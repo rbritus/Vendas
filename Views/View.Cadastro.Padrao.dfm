@@ -1,0 +1,101 @@
+inherited FrmCadastroPadrao: TFrmCadastroPadrao
+  Caption = 'FrmCadastroPadrao'
+  ClientHeight = 594
+  ClientWidth = 840
+  WindowState = wsNormal
+  ExplicitWidth = 840
+  ExplicitHeight = 594
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pnlFundo: TPanel
+    Width = 840
+    Height = 594
+    ExplicitWidth = 840
+    ExplicitHeight = 594
+    inherited pnlConteudo: TPanel
+      Top = 0
+      Width = 668
+      Height = 594
+      Margins.Top = 0
+      ExplicitTop = 0
+      ExplicitWidth = 668
+      ExplicitHeight = 594
+    end
+    object pnlMenuLateral: TPanel
+      Left = 668
+      Top = 0
+      Width = 172
+      Height = 594
+      Align = alRight
+      BevelOuter = bvNone
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 1
+      object SpeedButton5: TSpeedButton
+        AlignWithMargins = True
+        Left = 0
+        Top = 55
+        Width = 172
+        Height = 50
+        Margins.Left = 0
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Align = alTop
+        GroupIndex = 1
+        Caption = 'Cancelar'
+        ImageIndex = 0
+        Flat = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 6710886
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Spacing = 10
+        OnClick = SpeedButton5Click
+        OnMouseEnter = SpeedButton5MouseEnter
+        OnMouseLeave = SpeedButton5MouseLeave
+        ExplicitTop = 50
+        ExplicitWidth = 160
+      end
+      object SpeedButton6: TSpeedButton
+        AlignWithMargins = True
+        Left = 0
+        Top = 0
+        Width = 172
+        Height = 50
+        Margins.Left = 0
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 5
+        Align = alTop
+        GroupIndex = 1
+        Caption = 'Confirmar'
+        ImageIndex = 0
+        Flat = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 6710886
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Spacing = 10
+        OnMouseEnter = SpeedButton6MouseEnter
+        OnMouseLeave = SpeedButton6MouseLeave
+        ExplicitWidth = 160
+      end
+      object pnlBarraLateralBotao: TPanel
+        Left = 169
+        Top = 0
+        Width = 3
+        Height = 49
+        BevelOuter = bvNone
+        Color = 16744448
+        ParentBackground = False
+        TabOrder = 0
+        Visible = False
+      end
+    end
+  end
+end
