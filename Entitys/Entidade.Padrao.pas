@@ -9,12 +9,12 @@ uses
 Type
    TEntidade<T: class> = Class(TInterfacedPersistent)
    Public
-      procedure Gravar();
-      procedure Excluir();
-      procedure Limpar();
-      function EstaVazia(): Boolean; virtual; abstract;
-      class function ListarTodos(): TList<T>;
-      class function ListarTodosCDS(): TClientDataSet;
+      procedure Gravar;
+      procedure Excluir;
+      procedure Limpar;
+      function EstaVazia: Boolean; virtual; abstract;
+      class function ListarTodos: TList<T>;
+      class function ListarTodosCDS: TClientDataSet;
       class function PesquisarPorId(Id: Integer): T;
       class function PesquisarPorCondicao(cSql: string): TList<T>;
    End;

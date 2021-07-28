@@ -16,8 +16,8 @@ type
    public
       procedure Gravar(Objeto: TObject);
       procedure Excluir(Objeto: TObject);
-      function ListarTodos(): TList<T>;
-      function ListarTodosCDS(): TDataSet;
+      function ListarTodos: TList<T>;
+      function ListarTodosCDS: TDataSet;
       function PesquisarPorId(Id: Integer): T;
       function PesquisarPorCondicao(cSql: string): TList<T>;
    End;

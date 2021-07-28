@@ -122,13 +122,18 @@
         <DCCReference Include="Interfaces\Interfaces.Services.pas"/>
         <DCCReference Include="Utils\Utils.Entidade.pas"/>
         <DCCReference Include="Utils\Utils.Constants.pas"/>
-        <DCCReference Include="Interfaces\Interfaces.Pessoa.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.Pessoa.pas"/>
         <DCCReference Include="Entitys\Entidade.Pessoa.pas"/>
         <DCCReference Include="Views\View.Cadastro.Pessoa.pas">
             <Form>FrmCadastroPessoa</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Attributes\Attributes.Forms.pas"/>
+        <DCCReference Include="Controllers\Controller.Cadastro.Padrao.pas"/>
+        <DCCReference Include="Wrappers\Wrapper.PropriedadeCadastro.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Cadastro.Padrao.pas"/>
+        <DCCReference Include="Utils\Utils.Enumerators.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Wrapper.PropriedadeCadastro.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

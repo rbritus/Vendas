@@ -3,7 +3,7 @@ unit Entidade.Pessoa;
 interface
 
 uses
-  System.Classes, Entidade.Padrao, Interfaces.Pessoa, Attributes.Entidades,
+  System.Classes, Entidade.Padrao, Interfaces.Entidade.Pessoa, Attributes.Entidades,
   System.SysUtils;
 
 type
@@ -51,7 +51,7 @@ end;
 function TPessoa.GetAtivo: string;
 begin
    if (FAtivo).IsEmpty then
-      FAtivo := RegistroAtivo;
+      FAtivo := REGISTROATIVO;
 
    Result := FAtivo
 end;
@@ -80,6 +80,9 @@ function TPessoa.EstaVazia: Boolean;
 begin
   Result := (FId = 0) and (FNome = EmptyStr);
 end;
+
+initialization
+   RegisterClass(TPessoa);
 
 end.
 

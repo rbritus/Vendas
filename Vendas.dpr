@@ -15,10 +15,15 @@ uses
   Interfaces.Services in 'Interfaces\Interfaces.Services.pas',
   Utils.Entidade in 'Utils\Utils.Entidade.pas',
   Utils.Constants in 'Utils\Utils.Constants.pas',
-  Interfaces.Pessoa in 'Interfaces\Interfaces.Pessoa.pas',
+  Interfaces.Entidade.Pessoa in 'Interfaces\Interfaces.Entidade.Pessoa.pas',
   Entidade.Pessoa in 'Entitys\Entidade.Pessoa.pas',
   View.Cadastro.Pessoa in 'Views\View.Cadastro.Pessoa.pas' {FrmCadastroPessoa},
-  Attributes.Forms in 'Attributes\Attributes.Forms.pas';
+  Attributes.Forms in 'Attributes\Attributes.Forms.pas',
+  Controller.Cadastro.Padrao in 'Controllers\Controller.Cadastro.Padrao.pas',
+  Wrapper.PropriedadeCadastro in 'Wrappers\Wrapper.PropriedadeCadastro.pas',
+  Interfaces.Controller.Cadastro.Padrao in 'Interfaces\Interfaces.Controller.Cadastro.Padrao.pas',
+  Utils.Enumerators in 'Utils\Utils.Enumerators.pas',
+  Interfaces.Wrapper.PropriedadeCadastro in 'Interfaces\Interfaces.Wrapper.PropriedadeCadastro.pas';
 
 {$R *.res}
 

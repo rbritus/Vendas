@@ -81,6 +81,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
+        OnClick = SpeedButton6Click
         OnMouseEnter = SpeedButton6MouseEnter
         OnMouseLeave = SpeedButton6MouseLeave
         ExplicitWidth = 160

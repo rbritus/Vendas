@@ -80,10 +80,5 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ThumbColor = clHighlight
       end
     end
-    inherited pnlMenuLateral: TPanel
-      inherited SpeedButton6: TSpeedButton
-        OnClick = SpeedButton6Click
-      end
-    end
   end
 end

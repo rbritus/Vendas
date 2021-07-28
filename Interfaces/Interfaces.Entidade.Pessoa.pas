@@ -1,4 +1,4 @@
-unit Interfaces.Pessoa;
+unit Interfaces.Entidade.Pessoa;
 
 interface
 uses

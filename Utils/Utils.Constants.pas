@@ -3,8 +3,8 @@ unit Utils.Constants;
 interface
 
 Const
-   RegistroAtivo = 'S';
-   ResgistroInativado = 'N';
+   REGISTROATIVO = 'S';
+   REGISTROINATIVO = 'N';
 
 implementation
 
