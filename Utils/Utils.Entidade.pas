@@ -76,7 +76,6 @@ begin
       lMethod.Free;
     end;
   finally
-    lType.Free;
     ctx.Free;
   end;
 end;
@@ -102,7 +101,6 @@ begin
       lMethod.Free;
     end;
   finally
-    lType.Free;
     ctx.Free;
   end;
 end;

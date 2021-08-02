@@ -8,9 +8,17 @@ Uses
 type
   TScriptSQL = class
   private
-      class Function ObterScriptDaEntidade(classe: TClass): String;
+    FClasse: TClass;
+    FNomeTabela: string;
+    function ObterScriptDaEntidade: string;
+    function TabelaExisteNoBanco: Boolean;
+    function ObterNomeTabela: String;
+    function ObterScriptParaAdicionarNovosCamposNaTabela: string;
+    function ObterScriptParaAdicionarTabelaCompleta: string;
+//    function ObterScriptParaCriarSequence: string;
+//    function ObterScriptParaAtualizarSequencia: string;
   public
-      class Function RegistrarEntidadeNoBanco(classe: TClass): boolean;
+    class function RegistrarEntidadeNoBanco(pClasse: TClass): boolean;
   end;
 
 Implementation
@@ -18,182 +26,160 @@ Implementation
 Uses
   Attributes.Entidades;
 
-Class Function TScriptSQL.ObterScriptDaEntidade(classe: TClass): String;
-Var
-   cScriptTabela          : String;
-   cScriptSequence        : String;
-   cScriptAtualizaSequence: String;
-   cNomeTabela            : String;
-   lTabelaExiste          : Boolean;
+function TScriptSQL.ObterScriptParaAdicionarNovosCamposNaTabela: string;
+var
+  DataSet: TDataSet;
+const
+  txtPadrao = 'alter table %s add %s';
 
-   ctx  : TRttiContext;
+  function ExisteCampo(Campo: string): Boolean;
+  var
+    lResposta: Boolean;
+  begin
+    DataSet.Filter := 'name = ' + QuotedStr(Campo);
+    DataSet.Filtered := True;
+    try
+      lResposta := DataSet.RecordCount > 0;
+    finally
+      DataSet.Filter := EmptyStr;
+      DataSet.Filtered := False;
+    end;
 
-   Function _getNomeTabela: String;
-   Var
-      atrib: TCustomAttribute;
-   Begin
-      Result := '';
-      For atrib In ctx.GetType(classe).GetAttributes Do
-      Begin
-         If atrib Is TNomeTabela Then
-         Begin
-            Result := TNomeTabela(atrib).nome;
-            Break;
-         End;
-      End;
-   End;
+    Result := lResposta;
+  end;
 
-   Procedure _ObterTabelaCompleta;
-   Var
-      atrib: TCustomAttribute;
-      prop : TRttiProperty;
-      cAux, cFK : String;
-   Begin
-      cScriptTabela := 'Create Table ' + cNomeTabela + '(' + sLineBreak;
+  function RetirarNotNull(sql: string): string;
+  begin
+    Result := StringReplace(sql, 'not null', EmptyStr, []);
+  end;
 
-      cFK := EmptyStr;
-      For prop In ctx.GetType(classe).GetDeclaredProperties Do
-         For atrib In prop.GetAttributes Do
-         Begin
-            If atrib Is TAtributoBanco Then
-            Begin
-               cAux := TAtributoBanco(atrib).getScriptCampo;
+begin
+  var cScriptTabela := EmptyStr;
+  var cSQL := 'PRAGMA Table_Info(' + QuotedStr(FNomeTabela) + ')';
+  DataSet := TConexao.GetInstance.EnviaConsulta(cSQL);
+  var ctx := TRttiContext.Create;
+  try
+    for var prop in ctx.GetType(FClasse).GetDeclaredProperties do
+      for var atrib in prop.GetAttributes do
+        if atrib is TAtributoBanco then
+          if not (TAtributoBanco(atrib) is TCampoListagem) then
+            if not ExisteCampo(TAtributoBanco(atrib).nome) then
+            begin
+              cScriptTabela := cScriptTabela + Format(txtPadrao, [FNomeTabela, RetirarNotNull(TAtributoBanco(atrib).getScriptCampo)]);
 
-               If CHAVE_PRIMARIA In TAtributoBanco(atrib).propriedades Then
-                  cAux := cAux + ' primary key AUTOINCREMENT';
+              if atrib is TCampoEstrangeiro then
+                cScriptTabela := cScriptTabela + ' REFERENCES ' + TAtributoBanco(atrib).caption + '(ID);' + sLineBreak;
 
-               If atrib is TCampoEstrangeiro Then
-                  cFK := cFK + ', FOREIGN KEY(' + TAtributoBanco(atrib).nome +
-                     ') REFERENCES ' + TAtributoBanco(atrib).caption + '(ID)';
+              cScriptTabela := cScriptTabela + ';' + sLineBreak;
+            end;
+    DataSet.Close;
+  finally
+    ctx.Free;
+    FreeAndNil(DataSet);
+  end;
+  Result := cScriptTabela;
+end;
 
-               if Trim(cAux) <> '' then
-                  cScriptTabela := cScriptTabela + cAux + ',';
-            End;
-         End;
-
-      cScriptTabela := Copy(cScriptTabela, 1, Length(cScriptTabela) - 1) + cFK + ');' + sLineBreak + sLineBreak;
-   End;
-
-   Procedure _ObterSomenteCampos;
-   Var
-      atrib: TCustomAttribute;
-      prop : TRttiProperty;
-      MyDataSet: TDataSet;
-      cSQL : String;
-   Const
-      txtPadrao = 'alter table %s add %s';
-
-      function ExisteCampo(Campo: string): Boolean;
-      Var
-         lResposta: Boolean;
-      Begin
-         MyDataSet.Filter := 'name = ' + QuotedStr(Campo);
-         MyDataSet.Filtered := True;
-         try
-            lResposta := MyDataSet.RecordCount > 0;
-         finally
-            MyDataSet.Filter := EmptyStr;
-            MyDataSet.Filtered := False;
-         end;
-
-         Result := lResposta;
-      end;
-
-      function RetirarNotNull(sql: string): string;
-      begin
-         Result := StringReplace(sql,'not null',EmptyStr,[]);
-      end;
-
-   Begin
-      cScriptTabela := '';
-
-      cSQL := 'PRAGMA Table_Info('+ QuotedStr(cNomeTabela) + ')';
-      MyDataSet := TConexao.GetInstance.EnviaConsulta(cSQL);
-      try
-         For prop In ctx.GetType(classe).GetDeclaredProperties Do
-            For atrib In prop.GetAttributes Do
-               If atrib Is TAtributoBanco Then
-                  if not(TAtributoBanco(atrib) is TCampoListagem) then
-                     If Not ExisteCampo(TAtributoBanco(atrib).nome) Then
-                     begin
-                        cScriptTabela := cScriptTabela +
-                           Format(txtPadrao,[cNomeTabela, RetirarNotNull(TAtributoBanco(atrib).getScriptCampo)]);
-
-                        If atrib is TCampoEstrangeiro Then
-                           cScriptTabela := cScriptTabela + ' REFERENCES ' + TAtributoBanco(atrib).caption + '(ID);' + sLineBreak;
-
-                        cScriptTabela := cScriptTabela + ';' + sLineBreak;
-                     end;
-      finally
-         MyDataSet.Close;
-         FreeAndNil(MyDataSet);
-      end;
-   End;
-
-   procedure _ObterSequencia;
-   begin
-      cScriptSequence := 'CREATE SEQUENCE gen_id_' + cNomeTabela + ' ;' + #13;
-   end;
-
-   procedure _AtualizarSequencia;
-   var
-      dSet: TQuery;
-      nSequenciaAtual,
-      nSequencialTabela: Integer;
-   begin
-      try
-         dSet := TQuery(TConexao.GetInstance.EnviaConsulta('select last_value from gen_id_' + cNomeTabela));
-         nSequenciaAtual := dSet.FieldByName('last_value').AsInteger;
-         dSet.Free;
-         dSet := TQuery(TConexao.GetInstance.EnviaConsulta('select Max(id) as "ID" from ' + cNomeTabela));
-         nSequencialTabela := dSet.FieldByName('ID').AsInteger;
-
-         if nSequencialTabela > nSequenciaAtual then
-            cScriptAtualizaSequence := 'alter sequence gen_id_'+ cNomeTabela +
-                                       ' restart with ' + IntToStr(nSequencialTabela+1)+
-                                       ' ;' + #13;
-
-      finally
-         FreeAndNil(dSet);
-      end;
-   end;
-
+Function TScriptSQL.ObterNomeTabela: String;
 Begin
-   cScriptTabela           := '';
-   cScriptSequence         := '';
-   cScriptAtualizaSequence := '';
-
-   ctx := TRttiContext.Create;
-   Try
-      cNomeTabela := _getNomeTabela;
-      lTabelaExiste := TConexao.GetInstance.TabelaExiste(cNomeTabela);
-
-      If lTabelaExiste Then
-         _ObterSomenteCampos
-      Else
-         _ObterTabelaCompleta;
-
-   Finally
-      ctx.Free;
-   End;
-
-   Result := cScriptTabela + cScriptSequence + cScriptAtualizaSequence;
+  Result :=  EmptyStr;
+  var ctx := TRttiContext.Create;
+  For var atrib In ctx.GetType(FClasse).GetAttributes Do
+  Begin
+     If atrib Is TNomeTabela Then
+     Begin
+        Result := TNomeTabela(atrib).nome;
+        Break;
+     End;
+  End;
 End;
 
-class Function TScriptSQL.RegistrarEntidadeNoBanco(classe: TClass): boolean;
-Begin
-   Result := False;
-   Var cScript := TScriptSQL.ObterScriptDaEntidade(classe);
+function TScriptSQL.TabelaExisteNoBanco: Boolean;
+begin
+  FNomeTabela := ObterNomeTabela;
+  Result := TConexao.GetInstance.TabelaExiste(FNomeTabela);
+end;
 
-   If Trim(cScript) <> '' Then
-   Begin
-      try
-         TConexao.GetInstance.EnviarComando(cScript);
-         Result := True;
-      except
-         TConexao.GetInstance.RollbackRetaining;
+function TScriptSQL.ObterScriptParaAdicionarTabelaCompleta: string;
+begin
+  var cAuxiliar := EmptyStr;
+  var cScriptTabela := 'Create Table ' + FNomeTabela + '(' + sLineBreak;
+  var cFK := EmptyStr;
+  var ctx := TRttiContext.Create;
+  for var prop in ctx.GetType(FClasse).GetDeclaredProperties do
+    for var atrib in prop.GetAttributes do
+    begin
+      if atrib is TAtributoBanco then
+      begin
+        cAuxiliar := TAtributoBanco(atrib).getScriptCampo;
+
+        if CHAVE_PRIMARIA in TAtributoBanco(atrib).propriedades then
+          cAuxiliar := cAuxiliar + ' primary key AUTOINCREMENT';
+
+        if atrib is TCampoEstrangeiro then
+          cFK := cFK + ', FOREIGN KEY(' + TAtributoBanco(atrib).nome + ') REFERENCES ' + TAtributoBanco(atrib).caption + '(ID)';
+
+        if Trim(cAuxiliar) <> '' then
+          cScriptTabela := cScriptTabela + cAuxiliar + ',';
       end;
-   End;
+    end;
+
+  Result := Copy(cScriptTabela, 1, Length(cScriptTabela) - 1) + cFK + ');' + sLineBreak + sLineBreak;
+end;
+
+//function TScriptSQL.ObterScriptParaCriarSequence: string;
+//begin
+//  Result := 'CREATE SEQUENCE gen_id_' + FNomeTabela + ' ;' + #13;
+//end;
+//
+//function TScriptSQL.ObterScriptParaAtualizarSequencia: string;
+//begin
+//  var Script := EmptyStr;
+//  var DataSetA := TQuery(TConexao.GetInstance.EnviaConsulta('select last_value from gen_id_' + FNomeTabela));
+//  var DataSetB := TQuery(TConexao.GetInstance.EnviaConsulta('select Max(id) as "ID" from ' + FNomeTabela));
+//  try
+//     var SequenciaAtual := DataSetA.FieldByName('last_value').AsInteger;
+//     var SequencialTabela := DataSetB.FieldByName('ID').AsInteger;
+//
+//     if SequencialTabela > SequenciaAtual then
+//      Script := 'alter sequence gen_id_' + FNomeTabela + ' restart with ' +
+//        IntToStr(SequencialTabela + 1) + ' ;' + #13;
+//  finally
+//     FreeAndNil(DataSetA);
+//     FreeAndNil(DataSetB);
+//  end;
+//  Result := Script;
+//end;
+
+Function TScriptSQL.ObterScriptDaEntidade: String;
+Begin
+  var Script := EMptyStr;
+  if TabelaExisteNoBanco then
+    Script := ObterScriptParaAdicionarNovosCamposNaTabela// + ObterScriptParaAtualizarSequencia
+  else
+    Script := ObterScriptParaAdicionarTabelaCompleta{ + ObterScriptParaCriarSequence};
+
+  Result := Script;
+End;
+
+class Function TScriptSQL.RegistrarEntidadeNoBanco(pClasse: TClass): boolean;
+Begin
+  Result := False;
+  var ScriptCreate := TScriptSQL.Create;
+  ScriptCreate.FClasse := pClasse;
+  try
+    var cScript := ScriptCreate.ObterScriptDaEntidade;
+    if Trim(cScript) = EmptyStr then
+      Exit;
+    try
+      TConexao.GetInstance.EnviarComando(cScript);
+      Result := True;
+    except
+      TConexao.GetInstance.RollbackRetaining;
+    end;
+  finally
+    ScriptCreate.Free;
+  end;
 End;
 
 End.

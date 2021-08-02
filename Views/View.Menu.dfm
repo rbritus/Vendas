@@ -76,8 +76,6 @@ object FrmMenu: TFrmMenu
       ShowHint = False
       TabOrder = 1
       OnResize = pnlMainFormResize
-      ExplicitLeft = 15
-      ExplicitWidth = 877
     end
   end
   object pnlMenuLateral: TPanel

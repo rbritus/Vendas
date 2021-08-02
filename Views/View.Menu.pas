@@ -56,7 +56,8 @@ implementation
 {$R *.dfm}
 
 uses
-  View.Cadastro.Pessoa;
+  Connection.Controller.SqLite, View.Cadastro.Pessoa,
+  Connection.Scripter.SqLite, Entidade.Pessoa;
 
 procedure TFrmMenu.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
@@ -86,7 +87,8 @@ end;
 
 procedure TFrmMenu.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-   FreeAndNil(FrmCadastroPessoa)
+   FreeAndNil(FrmCadastroPessoa);
+   TConexao.GetInstance.FecharConexao;
 end;
 
 procedure TFrmMenu.FormCreate(Sender: TObject);
@@ -96,6 +98,7 @@ end;
 
 procedure TFrmMenu.FormShow(Sender: TObject);
 begin
+//  TScriptSQL.RegistrarEntidadeNoBanco(TPessoa);
   FMenuExpandido := True;
   ControllerView.MainForm := Self;
 end;

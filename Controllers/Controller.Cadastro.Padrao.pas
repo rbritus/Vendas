@@ -42,12 +42,14 @@ end;
 
 procedure TControllerCadastroPadrao.DestruirEntidade;
 begin
-  if FEntidade <> nil then
-    FreeAndNil(FEntidade);
+  FEntidade.Free;
 end;
 
 procedure TControllerCadastroPadrao.GravarEntidade;
 begin
+  if FEntidade = nil then
+    Exit;
+
   PreencherEntidadeComEdits;
   Gravar;
   DestruirEntidade;
@@ -68,15 +70,15 @@ begin
   Ctx := TRttiContext.Create;
   try
     Tipo := Ctx.GetType(FForm.ClassType);
-    if Tipo <> Nil then
+    if Tipo = Nil then
+      Exit;
+
+    for Atrib in Tipo.GetAttributes do
     begin
-      for Atrib in Tipo.GetAttributes do
+      if Atrib is TClasseCadastro then
       begin
-        if Atrib is TClasseCadastro then
-        begin
-          FEntidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
-          Break;
-        end;
+        FEntidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
+        Break;
       end;
     end;
   finally
@@ -96,21 +98,21 @@ begin
   Ctx := TRttiContext.Create;
   try
     Tipo := Ctx.GetType(FForm.ClassType);
-    if Tipo <> Nil then
-      for FField in Tipo.GetFields do
-      begin
-        for Atrib in FField.GetAttributes do
-        begin
-          if Atrib is TPropriedadeCadastro then
-          begin
-            var Valor := Wrapper.ObtemValor(FField.GetValue(FForm),
-              TPropriedadeCadastro(Atrib), TPropriedadeCadastro(Atrib).TipoPropriedade);
+    if Tipo = Nil then
+      Exit;
 
-            TUtilsEntidade.SetarValorParaPropriedade(FEntidade,
-              TPropriedadeCadastro(Atrib).NomePropriedade, Valor);
-          end;
+    for FField in Tipo.GetFields do
+    begin
+      for Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          var Valor := Wrapper.ObtemValor(FField.GetValue(FForm), TPropriedadeCadastro(Atrib), TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          TUtilsEntidade.SetarValorParaPropriedade(FEntidade, TPropriedadeCadastro(Atrib).NomePropriedade, Valor);
         end;
       end;
+    end;
   finally
     Ctx.Free;
   end;

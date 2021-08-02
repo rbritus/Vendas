@@ -8,28 +8,28 @@ uses
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, Data.DbxSqlite, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Stan.Intf,
-  {Utils.Excecoes, }DB, Datasnap.DBClient, Datasnap.Provider, FireDAC.DApt;
+  DB, Datasnap.DBClient, Datasnap.Provider, FireDAC.DApt;
 
 type
   TQuery = Class(TFDQuery);
 
   TConexao = class(TFDConnection)
   strict private
-    DriverLink : TFDPhysSQLiteDriverLink;
-    Transaction: TFDTransaction;
+    FDriverLink : TFDPhysSQLiteDriverLink;
+    FTransaction: TFDTransaction;
     class var FInstance: TConexao;
-    procedure GetConexao();
+    procedure GetConexao;
   public
     class function GetInstance: TConexao;
 
-    procedure AtulizaEstruturaDeTabelasNoBanco();
+    procedure AtulizaEstruturaDeTabelasNoBanco;
     function ObterQuery: TQuery;
     procedure EnviarComando(Comando: String);
     function EnviaConsulta(Consulta: String): TDataSet;
     function ObterProximaSequencia(NomeTabela: String): Integer;
     function TabelaExiste(NomeTabela: String): Boolean;
     function CampoExiste(NomeTabela, NomeCampo: String): Boolean;
-    procedure FecharConexao();
+    procedure FecharConexao;
     constructor Create(AOwner: TComponent); Override;
   end;
 
@@ -60,8 +60,8 @@ begin
      FInstance.GetConexao;
   end;
 
-   if not Self.FInstance.InTransaction then
-      Self.FInstance.StartTransaction;
+//   if not Self.FInstance.InTransaction then
+//      Self.FInstance.StartTransaction;
 
   Result := Self.FInstance;
 end;
@@ -93,130 +93,115 @@ begin
 end;
 
 Function TConexao.ObterQuery: TQuery;
-Var
-   MyDataSet: TFDQuery;
 Begin
-   MyDataSet            := TFDQuery.Create(nil);
-   MyDataSet.Connection := GetInstance;
-   Result               := TQuery(MyDataSet);
+  var MyDataSet := TFDQuery.Create(nil);
+  MyDataSet.Connection := GetInstance;
+  Result := TQuery(MyDataSet);
 End;
 
 function TConexao.TabelaExiste(NomeTabela: String): Boolean;
-var
-   MyDataSet: TDataSet;
-Begin
-   try
-       MyDataSet := Self.EnviaConsulta(
-         'SELECT * FROM sqlite_master where tbl_name = ' + QuotedStr(NomeTabela));
-      Result := MyDataSet.RecordCount > 0;
-   finally
-      MyDataSet.Close;
-      FreeAndNil(MyDataSet);
-   end;
+begin
+  var MyDataSet := Self.EnviaConsulta('SELECT * FROM sqlite_master where tbl_name = ' + QuotedStr(NomeTabela));
+  try
+    Result := MyDataSet.RecordCount > 0;
+    MyDataSet.Close;
+  finally
+    FreeAndNil(MyDataSet);
+  end;
 end;
 
 procedure TConexao.EnviarComando(Comando: String);
-Var
-   MyDataSet: TFDQuery;
 Begin
-   MyDataSet := ObterQuery();
-
-   try
-      MyDataSet.SQL.Add(Comando);
-
-      Try
-         MyDataSet.ExecSQL;
-      Except
-         On E: Exception Do
-         Begin
-            Self.RollbackRetaining;
-//            Raise EComandoNaoExecutado.Create;
-         End;
-      End;
-   finally
-      MyDataSet.Free;
-   end;
+  var MyDataSet := ObterQuery;
+  try
+    MyDataSet.SQL.Add(Comando);
+    try
+      MyDataSet.ExecSQL;
+    except
+      on E: Exception do
+        Self.RollbackRetaining;
+    end;
+  finally
+    MyDataSet.Free;
+  end;
 end;
 
 procedure TConexao.FecharConexao;
 begin
-   FInstance.Close;
+  FInstance.Close;
+  FDriverLink.Free;
+  FTransaction.Free;
+  FInstance.Free;
 end;
 
 Function TConexao.EnviaConsulta(Consulta: String): TDataSet;
-Var
-   MyDataSet: TFDQuery;
-   dsp: TDataSetProvider;
 Begin
-   MyDataSet := ObterQuery();
-   MyDataSet.SQL.Add(Consulta);
-   dsp := TDataSetProvider.Create(Self.Owner);
-   dsp.Name := 'dspTConexao';
-   dsp.DataSet := MyDataSet;
-   var cds: TClientDataSet := TClientDataSet.Create(Self.Owner);
-   try
-      Try
-         cds.SetProvider(dsp);
-         cds.Open;
-//         MyDataSet.Open(Consulta);
-      Except
-         On E: Exception Do
-         begin
-            MyDataSet.Free;
-//            Raise EComandoNaoExecutado.Create;
-         end;
-      End;
-   finally
-      MyDataSet.Close;
-      cds.SetProvider(nil);
-      cds.ProviderName := EmptyStr;
-      FreeAndNil(dsp);
-      FreeAndNil(MyDataSet);
-   end;
-
-   Result := cds;
+  var MyDataSet := ObterQuery;
+  var dsp := TDataSetProvider.Create(Self.Owner);
+  var cds: TClientDataSet := TClientDataSet.Create(Self.Owner);
+  try
+    MyDataSet.SQL.Add(Consulta);
+    dsp.Name := 'dspTConexao';
+    dsp.DataSet := MyDataSet;
+    try
+      cds.SetProvider(dsp);
+      cds.Open;
+    except
+      on E: Exception do
+      begin
+        MyDataSet.Free;
+      end;
+    end;
+    MyDataSet.Close;
+    cds.SetProvider(nil);
+    cds.ProviderName := EmptyStr;
+  finally
+    FreeAndNil(dsp);
+    FreeAndNil(MyDataSet);
+  end;
+  Result := cds;
 End;
 
-procedure TConexao.GetConexao();
+procedure TConexao.GetConexao;
 var
    reg: TRegistry;
    Diretorio, Name: string;
 
-   procedure CriarTransaction();
+   procedure CriarTransaction;
    begin
-      Transaction := TFDTransaction.Create( nil );
-      Transaction.Connection := FInstance;
-      Transaction.Options.AutoCommit := True;
-      Transaction.Options.ReadOnly := False;
-      Transaction.Options.Isolation := xiReadCommitted;
+      FTransaction := TFDTransaction.Create( nil );
+      FTransaction.Connection := FInstance;
+      FTransaction.Options.AutoCommit := True;
+      FTransaction.Options.ReadOnly := False;
+      FTransaction.Options.Isolation := xiReadCommitted;
    end;
 
 begin
-   Reg := TRegistry.Create();
+   Reg := TRegistry.Create;
    Diretorio := EmptyStr;
    Name := EmptyStr;
-   DriverLink := TFDPhysSQLiteDriverLink.Create( nil );
-   CriarTransaction();
+   FDriverLink := TFDPhysSQLiteDriverLink.Create( nil );
+   CriarTransaction;
    FInstance.Params.Values['DriverID'] := 'SQLite';
    FInstance.UpdateOptions.LockWait := False;
    try
       Reg.RootKey := HKEY_CURRENT_USER;
-      if Reg.OpenKey('\Software\Produtec\', True) then
+      if Reg.OpenKey('\Software\Vendas\', True) then
       begin
-         Diretorio := Reg.ReadString('ProlojaDBLocal');
-         Name := Reg.ReadString('ProlojaDBName');
+         Diretorio := Reg.ReadString('DBLocal');
+         Name := Reg.ReadString('DBName');
       end;
 
       if Diretorio.Trim.IsEmpty then
       begin
          Diretorio := IncludeTrailingPathDelimiter(GetCurrentDir);
-         Reg.WriteString('ProlojaDBLocal', Diretorio);
+         Reg.WriteString('DBLocal', Diretorio);
       end;
 
       if Name.Trim.IsEmpty then
       begin
          Name := ChangeFileExt(ExtractFileName(ParamStr(0)),EmptyStr)+'.db';
-         Reg.WriteString('ProlojaDBName', Name);
+         Reg.WriteString('DBName', Name);
       end;
 
       FInstance.Params.Values['Database'] := Diretorio+Name;
@@ -234,17 +219,14 @@ begin
 end;
 
 Function TConexao.ObterProximaSequencia(NomeTabela: String): Integer;
-Var
-   MyDataSet: TDataSet;
-   Sequencia: integer;
 Begin
-   MyDataSet := EnviaConsulta('select MAX(seq) seq from sqlite_sequence where ' +
+   var MyDataSet := EnviaConsulta('select MAX(seq) seq from sqlite_sequence where ' +
       'upper(name) = upper('+NomeTabela+')');
    Try
-      Sequencia := MyDataSet.FieldByName('seq').AsInteger + 1;
+      var Sequencia := MyDataSet.FieldByName('seq').AsInteger + 1;
       Result := Sequencia;
       MyDataSet.Close;
-      EnviarComando('update sqlite_sequence SET seq = ' + Sequencia.ToString() +
+      EnviarComando('update sqlite_sequence SET seq = ' + Sequencia.ToString +
          ' where upper(name) = upper('+NomeTabela+')');
    Finally
       FreeAndNil(MyDataSet);
