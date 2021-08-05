@@ -4,7 +4,7 @@ interface
 
 uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades, System.SysUtils, Data.DB,
-  Connection.Controller.SqLite;
+  Connection.Controller.SqLite, Utils.Enumerators;
 
 type
   TUtilsEntidade = class

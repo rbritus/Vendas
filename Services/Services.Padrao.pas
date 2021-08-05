@@ -3,27 +3,26 @@ unit Services.Padrao;
 interface
 
 uses
-  Generics.Collections, Rtti, Classes, Attributes.Entidades, Interfaces.Services,
-  Connection.Controller.SqLite, Datasnap.DBClient, Data.DB, System.SysUtils,
-  Utils.Entidade, Controls, FireDAC.Comp.Client, FireDAC.Stan.Param;
+  Generics.Collections, Rtti, Classes, Attributes.Entidades,
+  Interfaces.Services.Padrao, Connection.Controller.SqLite, Datasnap.DBClient,
+  Data.DB, System.SysUtils, Utils.Entidade, Controls, FireDAC.Comp.Client,
+  FireDAC.Stan.Param, Utils.Enumerators;
 
 type
-   TParametro = Record
-      FNomeParametro: String;
-      FValorParametro: String;
-      FValorParametroBlob: TMemoryStream;
-      FTipoPropriedade: TTiposDeCampo;
-   End;
+  TParametro = record
+    FNomeParametro: string;
+    FValorParametro: string;
+    FValorParametroBlob: TMemoryStream;
+    FTipoPropriedade: TTiposDeCampo;
+  end;
 
-   TArrayParametros = Array Of TParametro;
+  TArrayParametros = array of TParametro;
 
-  TServico<T: class> = class(TInterfacedPersistent, iServico<T>)
+  TServico<T: class> = class(TInterfacedObject, iServico<T>)
   private
-    procedure PersistirListagem(Propriedade: TRttiProperty; Lista: TList<TObject>;
-      EntidadePai: TObject);
+    procedure PersistirListagem(Propriedade: TRttiProperty; Lista: TList<TObject>; EntidadePai: TObject);
     procedure CorrigirCaptionDataSet(cds: TDataSet; Obj: T);
-    procedure PreencherArrayComParametros(Propriedade: TRttiProperty; Objeto:
-      TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
+    procedure PreencherArrayComParametros(Propriedade: TRttiProperty; Objeto: TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
     function ObterArrayComParametrosPreenchidos(Objeto: TObject): TArrayParametros;
     function RegistroJaGravadoEmBanco(Objeto: TObject): Boolean;
     procedure PersistirObjetoEmBanco(Objeto: TObject; Parametros: TArrayParametros);
@@ -38,6 +37,7 @@ type
     function ListarTodosCDS: TDataSet;
     function PesquisarPorId(Id: Integer): T;
     function PesquisarPorCondicao(cSql: string): TList<T>;
+    class function New: iServico<T>;
   end;
 
 implementation
@@ -172,41 +172,38 @@ end;
 procedure TServico<T>.PreencherArrayComParametros(Propriedade: TRttiProperty;
    Objeto: TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
 begin
+  RecParam.FNomeParametro := TAtributoBanco(Atrib).nome;
+
+  RecParam.FTipoPropriedade := TAtributoBanco(Atrib).Tipo;
+
+  if Propriedade.GetValue(Objeto).IsEmpty then
   begin
-    RecParam.FNomeParametro := TAtributoBanco(Atrib).nome;
+    RecParam.FValorParametro := 'null';
+    Exit;
+  end;
 
-    RecParam.FTipoPropriedade := TAtributoBanco(Atrib).Tipo;
-
-    if Propriedade.GetValue(Objeto).IsEmpty then
-    begin
-      RecParam.FValorParametro := 'null';
-      Exit;
-      ;
-    end;
-
-    case RecParam.FTipoPropriedade of
-      ftESTRANGEIRO:
-        begin
-          RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsType<TObject>, 'id');
-          if RecParam.FValorParametro = '0' then
-            RecParam.FValorParametro := 'null';
-        end;
-      ftBLOBT:
-        begin
-          RecParam.FValorParametroBlob := TMemoryStream.Create;
-          TMemoryStream(Propriedade.GetValue(Objeto).AsType<TMemoryStream>).SaveToStream(RecParam.FValorParametroBlob);
-        end;
-      ftLOGICO:
-        begin
-          RecParam.FValorParametro := BoolToStr(Propriedade.GetValue(Objeto).AsBoolean);
-        end;
-      ftDATA:
-        begin
-          RecParam.FValorParametro := DateToStr(Propriedade.GetValue(Objeto).AsExtended);
-        end
-    else
-      RecParam.FValorParametro := Propriedade.GetValue(Objeto).AsVariant;
-    end;
+  case RecParam.FTipoPropriedade of
+    ftESTRANGEIRO:
+      begin
+        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsType<TObject>, 'id');
+        if RecParam.FValorParametro = '0' then
+          RecParam.FValorParametro := 'null';
+      end;
+    ftBLOBT:
+      begin
+        RecParam.FValorParametroBlob := TMemoryStream.Create;
+        TMemoryStream(Propriedade.GetValue(Objeto).AsType<TMemoryStream>).SaveToStream(RecParam.FValorParametroBlob);
+      end;
+    ftLOGICO:
+      begin
+        RecParam.FValorParametro := BoolToStr(Propriedade.GetValue(Objeto).AsBoolean);
+      end;
+    ftDATA:
+      begin
+        RecParam.FValorParametro := DateToStr(Propriedade.GetValue(Objeto).AsExtended);
+      end
+  else
+    RecParam.FValorParametro := Propriedade.GetValue(Objeto).AsVariant;
   end;
 end;
 
@@ -222,31 +219,29 @@ begin
     if Tipo = Nil then
       Exit;
 
+    for var Prop in Tipo.GetDeclaredProperties do
     begin
-      for var Prop in Tipo.GetDeclaredProperties do
+      for var Atrib in Prop.GetAttributes do
       begin
-        for var Atrib in Prop.GetAttributes do
+        if (Atrib is TAtributoBanco) then
         begin
-          if (Atrib is TAtributoBanco) then
+          if CHAVE_PRIMARIA in TAtributoBanco(Atrib).propriedades then
+            Continue;
+
+          if (TAtributoBanco(Atrib).Tipo = ftLISTAGEM) then
           begin
-            if CHAVE_PRIMARIA in TAtributoBanco(Atrib).propriedades then
-              Continue;
-
-            if (TAtributoBanco(Atrib).Tipo = ftLISTAGEM) then
-            begin
-              if not Prop.GetValue(Objeto).IsEmpty then
-                PersistirListagem(Prop, Prop.GetValue(Objeto).AsType<TList<TObject>>, Objeto);
-              Continue;
-            end;
-
-            if Trim(Parametros[IndiceArray].FNomeParametro) <> EmptyStr then
-            begin
-              Inc(IndiceArray);
-              SetLength(Parametros, length(Parametros) + 1);
-            end;
-
-            PreencherArrayComParametros(Prop, Objeto, TAtributoBanco(Atrib), Parametros[IndiceArray]);
+            if not Prop.GetValue(Objeto).IsEmpty then
+              PersistirListagem(Prop, Prop.GetValue(Objeto).AsType<TList<TObject>>, Objeto);
+            Continue;
           end;
+
+          if Trim(Parametros[IndiceArray].FNomeParametro) <> EmptyStr then
+          begin
+            Inc(IndiceArray);
+            SetLength(Parametros, length(Parametros) + 1);
+          end;
+
+          PreencherArrayComParametros(Prop, Objeto, TAtributoBanco(Atrib), Parametros[IndiceArray]);
         end;
       end;
     end;
@@ -505,6 +500,11 @@ Begin
    End;
 
    Result := DSet;
+end;
+
+class function TServico<T>.New: iServico<T>;
+begin
+  Result := Self.Create;
 end;
 
 function TServico<T>.ListarTodos: TList<T>;

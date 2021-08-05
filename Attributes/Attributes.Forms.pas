@@ -17,22 +17,22 @@ type
   TPropriedadeCadastro = class(TCustomAttribute)
   private
     FNomePropriedade: string;
-    FTipoPropriedade: TTiposDoCampo;
+    FTipoPropriedade: TTiposDeCampo;
     FCampoObrigatorio: TCampoObrigatorio;
   public
-    property TipoPropriedade: TTiposDoCampo read FTipoPropriedade write FTipoPropriedade;
+    property TipoPropriedade: TTiposDeCampo read FTipoPropriedade write FTipoPropriedade;
     property NomePropriedade: string read FNomePropriedade write FNomePropriedade;
     property CampoObrigatorio: TCampoObrigatorio read FCampoObrigatorio write FCampoObrigatorio;
   end;
 
   TCadastroEdit = class(TPropriedadeCadastro)
   public
-    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDoCampo; pCampoObrigatorio: TCampoObrigatorio);
+    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
   end;
 
   TCadastroToggleSwitch = class(TPropriedadeCadastro)
   public
-    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDoCampo; pCampoObrigatorio: TCampoObrigatorio);
+    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
   end;
 
 implementation
@@ -47,7 +47,7 @@ end;
 { TPropCadastroTEdit }
 
 constructor TCadastroEdit.Create(pNomePropriedade: string;
-  pTipoPropriedade: TTiposDoCampo; pCampoObrigatorio: TCampoObrigatorio);
+  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
 begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;
@@ -57,7 +57,7 @@ end;
 { TCadastroToggleSwitch }
 
 constructor TCadastroToggleSwitch.Create(pNomePropriedade: string;
-  pTipoPropriedade: TTiposDoCampo; pCampoObrigatorio: TCampoObrigatorio);
+  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
 begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;

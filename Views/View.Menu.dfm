@@ -3,8 +3,8 @@ object FrmMenu: TFrmMenu
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Vendas'
-  ClientHeight = 703
-  ClientWidth = 1107
+  ClientHeight = 773
+  ClientWidth = 1094
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -25,8 +25,8 @@ object FrmMenu: TFrmMenu
     AlignWithMargins = True
     Left = 200
     Top = 57
-    Width = 907
-    Height = 646
+    Width = 894
+    Height = 716
     Margins.Left = 0
     Margins.Top = 0
     Margins.Right = 0
@@ -40,7 +40,7 @@ object FrmMenu: TFrmMenu
       AlignWithMargins = True
       Left = 15
       Top = 0
-      Width = 892
+      Width = 879
       Height = 50
       Margins.Left = 15
       Margins.Top = 0
@@ -60,15 +60,16 @@ object FrmMenu: TFrmMenu
     end
     object pnlMainForm: TPanel
       AlignWithMargins = True
-      Left = 30
-      Top = 50
-      Width = 847
-      Height = 591
-      Margins.Left = 30
+      Left = 27
+      Top = 46
+      Width = 840
+      Height = 667
+      Margins.Left = 0
       Margins.Top = 0
-      Margins.Right = 30
-      Margins.Bottom = 5
-      Align = alClient
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Align = alCustom
+      Anchors = [akTop, akBottom]
       BevelOuter = bvNone
       Color = 16117996
       ParentBackground = False
@@ -82,7 +83,7 @@ object FrmMenu: TFrmMenu
     Left = 0
     Top = 57
     Width = 200
-    Height = 646
+    Height = 716
     Align = alLeft
     BevelOuter = bvNone
     Color = clWhite
@@ -231,7 +232,7 @@ object FrmMenu: TFrmMenu
   object pnlTopo: TPanel
     Left = 0
     Top = 0
-    Width = 1107
+    Width = 1094
     Height = 57
     Align = alTop
     BevelOuter = bvNone

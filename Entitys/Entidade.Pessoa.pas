@@ -37,7 +37,6 @@ uses
   Utils.Constants;
 
 { TPessoa }
-
 function TPessoa.GetId: Integer;
 begin
   Result := FId;
@@ -50,10 +49,10 @@ end;
 
 function TPessoa.GetAtivo: string;
 begin
-   if (FAtivo).IsEmpty then
-      FAtivo := REGISTROATIVO;
+  if (FAtivo).IsEmpty then
+    FAtivo := REGISTROATIVO;
 
-   Result := FAtivo
+  Result := FAtivo
 end;
 
 procedure TPessoa.SetId(const Value: integer);
@@ -73,7 +72,7 @@ end;
 
 class function TPessoa.New: iPessoa;
 begin
-    Result := Self.Create;
+  Result := Self.Create;
 end;
 
 function TPessoa.EstaVazia: Boolean;
@@ -82,7 +81,7 @@ begin
 end;
 
 initialization
-   RegisterClass(TPessoa);
+  RegisterClass(TPessoa);
 
 end.
 

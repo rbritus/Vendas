@@ -1,6 +1,7 @@
-unit Interfaces.Services;
+unit Interfaces.Services.Padrao;
 
 interface
+
 uses
    System.Classes, System.Generics.Collections, generics.collections, Data.DB;
 

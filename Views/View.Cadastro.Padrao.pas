@@ -9,7 +9,7 @@ uses
 
 type
   TFrmCadastroPadrao = class(TFrmPadrao)
-    pnlMenuLateral: TPanel;
+    pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
@@ -20,11 +20,12 @@ type
     procedure SpeedButton5MouseLeave(Sender: TObject);
     procedure SpeedButton6Click(Sender: TObject);
   private
+    { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
-    { Private declarations }
   public
     { Public declarations }
+    procedure SetIdEdicao(pId: Integer);
   end;
 
 var
@@ -40,12 +41,17 @@ uses
 procedure TFrmCadastroPadrao.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
   pnlBarraLateralBotao.Visible := True;
-  pnlBarraLateralBotao.Top := Botao.Top;
+  pnlBarraLateralBotao.left := Botao.left;
 end;
 
 procedure TFrmCadastroPadrao.OcultarBarraLateralDoBotao;
 begin
   pnlBarraLateralBotao.Visible := False;
+end;
+
+procedure TFrmCadastroPadrao.SetIdEdicao(pId: Integer);
+begin
+
 end;
 
 procedure TFrmCadastroPadrao.SpeedButton5Click(Sender: TObject);

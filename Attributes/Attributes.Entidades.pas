@@ -3,7 +3,7 @@ unit Attributes.Entidades;
 interface
 
 Uses
-   System.SysUtils;
+   System.SysUtils, Utils.Enumerators;
 
 type
   TNomeTabela = class(TCustomAttribute)
@@ -13,9 +13,6 @@ type
     property Nome: String read FNome write FNome;
     constructor Create(const AValue: String);
   end;
-
-  TTiposDeCampo = (ftINTEIRO, ftTEXTO, ftDECIMAL, ftDATA, ftESTRANGEIRO,
-     ftLISTAGEM, ftLOGICO, ftBLOBT);
 
   TTipoAssociacaoEntreTabelas = (taOneToOne, taOneToMany, taManyToOne, taManyToMany);
 
@@ -31,10 +28,9 @@ type
       FTipo        : TTiposDeCampo;
       Fpropriedades: TConfiguracaoCampo;
       Fcaption     : String;
-      Procedure Setcaption(Const Value: String);
    Public
       Property nome        : String Read Fnome Write Fnome;
-      Property caption     : String Read Fcaption Write Setcaption;
+      Property caption     : String Read Fcaption Write Fcaption;
       Property tipo        : TTiposDeCampo Read FTipo Write FTipo;
       Property propriedades: TConfiguracaoCampo Read Fpropriedades
          Write Fpropriedades;
@@ -183,11 +179,6 @@ End;
 Function TAtributoBanco.getScriptCampo: String;
 Begin
    Raise EAccessViolation.create('Método não pode ser chamado da classe pai');
-End;
-
-Procedure TAtributoBanco.Setcaption(Const Value: String);
-Begin
-   Fcaption := Value;
 End;
 
 { TCampoData }

@@ -11,7 +11,7 @@ type
     FEntidade: TPersistent;
   private
     procedure ObterObjeto;
-    procedure PreencherEntidadeComEdits;
+    procedure PreencherEntidadeComCamposDoForm;
     procedure Gravar;
     constructor Create(pForm: TForm);
     procedure DestruirEntidade;
@@ -50,7 +50,7 @@ begin
   if FEntidade = nil then
     Exit;
 
-  PreencherEntidadeComEdits;
+  PreencherEntidadeComCamposDoForm;
   Gravar;
   DestruirEntidade;
 end;
@@ -86,7 +86,7 @@ begin
   end;
 end;
 
-procedure TControllerCadastroPadrao.PreencherEntidadeComEdits;
+procedure TControllerCadastroPadrao.PreencherEntidadeComCamposDoForm;
 var
   Ctx: TRttiContext;
   Tipo: TRTTIType;

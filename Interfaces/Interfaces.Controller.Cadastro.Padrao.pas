@@ -1,6 +1,7 @@
 unit Interfaces.Controller.Cadastro.Padrao;
 
 interface
+
 uses
    System.Classes;
 

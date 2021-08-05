@@ -11,15 +11,15 @@ type
   public
     class function New: iWrapperPropriedadeCadastro;
     function ObtemValor(Valor: TValue; Propriedade: TPropriedadeCadastro;
-      Tipo: TTiposDoCampo): TValue;
+      Tipo: TTiposDeCampo): TValue;
   end;
 
   TTratarTEdit = class
-      class function ObtemValor(Valor: TValue; Tipo: TTiposDoCampo): TValue;
+      class function ObtemValor(Valor: TValue; Tipo: TTiposDeCampo): TValue;
   end;
 
   TTratarTToggleSwitch = class
-      class function ObtemValor(Valor: TValue; Tipo: TTiposDoCampo): TValue;
+      class function ObtemValor(Valor: TValue; Tipo: TTiposDeCampo): TValue;
   end;
 
 implementation
@@ -35,18 +35,20 @@ begin
 end;
 
 function TWrapperPropriedadeCadastro.ObtemValor(Valor: TValue; Propriedade:
-  TPropriedadeCadastro; Tipo: TTiposDoCampo): TValue;
+  TPropriedadeCadastro; Tipo: TTiposDeCampo): TValue;
 begin
   if Propriedade is TCadastroEdit then
     Exit(TTratarTEdit.ObtemValor(Valor, Tipo));
 
   if Propriedade is TCadastroToggleSwitch then
     Exit(TTratarTToggleSwitch.ObtemValor(Valor, Tipo));
+
+  Result := Valor;
 end;
 
 { TTratarEdit }
 
-class function TTratarTEdit.ObtemValor(Valor: TValue; Tipo: TTiposDoCampo): TValue;
+class function TTratarTEdit.ObtemValor(Valor: TValue; Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
     ftINTEIRO, ftDECIMAL : Result := StrToIntDef(Valor.AsType<TEdit>.Text,0);
@@ -59,7 +61,7 @@ end;
 { TTratarTToggleSwitch }
 
 class function TTratarTToggleSwitch.ObtemValor(Valor: TValue;
-  Tipo: TTiposDoCampo): TValue;
+  Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
     ftINTEIRO, ftDECIMAL : Result := Ord(Valor.AsType<TToggleSwitch>.State);

@@ -3,8 +3,8 @@ object FrmPadrao: TFrmPadrao
   Top = 0
   BorderStyle = bsNone
   Caption = 'FrmPadrao'
-  ClientHeight = 377
-  ClientWidth = 667
+  ClientHeight = 640
+  ClientWidth = 840
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -23,8 +23,8 @@ object FrmPadrao: TFrmPadrao
     AlignWithMargins = True
     Left = 0
     Top = 0
-    Width = 667
-    Height = 377
+    Width = 840
+    Height = 640
     Margins.Left = 0
     Margins.Top = 0
     Margins.Right = 0
@@ -34,12 +34,14 @@ object FrmPadrao: TFrmPadrao
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
+    ExplicitWidth = 667
+    ExplicitHeight = 377
     object pnlConteudo: TPanel
       AlignWithMargins = True
       Left = 0
       Top = 3
-      Width = 667
-      Height = 374
+      Width = 840
+      Height = 637
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
@@ -49,6 +51,8 @@ object FrmPadrao: TFrmPadrao
       Padding.Top = 3
       ParentBackground = False
       TabOrder = 0
+      ExplicitWidth = 667
+      ExplicitHeight = 374
     end
   end
 end

@@ -4,7 +4,7 @@ Interface
 
 uses
   System.Classes, System.Generics.Collections, Services.Padrao, Rtti,
-  Datasnap.DBClient, System.SysUtils, Interfaces.Services, Utils.Entidade;
+  Datasnap.DBClient, System.SysUtils, Interfaces.Services.Padrao, Utils.Entidade;
 
 Type
    TEntidade<T: class> = Class(TInterfacedPersistent)
@@ -24,12 +24,9 @@ Implementation
 { TEntidade }
 
 procedure TEntidade<T>.Excluir;
-var
-   iServico: iServico<T>;
 begin
-   iServico := TServico<T>.Create;
+   var iServico := TServico<T>.Create;
    iServico.Excluir(Self);
-//   iServico.Free;
 end;
 
 procedure TEntidade<T>.Gravar;

@@ -8,24 +8,26 @@ uses
   Winapi.Windows, Winapi.Messages;
 
 type
-  TControllerView = class(TPersistent)
-    private
-      ListaForm : TDictionary<TComponentClass, TForm>;
-      FMainForm: TForm;
-    public
-      constructor Create;
-      destructor Destroy; override;
-
-      procedure ShowForm(Value: TComponentClass; const Parent : TPanel; var Title : TPanel);
-      procedure ListForms(var Lista : TListBox;var Title : TPanel);
-      procedure ReRenderForms;
-      procedure DesablePanel(var aPanel : TPanel);
-      procedure EnablePanel(var aPanel : TPanel;  aColor: TColor);
-      function CountForms : integer;
-      function ModuloForm(aForm : Tform):string;
-      procedure ArredondarCantos(componente: TWinControl);
-
-      property MainForm: TForm read FMainForm write FMainForm;
+  TControllerView = class(TObject)
+  private
+    ListaForm: TDictionary<TComponentClass, TForm>;
+    FMainForm: TForm;
+    FParent: TPanel;
+    FTitle: TPanel;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure ShowForm(Value: TComponentClass);
+    procedure ListForms(var Lista: TListBox; var Title: TPanel);
+    procedure ReRenderForms;
+    procedure DesablePanel(var aPanel: TPanel);
+    procedure EnablePanel(var aPanel: TPanel; aColor: TColor);
+    function CountForms: integer;
+    function ModuloForm(aForm: Tform): string;
+    procedure ArredondarCantos(componente: TWinControl);
+    property MainForm: TForm read FMainForm write FMainForm;
+    property Parent: TPanel read FParent write FParent;
+    property Title: TPanel read FTitle write FTitle;
   end;
 
 var
@@ -35,8 +37,7 @@ implementation
 
 { TControllerView }
 
-procedure TControllerView.ShowForm(Value: TComponentClass;
-  const Parent: TPanel; var Title: TPanel);
+procedure TControllerView.ShowForm(Value: TComponentClass);
 var
   aForm: TForm;
   LabelCaminhoForm: Tlabel;

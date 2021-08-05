@@ -1,20 +1,32 @@
-inherited FrmCadastroPadrao: TFrmCadastroPadrao
-  Caption = 'FrmCadastroPadrao'
+inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
+  Caption = 'FrmCadastroListaPadrao'
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
-  WindowState = wsNormal
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    ExplicitWidth = 840
-    ExplicitHeight = 640
     inherited pnlConteudo: TPanel
-      Top = 35
-      Height = 605
-      Margins.Top = 0
-      ExplicitTop = 35
+      Top = 38
+      Height = 602
+      ExplicitTop = 38
       ExplicitWidth = 840
-      ExplicitHeight = 605
+      ExplicitHeight = 602
+      object grdLista: TDBGrid
+        Left = 0
+        Top = 3
+        Width = 840
+        Height = 599
+        Align = alClient
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = grdListaDblClick
+      end
     end
     object pnlMenu: TPanel
       Left = 0
@@ -48,9 +60,6 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
-        OnClick = SpeedButton5Click
-        OnMouseEnter = SpeedButton5MouseEnter
-        OnMouseLeave = SpeedButton5MouseLeave
       end
       object SpeedButton6: TSpeedButton
         AlignWithMargins = True
@@ -74,9 +83,6 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
-        OnClick = SpeedButton6Click
-        OnMouseEnter = SpeedButton6MouseEnter
-        OnMouseLeave = SpeedButton6MouseLeave
       end
       object pnlBarraLateralBotao: TPanel
         Left = 0
