@@ -88,7 +88,6 @@ end;
 procedure TFrmMenu.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
    TConexao.GetInstance.FecharConexao;
-   FreeAndNil(FrmCadastroListaPessoa);
 end;
 
 procedure TFrmMenu.FormCreate(Sender: TObject);

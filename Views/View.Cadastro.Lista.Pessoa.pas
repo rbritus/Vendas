@@ -10,7 +10,6 @@ uses
 type
   TFrmCadastroListaPessoa = class(TFrmCadastroListaPadrao)
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,13 +30,7 @@ procedure TFrmCadastroListaPessoa.FormCreate(Sender: TObject);
 begin
   inherited;
   FServicolistaCadastro := TServicoPessoa.New;
-  FFormCadastro := TFrmCadastroPessoa.Create(Self);
-end;
-
-procedure TFrmCadastroListaPessoa.FormDestroy(Sender: TObject);
-begin
-  inherited;
-  FreeAndNil(FFormCadastro);
+  FTClasseFormCadastro := TFrmCadastroPessoa;
 end;
 
 end.

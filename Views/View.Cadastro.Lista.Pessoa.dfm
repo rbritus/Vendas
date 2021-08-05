@@ -1,8 +1,6 @@
 inherited FrmCadastroListaPessoa: TFrmCadastroListaPessoa
   Caption = 'FrmCadastroListaPessoa'
-  OnClose = nil
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel

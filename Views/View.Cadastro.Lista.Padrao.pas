@@ -9,6 +9,8 @@ uses
   Interfaces.Services.ListaCadastro, View.Cadastro.Padrao, Datasnap.DBClient;
 
 type
+  TFrmCadastroPadraoClass = class of TComponent;
+
   TFrmCadastroListaPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
@@ -27,7 +29,7 @@ type
     procedure ExecutarConsulta;
   protected
     FServicolistaCadastro: iServicesListaCadastro;
-    FFormCadastro: TFrmCadastroPadrao;
+    FTClasseFormCadastro: TFrmCadastroPadraoClass;
   public
     { Public declarations }
   end;
@@ -36,6 +38,9 @@ var
   FrmCadastroListaPadrao: TFrmCadastroListaPadrao;
 
 implementation
+
+uses
+  Controller.View;
 
 {$R *.dfm}
 
@@ -75,7 +80,7 @@ end;
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
   inherited;
-  FFormCadastro.Show;
+  ControllerView.ShowForm(TComponentClass(FTClasseFormCadastro));
 end;
 
 end.
