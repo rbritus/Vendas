@@ -24,8 +24,7 @@ type
 implementation
 
 uses
-  System.Rtti, Attributes.Forms, Utils.Entidade, Wrapper.PropriedadeCadastro,
-  Interfaces.Wrapper.PropriedadeCadastro, System.SysUtils;
+  Utils.Entidade, Utils.Form;
 
 { TControllerCadastroPadrao }
 
@@ -61,61 +60,13 @@ begin
 end;
 
 procedure TControllerCadastroPadrao.ObterObjeto;
-var
-  Ctx: TRttiContext;
-  Tipo: TRTTIType;
-  Atrib: TCustomAttribute;
 begin
-  FEntidade := nil;
-  Ctx := TRttiContext.Create;
-  try
-    Tipo := Ctx.GetType(FForm.ClassType);
-    if Tipo = Nil then
-      Exit;
-
-    for Atrib in Tipo.GetAttributes do
-    begin
-      if Atrib is TClasseCadastro then
-      begin
-        FEntidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
-        Break;
-      end;
-    end;
-  finally
-    Ctx.Free;
-  end;
+  FEntidade := TUtilsForm.ObterObjetoDeCadastroDoForm(FForm);
 end;
 
 procedure TControllerCadastroPadrao.PreencherEntidadeComCamposDoForm;
-var
-  Ctx: TRttiContext;
-  Tipo: TRTTIType;
-  Atrib: TCustomAttribute;
-  FField: TRttiField;
-  Wrapper: iWrapperPropriedadeCadastro;
 begin
-  Wrapper := TWrapperPropriedadeCadastro.New;
-  Ctx := TRttiContext.Create;
-  try
-    Tipo := Ctx.GetType(FForm.ClassType);
-    if Tipo = Nil then
-      Exit;
-
-    for FField in Tipo.GetFields do
-    begin
-      for Atrib in FField.GetAttributes do
-      begin
-        if Atrib is TPropriedadeCadastro then
-        begin
-          var Valor := Wrapper.ObtemValor(FField.GetValue(FForm), TPropriedadeCadastro(Atrib), TPropriedadeCadastro(Atrib).TipoPropriedade);
-
-          TUtilsEntidade.SetarValorParaPropriedade(FEntidade, TPropriedadeCadastro(Atrib).NomePropriedade, Valor);
-        end;
-      end;
-    end;
-  finally
-    Ctx.Free;
-  end;
+  TUtilsForm.PreencherEntidadeComCamposDoForm(FEntidade, FForm);
 end;
 
 end.

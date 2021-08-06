@@ -15,8 +15,8 @@ type
 
     class function ExecutarMetodoObjeto(Objeto: TObject; NomeMetodo: string;
       ParametrosDoMetodo: array of TValue): TValue;
-    class function ExecutarMetodoClasse(Classe: TPersistentClass;
-      NomeMetodo: string; ParametrosDoMetodo: array of TValue): TValue;
+    class function ExecutarMetodoClasse(Classe: TClass; NomeMetodo: string;
+      ParametrosDoMetodo: array of TValue): TValue;
 
     class procedure SetarValorParaPropriedade(Objeto: TObject; NomePropriedade:
       string; Valor: TValue);
@@ -55,8 +55,8 @@ begin
   end;
 end;
 
-class function TUtilsEntidade.ExecutarMetodoClasse(Classe: TPersistentClass;
-  NomeMetodo: string; ParametrosDoMetodo: array of TValue): TValue;
+class function TUtilsEntidade.ExecutarMetodoClasse(Classe: TClass; NomeMetodo: string;
+  ParametrosDoMetodo: array of TValue): TValue;
 var
   ctx: TRttiContext;
   lType: TRttiType;
@@ -173,18 +173,14 @@ begin
 end;
 
 class function TUtilsEntidade.ObterNomeDaTabela(Objeto: TObject): string;
-var
-  Ctx: TRttiContext;
-  Tipo: TRTTIType;
-  Atrib: TCustomAttribute;
 begin
   Result := EmptyStr;
+  var Ctx := TRttiContext.Create;
   try
-    Ctx := TRttiContext.Create;
-    Tipo := Ctx.GetType(Objeto.ClassType);
+    var Tipo := Ctx.GetType(Objeto.ClassType);
     if Tipo <> Nil then
     begin
-      for Atrib in Tipo.GetAttributes do
+      for var Atrib in Tipo.GetAttributes do
       begin
         if Atrib is TNomeTabela then
         begin

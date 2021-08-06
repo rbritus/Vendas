@@ -32,9 +32,6 @@ var
 
 implementation
 
-uses
-  System.Rtti, System.TypInfo, System.StrUtils, Utils.Entidade;
-
 {$R *.dfm}
 
 end.

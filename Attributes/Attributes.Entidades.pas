@@ -2,16 +2,16 @@ unit Attributes.Entidades;
 
 interface
 
-Uses
-   System.SysUtils, Utils.Enumerators;
+uses
+  System.SysUtils, Utils.Enumerators, Objeto.CustomSelect;
 
 type
   TNomeTabela = class(TCustomAttribute)
   private
-    FNome: String;
+    FNome: string;
   public
-    property Nome: String read FNome write FNome;
-    constructor Create(const AValue: String);
+    property Nome: string read FNome write FNome;
+    constructor Create(const AValue: string);
   end;
 
   TTipoAssociacaoEntreTabelas = (taOneToOne, taOneToMany, taManyToOne, taManyToMany);
@@ -20,290 +20,317 @@ type
 
   TAtributosCampo = (CHAVE_PRIMARIA, NOTNULL);
 
-  TConfiguracaoCampo = Set Of TAtributosCampo;
+  TConfiguracaoCampo = set of TAtributosCampo;
 
-  TAtributoBanco = Class(TCustomAttribute)
-   Private
-      Fnome        : String;
-      FTipo        : TTiposDeCampo;
-      Fpropriedades: TConfiguracaoCampo;
-      Fcaption     : String;
-   Public
-      Property nome        : String Read Fnome Write Fnome;
-      Property caption     : String Read Fcaption Write Fcaption;
-      Property tipo        : TTiposDeCampo Read FTipo Write FTipo;
-      Property propriedades: TConfiguracaoCampo Read Fpropriedades
-         Write Fpropriedades;
-      Function getScriptCampo: String; Virtual;
-   End;
+  TAtributoBanco = class(TCustomAttribute)
+  private
+    Fnome: string;
+    FTipo: TTiposDeCampo;
+    Fpropriedades: TConfiguracaoCampo;
+    Fcaption: string;
+    FVisivel: Boolean;
+    FCustomSelect: TClasseCustom;
+  public
+    property nome: string read Fnome write Fnome;
+    property caption: string read Fcaption write Fcaption;
+    property tipo: TTiposDeCampo read FTipo write FTipo;
+    property propriedades: TConfiguracaoCampo read Fpropriedades write Fpropriedades;
+    property Visivel: Boolean read FVisivel write FVisivel;
+    property CustomSelect: TClasseCustom read FCustomSelect write FCustomSelect;
+    function getScriptCampo: string; virtual;
+  end;
 
-   TCampoTexto = Class(TAtributoBanco)
-   Private
-      fTamanho: Integer;
-   Public
-      Property tamanho: Integer Read fTamanho Write fTamanho;
-      Constructor create(pNome: String; pTamanho: Integer;
-         pConfig: TConfiguracaoCampo; pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoTexto = class(TAtributoBanco)
+  private
+    fTamanho: Integer;
+  public
+    property tamanho: Integer read fTamanho write fTamanho;
+    constructor create(pNome: string; pTamanho: Integer; pConfig: TConfiguracaoCampo;
+      pCaption: string = ''; pVisivel: Boolean = True); overload;
+    constructor create(pNome: string; pTamanho: Integer; pConfig: TConfiguracaoCampo;
+      pTCustomSelect: TClasseCustom); overload;
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoInteiro = Class(TAtributoBanco)
-   Public
-      Constructor create(pNome: String; pConfig: TConfiguracaoCampo;
-         pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoInteiro = class(TAtributoBanco)
+  public
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+      pVisivel: Boolean = True);
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoDecimal = Class(TAtributoBanco)
-   Private
-      fTamanho : Integer;
-      fPrecisao: Integer;
-   Public
-      Property tamanho : Integer Read fTamanho Write fTamanho;
-      Property precisao: Integer Read fPrecisao Write fPrecisao;
-      Constructor create(pNome: String; pTamanho, pPrecisao: Integer;
-         pConfig: TConfiguracaoCampo; pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoDecimal = class(TAtributoBanco)
+  private
+    fTamanho: Integer;
+    fPrecisao: Integer;
+  public
+    property tamanho: Integer read fTamanho write fTamanho;
+    property precisao: Integer read fPrecisao write fPrecisao;
+    constructor create(pNome: string; pTamanho, pPrecisao: Integer; pConfig:
+      TConfiguracaoCampo; pCaption: string = ''; pVisivel: Boolean = True);
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoData = Class(TAtributoBanco)
-   Public
-      Constructor create(pNome: String; pConfig: TConfiguracaoCampo;
-         pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoData = class(TAtributoBanco)
+  public
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+      pVisivel: Boolean = True);
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoLogico = Class(TAtributoBanco)
-      Constructor create(pNome: String; pConfig: TConfiguracaoCampo;
-         pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoLogico = class(TAtributoBanco)
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+      pVisivel: Boolean = True);
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoEstrangeiro = Class(TCampoInteiro)
-   Private
-      FCampoDescricaoConsulta: string;
-   Public
-      Constructor create(pNome: String; pConfig: TConfiguracaoCampo;
-         pCaption: String = ''; pCampoDescricaoConsulta: String = '');
+  TCampoEstrangeiro = class(TCampoInteiro)
+  private
+    FCampoDescricaoConsulta: string;
+  public
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+      pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
       //Propriedade utilizada na consulta da entidade, ela aponta qual é a
       //propriedade que serve como descrição da entidade relacionada
-      property CampoDescricaoConsulta: string Read FCampoDescricaoConsulta
-         Write FCampoDescricaoConsulta;
-   End;
+    property CampoDescricaoConsulta: string read FCampoDescricaoConsulta write FCampoDescricaoConsulta;
+  end;
 
-   TCampoListagem = Class(TAtributoBanco)
-   Private
-      FTipoCascata     : TTipoCascata;
-      FTipoAssociacao  : TTipoAssociacaoEntreTabelas;
-      FCampoFilho      : String;
-      FCampoPai        : String;
-      FTabelaRelacional: String;
-   Public
-      Property TipoAssociacao  : TTipoAssociacaoEntreTabelas Read FTipoAssociacao Write FTipoAssociacao;
-      Property TipoCascata     : TTipoCascata Read FTipoCascata Write FTipoCascata;
-      Property CampoPai        : String Read FCampoPai Write FCampoPai;
-      Property CampoFilho      : String Read FCampoFilho Write FCampoFilho;
-      Property TabelaRelacional: String Read FTabelaRelacional Write FTabelaRelacional;
-      Constructor create(pTipoAssociacao: TTipoAssociacaoEntreTabelas;
-         pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho,
-         pTabelaRelacional: String);
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoListagem = class(TAtributoBanco)
+  private
+    FTipoCascata: TTipoCascata;
+    FTipoAssociacao: TTipoAssociacaoEntreTabelas;
+    FCampoFilho: string;
+    FCampoPai: string;
+    FTabelaRelacional: string;
+  public
+    property TipoAssociacao: TTipoAssociacaoEntreTabelas read FTipoAssociacao write FTipoAssociacao;
+    property TipoCascata: TTipoCascata read FTipoCascata write FTipoCascata;
+    property CampoPai: string read FCampoPai write FCampoPai;
+    property CampoFilho: string read FCampoFilho write FCampoFilho;
+    property TabelaRelacional: string read FTabelaRelacional write FTabelaRelacional;
+    constructor create(pTipoAssociacao: TTipoAssociacaoEntreTabelas; pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho, pTabelaRelacional: string);
+    function getScriptCampo: string; override;
+  end;
 
-   TCampoBlob = Class(TAtributoBanco)
-   Public
-      Constructor create(pNome: String; pConfig: TConfiguracaoCampo;
-        pCaption: String = '');
-      Function getScriptCampo: String; Override;
-   End;
+  TCampoBlob = class(TAtributoBanco)
+  public
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '');
+    function getScriptCampo: string; override;
+  end;
 
 implementation
 
 { TableName }
 
-constructor TNomeTabela.Create(const AValue: String);
+constructor TNomeTabela.Create(const AValue: string);
 begin
-   Self.Nome := AValue;
+  Self.Nome := AValue;
 end;
 
 { TCampoTexto }
 
-Constructor TCampoTexto.create(pNome: String; pTamanho: Integer;
-   pConfig: TConfiguracaoCampo; pCaption: String = '');
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftTEXTO;
-   self.tamanho      := pTamanho;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-End;
+constructor TCampoTexto.create(pNome: string; pTamanho: Integer; pConfig: TConfiguracaoCampo;
+  pCaption: string = ''; pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftTEXTO;
+  self.tamanho := pTamanho;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  Self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoTexto.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
+constructor TCampoTexto.create(pNome: string; pTamanho: Integer;
+  pConfig: TConfiguracaoCampo; pTCustomSelect: TClasseCustom);
+begin
+  self.nome := pNome;
+  self.tipo := ftTEXTO;
+  self.tamanho := pTamanho;
+  self.propriedades := pConfig;
+  self.caption := EmptyStr;
+  Self.Visivel := True;
+  Self.CustomSelect := pTCustomSelect;
+end;
+
+function TCampoTexto.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
 //   cRetorno := self.nome + ' character varying(' + IntToStr(self.tamanho) + ')';
-   cRetorno := self.nome + ' TEXT';
+  cRetorno := self.nome + ' TEXT';
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 { TCampoInteiro }
 
-Constructor TCampoInteiro.create(pNome: String; pConfig: TConfiguracaoCampo;
-   pCaption: String = '');
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftINTEIRO;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-End;
+constructor TCampoInteiro.create(pNome: string; pConfig: TConfiguracaoCampo;
+  pCaption: string = ''; pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftINTEIRO;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  Self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoInteiro.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
-   cRetorno := self.nome + ' integer';
+function TCampoInteiro.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
+  cRetorno := self.nome + ' integer';
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 { TAtributoBanco }
 
-Function TAtributoBanco.getScriptCampo: String;
-Begin
-   Raise EAccessViolation.create('Método não pode ser chamado da classe pai');
-End;
+function TAtributoBanco.getScriptCampo: string;
+begin
+  raise EAccessViolation.create('Método não pode ser chamado da classe pai');
+end;
 
 { TCampoData }
 
-Constructor TCampoData.create(pNome: String; pConfig: TConfiguracaoCampo;
-   pCaption: String = '');
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftDATA;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-End;
+constructor TCampoData.create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+  pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftDATA;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoData.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
-   cRetorno := self.nome + ' date';
+function TCampoData.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
+  cRetorno := self.nome + ' date';
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 { TCampoEstrangeiro }
 
-Constructor TCampoEstrangeiro.create(pNome: String; pConfig: TConfiguracaoCampo;
-   pCaption: String = ''; pCampoDescricaoConsulta: String = '');
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftESTRANGEIRO;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-   Self.CampoDescricaoConsulta := pCampoDescricaoConsulta;
-End;
+constructor TCampoEstrangeiro.create(pNome: string; pConfig: TConfiguracaoCampo;
+  pCaption: string = ''; pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftESTRANGEIRO;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  Self.CampoDescricaoConsulta := pCampoDescricaoConsulta;
+  self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
 { TCampoListagem }
 
-Constructor TCampoListagem.create(pTipoAssociacao: TTipoAssociacaoEntreTabelas;
-   pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho, pTabelaRelacional
-   : String);
-Begin
-   self.tipo             := ftLISTAGEM;
-   self.TipoAssociacao   := pTipoAssociacao;
-   self.TipoCascata      := pTipoCascata;
-   self.CampoPai         := pCampoPai;
-   self.CampoFilho       := pCampoFilho;
-   self.TabelaRelacional := pTabelaRelacional;
-End;
+constructor TCampoListagem.create(pTipoAssociacao: TTipoAssociacaoEntreTabelas; pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho, pTabelaRelacional: string);
+begin
+  self.tipo := ftLISTAGEM;
+  self.TipoAssociacao := pTipoAssociacao;
+  self.TipoCascata := pTipoCascata;
+  self.CampoPai := pCampoPai;
+  self.CampoFilho := pCampoFilho;
+  self.TabelaRelacional := pTabelaRelacional;
+  self.Visivel := False;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoListagem.getScriptCampo: String;
-Begin
-   getScriptCampo := '';
-End;
+function TCampoListagem.getScriptCampo: string;
+begin
+  getScriptCampo := '';
+end;
 
 { TCampoDecimal }
 
-Constructor TCampoDecimal.create(pNome: String; pTamanho, pPrecisao: Integer;
-   pConfig: TConfiguracaoCampo; pCaption: String = '');
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftDECIMAL;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-   self.tamanho      := pTamanho;
-   self.precisao     := pPrecisao;
-End;
+constructor TCampoDecimal.create(pNome: string; pTamanho, pPrecisao: Integer;
+  pConfig: TConfiguracaoCampo; pCaption: string = ''; pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftDECIMAL;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  self.tamanho := pTamanho;
+  self.precisao := pPrecisao;
+  self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoDecimal.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
-   cRetorno := Format(' %s numeric(%d, %d)', [self.nome, self.tamanho, self.precisao]);
+function TCampoDecimal.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
+  cRetorno := Format(' %s numeric(%d, %d)', [self.nome, self.tamanho, self.precisao]);
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 { TCampoLogico }
 
-Constructor TCampoLogico.create(pNome: String; pConfig: TConfiguracaoCampo;
-   pCaption: String);
-Begin
-   self.nome         := pNome;
-   self.tipo         := ftLOGICO;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
-End;
+constructor TCampoLogico.create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+  pVisivel: Boolean = True);
+begin
+  self.nome := pNome;
+  self.tipo := ftLOGICO;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  self.Visivel := pVisivel;
+  Self.CustomSelect := nil;
+end;
 
-Function TCampoLogico.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
-   cRetorno := self.nome + ' boolean';
+function TCampoLogico.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
+  cRetorno := self.nome + ' boolean';
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 { TCampoBlob }
 
-constructor TCampoBlob.create(pNome: String; pConfig: TConfiguracaoCampo;
-  pCaption: String);
+constructor TCampoBlob.create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string);
 begin
-   self.nome         := pNome;
-   self.tipo         := ftBLOBT;
-   self.propriedades := pConfig;
-   self.caption      := pCaption;
+  self.nome := pNome;
+  self.tipo := ftBLOBT;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  self.Visivel := False;
+  Self.CustomSelect := nil;
 end;
 
-Function TCampoBlob.getScriptCampo: String;
-Var
-   cRetorno: String;
-Begin
-   cRetorno := self.nome + ' bytea';
+function TCampoBlob.getScriptCampo: string;
+var
+  cRetorno: string;
+begin
+  cRetorno := self.nome + ' bytea';
 
-   If NOTNULL In self.propriedades Then
-      cRetorno := cRetorno + ' not null';
+  if NOTNULL in self.propriedades then
+    cRetorno := cRetorno + ' not null';
 
-   Result := cRetorno;
-End;
+  Result := cRetorno;
+end;
 
 end.
+

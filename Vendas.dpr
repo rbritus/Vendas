@@ -27,8 +27,9 @@ uses
   View.Cadastro.Lista.Padrao in 'Views\View.Cadastro.Lista.Padrao.pas' {FrmCadastroListaPadrao},
   Interfaces.Objeto.PropertyCustom in 'Interfaces\Interfaces.Objeto.PropertyCustom.pas',
   Interfaces.Services.ListaCadastro in 'Interfaces\Interfaces.Services.ListaCadastro.pas',
-  Services.Entidade.Pessoa in 'Services\Services.Entidade.Pessoa.pas',
-  View.Cadastro.Lista.Pessoa in 'Views\View.Cadastro.Lista.Pessoa.pas' {FrmCadastroListaPessoa};
+  View.Cadastro.Lista.Pessoa in 'Views\View.Cadastro.Lista.Pessoa.pas' {FrmCadastroListaPessoa},
+  Objeto.CustomSelect in 'Objects\Objeto.CustomSelect.pas',
+  Utils.Form in 'Utils\Utils.Form.pas';
 
 {$R *.res}
 

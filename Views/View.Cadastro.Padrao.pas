@@ -25,7 +25,7 @@ type
     procedure OcultarBarraLateralDoBotao;
   public
     { Public declarations }
-    procedure SetIdEdicao(pId: Integer);
+    procedure CarregarEntidadeParaEdicao(pId: Integer);
   end;
 
 var
@@ -49,7 +49,7 @@ begin
   pnlBarraLateralBotao.Visible := False;
 end;
 
-procedure TFrmCadastroPadrao.SetIdEdicao(pId: Integer);
+procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
 
 end;

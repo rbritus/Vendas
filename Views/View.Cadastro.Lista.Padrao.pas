@@ -6,11 +6,9 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  Interfaces.Services.ListaCadastro, View.Cadastro.Padrao, Datasnap.DBClient;
+  View.Cadastro.Padrao, Datasnap.DBClient;
 
 type
-  TFrmCadastroPadraoClass = class of TComponent;
-
   TFrmCadastroListaPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
@@ -27,9 +25,6 @@ type
     procedure ApresentarDadosNaGrid;
     procedure CriarDataSource;
     procedure ExecutarConsulta;
-  protected
-    FServicolistaCadastro: iServicesListaCadastro;
-    FTClasseFormCadastro: TFrmCadastroPadraoClass;
   public
     { Public declarations }
   end;
@@ -40,7 +35,7 @@ var
 implementation
 
 uses
-  Controller.View;
+  Controller.View, Utils.Form, Utils.Entidade;
 
 {$R *.dfm}
 
@@ -55,7 +50,12 @@ end;
 
 procedure TFrmCadastroListaPadrao.ExecutarConsulta;
 begin
-  FClientDataSet := FServicolistaCadastro.GetDataSetListaCadastro as TClientDataSet;
+  var Entidade := TUtilsForm.ObterObjetoDeCadastroDoForm(Self);
+  try
+    FClientDataSet := TUtilsEntidade.ExecutarMetodoClasse(GetClass(Entidade.ClassName),'ListarTodosCDS',[]).AsType<TClientDataSet>;
+  finally
+    FreeAndNil(Entidade);
+  end;
 end;
 
 procedure TFrmCadastroListaPadrao.ApresentarDadosNaGrid;
@@ -80,7 +80,8 @@ end;
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
   inherited;
-  ControllerView.ShowForm(TComponentClass(FTClasseFormCadastro));
+  var ClasseForm := TUtilsForm.ObterClasseDoFormularioCadastro(Self);
+  ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
 end.

@@ -25,6 +25,8 @@ type
     function CountForms: integer;
     function ModuloForm(aForm: Tform): string;
     procedure ArredondarCantos(componente: TWinControl);
+    procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
+
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
     property Title: TPanel read FTitle write FTitle;
@@ -43,11 +45,7 @@ var
   LabelCaminhoForm: Tlabel;
   LabelAtual: Tlabel;
 begin
-  if not ListaForm.TryGetValue(Value, aForm) then
-  begin
-    Application.CreateForm(Value, aForm);
-    ListaForm.Add(Value, aForm);
-  end;
+  AdicionarFormNalista(Value,aForm);
   Parent.Visible := True;
   Title.Visible := True;
   aForm.Parent := Parent;
@@ -69,6 +67,16 @@ begin
       LabelAtual.Caption := aForm.Caption;
   end;
   aForm.Show;
+end;
+
+procedure TControllerView.AdicionarFormNalista(Value: TComponentClass;
+  var pForm: TForm);
+begin
+  if not ListaForm.TryGetValue(Value, pForm) then
+  begin
+    Application.CreateForm(Value, pForm);
+    ListaForm.Add(Value, pForm);
+  end;
 end;
 
 procedure TControllerView.ArredondarCantos(componente: TWinControl);

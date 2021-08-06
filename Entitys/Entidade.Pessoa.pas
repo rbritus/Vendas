@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Interfaces.Entidade.Pessoa, Attributes.Entidades,
-  System.SysUtils;
+  System.SysUtils, Objeto.CustomSelect;
 
 type
   [TNomeTabela('PESSOA')]
@@ -24,7 +24,7 @@ type
     property Id: Integer read GetId write SetId;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
-    [TCampoTexto('ATIVO', 1, [], 'Ativo')]
+    [TCampoTexto('ATIVO', 1, [NOTNULL], TCustomSelectAtivo)]
     property Ativo: string read GetAtivo write SetAtivo;
 
     class function New : iPessoa;

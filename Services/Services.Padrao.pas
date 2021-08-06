@@ -21,7 +21,7 @@ type
   TServico<T: class> = class(TInterfacedObject, iServico<T>)
   private
     procedure PersistirListagem(Propriedade: TRttiProperty; Lista: TList<TObject>; EntidadePai: TObject);
-    procedure CorrigirCaptionDataSet(cds: TDataSet; Obj: T);
+    procedure AlterarPropriedadeVisibleDoField(cds: TDataSet);
     procedure PreencherArrayComParametros(Propriedade: TRttiProperty; Objeto: TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
     function ObterArrayComParametrosPreenchidos(Objeto: TObject): TArrayParametros;
     function RegistroJaGravadoEmBanco(Objeto: TObject): Boolean;
@@ -30,6 +30,7 @@ type
     function CriarSqlParaAtualizacao(Objeto: TObject; Parametros: TArrayParametros): string;
     procedure PreencherQueryComArray(Qry: TQuery; Parametros: TArrayParametros);
     function ObterSqlParaPersistencia(Objeto: TObject; Parametros: TArrayParametros): string;
+    function ObterSqlCustomizada: string;
   public
     procedure Gravar(Objeto: TObject);
     procedure Excluir(Objeto: TObject);
@@ -42,38 +43,35 @@ type
 
 implementation
 
+uses
+  Objeto.CustomSelect;
+
 { TServico<T> }
 
-procedure TServico<T>.CorrigirCaptionDataSet(cds: TDataSet; Obj: T);
-Var
-   Ctx  : TRttiContext;
-   Prop : TRttiProperty;
-   Tipo : TRTTIType;
-   Atrib: TCustomAttribute;
-Begin
-   Ctx    := TRttiContext.Create;
-   Tipo   := ctx.GetType(Obj.ClassType);
+procedure TServico<T>.AlterarPropriedadeVisibleDoField(cds: TDataSet);
+begin
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(TypeInfo(T));
+    if not Assigned(Tipo) then
+      Exit;
 
-   Try
-      If Tipo <> Nil Then
-      Begin
-         For Prop In Tipo.GetDeclaredProperties Do
-         Begin
-            For Atrib In Prop.GetAttributes Do
-            Begin
-               If Atrib Is TAtributoBanco Then
-               Begin
-                  if cds.FindField(TAtributoBanco(Atrib).nome) = nil then
-                     Continue;
+    for var Prop in Tipo.GetDeclaredProperties do
+    begin
+      for var Atrib in Prop.GetAttributes do
+      begin
+        if Atrib is TAtributoBanco then
+        begin
+          if cds.FindField(TAtributoBanco(Atrib).nome) = nil then
+            Continue;
 
-                  cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
-               End;
-            End;
-         End;
-      End;
-   Finally
-      Ctx.Free;
-   End;
+          cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
 end;
 
 procedure TServico<T>.Excluir(Objeto: TObject);
@@ -401,7 +399,6 @@ Begin
    idPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'id');
 
    Ctx := TRttiContext.Create;
-
    Try
       For Atrib In Propriedade.GetAttributes Do
       Begin
@@ -484,22 +481,53 @@ Begin
 
 End;
 
-function TServico<T>.ListarTodosCDS(): TDataSet;
-Var
-   DSet   : TDataSet;
-   Objeto : T;
-Begin
-   Objeto  := TUtilsEntidade.ObterObjetoGenerico<T>();
+function TServico<T>.ObterSqlCustomizada: string;
+var
+  Objeto: T;
+begin
+  var Sql := EmptyStr;
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(TypeInfo(T));
+    if not Assigned(Tipo) then
+      Exit;
 
-   Try
-      DSet := TConexao.GetInstance.EnviaConsulta('select * from ' +
-         TUtilsEntidade.ObterNomeDaTabela(Objeto));
-      CorrigirCaptionDataSet(DSet, Objeto);
-   Finally
-      FreeAndNil(Objeto);
-   End;
+    for var Prop in Tipo.GetDeclaredProperties do
+    begin
+      for var Atrib in Prop.GetAttributes do
+      begin
+        if not (Atrib is TAtributoBanco) then
+          Continue;
 
-   Result := DSet;
+        if not Sql.IsEmpty then
+          Sql := Sql + ', ';
+
+        if not Assigned(TAtributoBanco(Atrib).CustomSelect) then
+        begin
+          Sql := Sql + TAtributoBanco(Atrib).nome + ' as ' + TAtributoBanco(Atrib).caption;
+          Continue;
+        end;
+        Sql := Sql + TUtilsEntidade.ExecutarMetodoClasse(TAtributoBanco(Atrib).CustomSelect,'getSelectCustom',[]).AsString;
+      end;
+    end;
+    Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
+    try
+      Sql := 'select ' + Sql + ' from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto);
+    finally
+      Objeto.Free;
+    end;
+  finally
+    Ctx.Free;
+  end;
+  Result := Sql;
+end;
+
+function TServico<T>.ListarTodosCDS: TDataSet;
+begin
+  var Sql := ObterSqlCustomizada;
+  var DSet := TConexao.GetInstance.EnviaConsulta(Sql);
+  AlterarPropriedadeVisibleDoField(DSet);
+  Result := DSet;
 end;
 
 class function TServico<T>.New: iServico<T>;
@@ -508,34 +536,33 @@ begin
 end;
 
 function TServico<T>.ListarTodos: TList<T>;
-Var
-   DSet   : TDataSet;
-   ListObj: TList<T>;
-   Objeto : T;
-Begin
-   ListObj := TList<T>.Create;
-   Objeto  := TUtilsEntidade.ObterObjetoGenerico<T>();
+var
+  DSet: TDataSet;
+  ListObj: TList<T>;
+  Objeto: T;
+begin
+  ListObj := TList<T>.Create;
+  Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
 
-   Try
-      DSet := TConexao.GetInstance.EnviaConsulta('select * from ' +
-         TUtilsEntidade.ObterNomeDaTabela(Objeto));
-   Finally
-      FreeAndNil(Objeto);
-   End;
+  try
+    DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto));
+  finally
+    FreeAndNil(Objeto);
+  end;
 
-   DSet.First;
-   While Not DSet.Eof Do
-   Begin
-      Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
+  DSet.First;
+  while not DSet.Eof do
+  begin
+    Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
-      TUtilsEntidade.PreencheObjeto(TObject(Objeto), DSet);
-      ListObj.Add(Objeto);
+    TUtilsEntidade.PreencheObjeto(TObject(Objeto), DSet);
+    ListObj.Add(Objeto);
 
-      DSet.Next;
-   End;
-   FreeAndNil(DSet);
+    DSet.Next;
+  end;
+  FreeAndNil(DSet);
 
-   Result := ListObj;
+  Result := ListObj;
 end;
 
 function TServico<T>.PesquisarPorCondicao(cSql: string): TList<T>;
@@ -545,7 +572,7 @@ Var
    Objeto: T;
 Begin
    ListObj := TList<T>.Create;
-   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
+   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
    DSet   := TConexao.GetInstance.EnviaConsulta('select * from ' +
        TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + cSql);
@@ -562,7 +589,7 @@ Begin
       DSet.First;
       While Not DSet.Eof Do
       Begin
-         Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
+         Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
          TUtilsEntidade.PreencheObjeto(TObject(Objeto), DSet);
          ListObj.Add(Objeto);
@@ -581,7 +608,7 @@ Var
    DSet  : TDataSet;
    Objeto: T;
 Begin
-   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
+   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
    DSet   := TConexao.GetInstance.EnviaConsulta('select * from ' +
        TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' +

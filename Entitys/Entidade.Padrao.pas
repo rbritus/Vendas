@@ -25,15 +25,14 @@ Implementation
 
 procedure TEntidade<T>.Excluir;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    iServico.Excluir(Self);
 end;
 
 procedure TEntidade<T>.Gravar;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    iServico.Gravar(Self);
-   iServico.Free;
 end;
 
 procedure TEntidade<T>.Limpar;
@@ -43,30 +42,26 @@ end;
 
 class function TEntidade<T>.ListarTodos(): TList<T>;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    Result := iServico.ListarTodos();
-   iServico.Free;
 end;
 
 class function TEntidade<T>.ListarTodosCDS: TClientDataSet;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    Result := TClientDataSet(iServico.ListarTodosCDS());
-   iServico.Free;
 end;
 
 class function TEntidade<T>.PesquisarPorCondicao(cSql: string): TList<T>;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    Result := iServico.PesquisarPorCondicao(cSql);
-   iServico.Free;
 end;
 
 class function TEntidade<T>.PesquisarPorId(Id: Integer): T;
 begin
-   var iServico := TServico<T>.Create;
+   var iServico := TServico<T>.New;
    Result := iServico.PesquisarPorId(Id);
-   iServico.Free;
 end;
 
 end.

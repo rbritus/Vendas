@@ -14,6 +14,14 @@ type
     constructor Create(const ClassValue: TPersistentClass);
   end;
 
+  TFormularioCadastro = class(TCustomAttribute)
+  private
+    FFormClasse: TComponentClass;
+  public
+    property FormClasse: TComponentClass read FFormClasse write FFormClasse;
+    constructor Create(const ClassValue: TComponentClass);
+  end;
+
   TPropriedadeCadastro = class(TCustomAttribute)
   private
     FNomePropriedade: string;
@@ -62,6 +70,13 @@ begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;
   FCampoObrigatorio := pCampoObrigatorio;
+end;
+
+{ TFormularioCadastro }
+
+constructor TFormularioCadastro.Create(const ClassValue: TComponentClass);
+begin
+  FFormClasse := ClassValue;
 end;
 
 end.
