@@ -81,6 +81,10 @@ procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
   inherited;
   var ClasseForm := TUtilsForm.ObterClasseDoFormularioCadastro(Self);
+  var Form : TForm := nil;
+  ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
+  var ID := grdLista.DataSource.DataSet.FieldByName('id').AsInteger;
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
   ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 

@@ -51,7 +51,8 @@ end;
 
 procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
-
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.CarregarEntidadeParaEdicao(pId);
 end;
 
 procedure TFrmCadastroPadrao.SpeedButton5Click(Sender: TObject);
@@ -77,6 +78,7 @@ begin
   inherited;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.GravarEntidade;
+  Close;
 end;
 
 procedure TFrmCadastroPadrao.SpeedButton6MouseEnter(Sender: TObject);

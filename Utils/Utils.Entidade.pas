@@ -202,10 +202,9 @@ var
 begin
   Result := EmptyStr;
   Ctx := TRttiContext.Create;
-  Tipo := Ctx.GetType(FindClass(Obj.ClassName));
-
   try
-    if Tipo <> Nil then
+    Tipo := Ctx.GetType(FindClass(Obj.ClassName));
+    if Assigned(Tipo) then
       Result := Tipo.GetProperty(cNomePropriedade).GetValue(Obj).AsVariant;
   finally
     Ctx.Free;

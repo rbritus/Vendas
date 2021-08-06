@@ -17,7 +17,6 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure ShowForm(Value: TComponentClass);
     procedure ListForms(var Lista: TListBox; var Title: TPanel);
     procedure ReRenderForms;
     procedure DesablePanel(var aPanel: TPanel);
@@ -25,7 +24,9 @@ type
     function CountForms: integer;
     function ModuloForm(aForm: Tform): string;
     procedure ArredondarCantos(componente: TWinControl);
+
     procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
+    procedure ShowForm(Value: TComponentClass);
 
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
