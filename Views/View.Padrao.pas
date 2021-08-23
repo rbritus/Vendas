@@ -13,6 +13,7 @@ type
     pnlConteudo: TPanel;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -45,6 +46,11 @@ procedure TFrmPadrao.FormResize(Sender: TObject);
 begin
 //  ControllerView.ArredondarCantos(pnlConteudo);
 //  ControllerView.ArredondarCantos(pnlFundo);
+end;
+
+procedure TFrmPadrao.FormShow(Sender: TObject);
+begin
+  ControllerView.CaptionShow(Self);
 end;
 
 procedure TFrmPadrao.LimparCampos();

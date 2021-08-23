@@ -10,7 +10,8 @@ type
   TUtilsEntidade = class
   public
     class function ObterObjetoGenerico<T>: T;
-    class function ObterNomeDaTabela(Objeto: TObject): string;
+    class function ObterNomeDaTabela(Classe: TPersistentClass): string; overload;
+    class function ObterNomeDaTabela(Objeto: TObject): string; overload;
     class function ObterChavePrimaria(Objeto: TObject): string;
 
     class function ExecutarMetodoObjeto(Objeto: TObject; NomeMetodo: string;
@@ -18,11 +19,11 @@ type
     class function ExecutarMetodoClasse(Classe: TClass; NomeMetodo: string;
       ParametrosDoMetodo: array of TValue): TValue;
 
-    class procedure SetarValorParaPropriedade(Objeto: TObject; NomePropriedade:
-      string; Valor: TValue);
+    class procedure SetarValorParaPropriedade(Objeto: TObject; NomePropriedade: string; Valor: TValue);
     class function ObterValorPropriedade(Obj: TObject; cNomePropriedade: string): Variant;
-    class function ObterObjetoChaveEstrangeira(ObjPai: TObject;
-      ClasseObjEstrangeiro: TPersistentClass): TObject;
+    class function ObterObjetoChaveEstrangeira(ObjPai: TObject; ClasseObjEstrangeiro: TPersistentClass): TObject;
+    class function ObterListaComTabelaRelacional<T: class>(ID: Integer; CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
+         ClasseDestino: TPersistentClass): TObjectList<T>;
 
     class procedure PreencheObjeto(var Obj: TObject; DSet: TDataSet);
     class procedure Limpar(Objeto: TObject);
@@ -113,26 +114,24 @@ var
   cTabela: string;
   cPK: string;
 begin
+  DSetSelf := TConexao.GetInstance.EnviaConsulta('select * from ' + ObterNomeDaTabela(ObjPai) +
+    ' where ' + ObterChavePrimaria(ObjPai) + ' = ' + IntToStr(ObterValorPropriedade(ObjPai, 'ID')));
   try
-    DSetSelf := TConexao.GetInstance.EnviaConsulta('select * from ' + ObterNomeDaTabela(ObjPai) + ' where ' + ObterChavePrimaria(ObjPai) + ' = ' + IntToStr(ObterValorPropriedade(ObjPai, 'ID')));
-
     ObjEstrangeiro := TObject(ClasseObjEstrangeiro.Create);
 
     cTabela := ObterNomeDaTabela(TObject(ObjEstrangeiro));
     cPK := ObterChavePrimaria(TObject(ObjEstrangeiro));
-    DSetEstrangeiro := TConexao.GetInstance.EnviaConsulta('select * from ' + cTabela + ' where ' + cPK + ' = ' + IntToStr(DSetSelf.FieldByName(cTabela + '_FK').AsInteger));
+    DSetEstrangeiro := TConexao.GetInstance.EnviaConsulta('select * from ' + cTabela +
+      ' where ' + cPK + ' = ' + IntToStr(DSetSelf.FieldByName(cTabela + '_FK').AsInteger));
     try
       if DSetEstrangeiro.IsEmpty then
-        Result := Nil
-      else
-      begin
-        PreencheObjeto(ObjEstrangeiro, DSetEstrangeiro);
-        Result := ObjEstrangeiro;
-      end;
+        Exit(Nil);
+
+      PreencheObjeto(ObjEstrangeiro, DSetEstrangeiro);
+      Result := ObjEstrangeiro;
     finally
       FreeAndNil(DSetEstrangeiro);
     end;
-
   finally
     FreeAndNil(DSetSelf);
   end;
@@ -172,12 +171,42 @@ begin
   end;
 end;
 
-class function TUtilsEntidade.ObterNomeDaTabela(Objeto: TObject): string;
+class function TUtilsEntidade.ObterListaComTabelaRelacional<T>(ID: Integer;
+  CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
+  ClasseDestino: TPersistentClass): TObjectList<T>;
+Begin
+  const ctSelect = 'select TAB1.* from %s TAB1 inner join %s TAB2 on TAB2.%s = TAB1.ID where TAB2.%s = %d';
+  var sql := Format(ctSelect, [TUtilsEntidade.ObterNomeDaTabela(ClasseDestino),
+    TabelaIntermediaria, CampoRelacionalTerceiro, CampoRelacionalProprio, ID]);
+
+  var ListObj := TObjectList<T>.Create;
+  var DSet := TConexao.GetInstance.EnviaConsulta(sql);
+  try
+
+    DSet.First;
+    while not DSet.Eof do
+    begin
+      var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
+      TUtilsEntidade.PreencheObjeto(TObject(Objeto), DSet);
+      ListObj.Add(Objeto);
+//            Banco.IncluirNaCache(TObject(Objeto));
+
+      DSet.Next;
+    end;
+  finally
+    DSet.Close;
+    FreeAndNil(DSet);
+  end;
+
+  Result := ListObj;
+end;
+
+class function TUtilsEntidade.ObterNomeDaTabela(Classe: TPersistentClass): string;
 begin
   Result := EmptyStr;
   var Ctx := TRttiContext.Create;
   try
-    var Tipo := Ctx.GetType(Objeto.ClassType);
+    var Tipo := Ctx.GetType(Classe);
     if Tipo <> Nil then
     begin
       for var Atrib in Tipo.GetAttributes do
@@ -192,6 +221,11 @@ begin
   finally
     Ctx.Free;
   end;
+end;
+
+class function TUtilsEntidade.ObterNomeDaTabela(Objeto: TObject): string;
+begin
+  Result := TUtilsEntidade.ObterNomeDaTabela(TPersistentClass(Objeto.ClassType));
 end;
 
 class function TUtilsEntidade.ObterValorPropriedade(Obj: TObject;

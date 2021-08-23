@@ -29,7 +29,20 @@ uses
   Interfaces.Services.ListaCadastro in 'Interfaces\Interfaces.Services.ListaCadastro.pas',
   View.Cadastro.Lista.Pessoa in 'Views\View.Cadastro.Lista.Pessoa.pas' {FrmCadastroListaPessoa},
   Objeto.CustomSelect in 'Objects\Objeto.CustomSelect.pas',
-  Utils.Form in 'Utils\Utils.Form.pas';
+  Utils.Form in 'Utils\Utils.Form.pas',
+  Entidade.Endereco in 'Entitys\Entidade.Endereco.pas',
+  Interfaces.Entidade.Endereco in 'Interfaces\Interfaces.Entidade.Endereco.pas',
+  Entidade.Logradouro in 'Entitys\Entidade.Logradouro.pas',
+  Interfaces.Entidade.Logradouro in 'Interfaces\Interfaces.Entidade.Logradouro.pas',
+  Entidade.Cidade in 'Entitys\Entidade.Cidade.pas',
+  Interfaces.Entidade.Cidade in 'Interfaces\Interfaces.Entidade.Cidade.pas',
+  Entidade.Estado in 'Entitys\Entidade.Estado.pas',
+  Interfaces.Entidade.Estado in 'Interfaces\Interfaces.Entidade.Estado.pas',
+  Entidade.Pais in 'Entitys\Entidade.Pais.pas',
+  Interfaces.Entidade.Pais in 'Interfaces\Interfaces.Entidade.Pais.pas',
+  Controller.Scripter in 'Controllers\Controller.Scripter.pas',
+  Scripts.Versao00 in 'Scripts\Scripts.Versao00.pas',
+  Objeto.ScriptDML in 'Objects\Objeto.ScriptDML.pas';
 
 {$R *.res}
 
@@ -37,5 +50,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmMenu, FrmMenu);
+  TControllerScript.RegistrarEntidadesNoBanco;
   Application.Run;
 end.

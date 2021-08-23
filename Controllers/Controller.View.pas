@@ -24,6 +24,7 @@ type
     function CountForms: integer;
     function ModuloForm(aForm: Tform): string;
     procedure ArredondarCantos(componente: TWinControl);
+    procedure CaptionShow(aForm: Tform);
 
     procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
     procedure ShowForm(Value: TComponentClass);
@@ -54,7 +55,6 @@ begin
   aForm.BorderStyle := bsNone;
   aForm.Visible := True;
   aForm.FormStyle := fsNormal;
-//  aForm.WindowState := wsMaximized;
   if Assigned(Title) then
   begin
     Title.Caption := aForm.Caption;
@@ -70,8 +70,7 @@ begin
   aForm.Show;
 end;
 
-procedure TControllerView.AdicionarFormNalista(Value: TComponentClass;
-  var pForm: TForm);
+procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
 begin
   if not ListaForm.TryGetValue(Value, pForm) then
   begin
@@ -81,17 +80,20 @@ begin
 end;
 
 procedure TControllerView.ArredondarCantos(componente: TWinControl);
-var
-  BX: TRect;
-  mdo: HRGN;
 begin
-  BX := componente.ClientRect;
-  mdo := CreateRoundRectRgn(BX.Left, BX.Top, BX.Right, BX.Bottom, 20, 20);
+  var BX := componente.ClientRect;
+  var mdo := CreateRoundRectRgn(BX.Left, BX.Top, BX.Right, BX.Bottom, 20, 20);
   componente.Perform(EM_GETRECT, 0, lParam(@BX));
   InflateRect(BX, -4, -4);
   componente.Perform(EM_SETRECTNP, 0, lParam(@BX));
   SetWindowRgn(componente.Handle, mdo, True);
   componente.Invalidate;
+end;
+
+procedure TControllerView.CaptionShow(aForm: Tform);
+begin
+  if Assigned(Title) then
+    Title.Caption := aForm.Caption;
 end;
 
 function TControllerView.CountForms: integer;
@@ -105,53 +107,41 @@ begin
 end;
 
 procedure TControllerView.ListForms(var Lista: TListBox; var Title: TPanel);
-var
-  Key : TForm;
 begin
   Lista.Items.Clear;
   Lista.Style := lbOwnerDrawFixed;
   Lista.Ctl3D := false;
   Lista.ItemHeight := 25;
 
-  for Key in ListaForm.Values do
+  for var Key in ListaForm.Values do
     Lista.AddItem(Key.Caption, Key);
 end;
 
 function TControllerView.ModuloForm(aForm: Tform): string;
-var
-  M : String;
 begin
-  M := copy(aForm.Name, length(aForm.Name));
+  var Nome := copy(aForm.Name, length(aForm.Name));
 
-  if UpperCase(M)='C' then
+  if UpperCase(Nome)='C' then
     Result := 'Cadastros';
 end;
 
 procedure TControllerView.ReRenderForms;
-var
-  Key : TForm;
 begin
-  try
-    for Key in ListaForm.Values do
+  for var Key in ListaForm.Values do
+  begin
+    if Key.Showing then
     begin
-      if key.Showing then
-      begin
-        key.Visible := false;
-        key.Visible := true;
-      end;
+      Key.Visible := false;
+      Key.Visible := true;
     end;
-  finally
   end;
 end;
 
 procedure TControllerView.DesablePanel (var aPanel : TPanel);
 begin
-  with aPanel do
-  begin
-    Enabled := false;
-    Color   := $00C7C3BE;
-    Cursor  := crNo;
-  end;
+  aPanel.Enabled := false;
+  aPanel.Color := $00C7C3BE;
+  aPanel.Cursor := crNo;
 end;
 
 destructor TControllerView.Destroy;
@@ -162,12 +152,9 @@ end;
 
 procedure TControllerView.EnablePanel (var aPanel : TPanel; aColor: TColor);
 begin
-  with aPanel do
-  begin
-    Enabled := True;
-    Color   := aColor;
-    Cursor  := crHandPoint;
-  end;
+  aPanel.Enabled := True;
+  aPanel.Color := aColor;
+  aPanel.Cursor := crHandPoint;
 end;
 
 initialization

@@ -57,7 +57,8 @@ implementation
 
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
-  Connection.Scripter.SqLite, Entidade.Pessoa;
+  Connection.Scripter.SqLite, Entidade.Pessoa, Entidade.Endereco,
+  FireDAC.Comp.Client;
 
 procedure TFrmMenu.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
@@ -87,7 +88,7 @@ end;
 
 procedure TFrmMenu.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-   TConexao.GetInstance.FecharConexao;
+  TConexao.GetInstance.FecharConexao;
 end;
 
 procedure TFrmMenu.FormCreate(Sender: TObject);
@@ -97,7 +98,6 @@ end;
 
 procedure TFrmMenu.FormShow(Sender: TObject);
 begin
-//  TScriptSQL.RegistrarEntidadeNoBanco(TPessoa);
   FMenuExpandido := True;
   ControllerView.MainForm := Self;
   ControllerView.Parent := pnlMainForm;
@@ -111,47 +111,70 @@ end;
 
 procedure TFrmMenu.SpeedButton3MouseEnter(Sender: TObject);
 begin
-   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
 procedure TFrmMenu.SpeedButton3MouseLeave(Sender: TObject);
 begin
-   OcultarBarraLateralDoBotao;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmMenu.SpeedButton4MouseEnter(Sender: TObject);
 begin
-   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
 procedure TFrmMenu.SpeedButton4MouseLeave(Sender: TObject);
 begin
-   OcultarBarraLateralDoBotao;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmMenu.SpeedButton5MouseEnter(Sender: TObject);
 begin
-   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
 procedure TFrmMenu.SpeedButton5MouseLeave(Sender: TObject);
 begin
-   OcultarBarraLateralDoBotao;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmMenu.SpeedButton6Click(Sender: TObject);
 begin
-   ControllerView.ShowForm(TFrmCadastroListaPessoa);
+//  var qry: TFdquery := TConexao.GetInstance.ObterQuery;
+//  qry.SQL.add('insert into pessoa (nome, ativo) values (''Teste multi2'',''S'');');
+//  qry.SQL.add('SELECT last_insert_rowid() result_id;');
+//  qry.OpenOrExecute;
+//  var ctext := qry.FieldByName('result_id').AsString;
+//
+//exit;
+  ControllerView.ShowForm(TFrmCadastroListaPessoa);
+//  var Pessoa := TPessoa.PesquisarPorId(1);
+//  var Pessoa := TPessoa.Create;
+//  Pessoa.Nome := 'Teste gravacao';
+//
+//  var Endereco := TEndereco.Create;
+//  Endereco.CEP := '87053268';
+//  Endereco.Endereco := 'Teste 02';
+//  Endereco.Numero := 275;
+//  Endereco.Bairro := 'Zona2';
+//  Pessoa.Enderecos.Add(Endereco);
+//
+//  Pessoa.Gravar;
+//  FreeAndNil(Pessoa);
+//
+//  Pessoa.Enderecos.Add(Endereco);
+//  Pessoa.Gravar;
 end;
 
 procedure TFrmMenu.SpeedButton6MouseEnter(Sender: TObject);
 begin
-   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
 procedure TFrmMenu.SpeedButton6MouseLeave(Sender: TObject);
 begin
-   OcultarBarraLateralDoBotao;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmMenu.SplitViewMenuOpened(Sender: TObject);

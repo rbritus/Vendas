@@ -1,5 +1,5 @@
 inherited FrmCadastroListaPessoa: TFrmCadastroListaPessoa
-  Caption = 'FrmCadastroListaPessoa'
+  Caption = 'Pessoas'
   PixelsPerInch = 96
   TextHeight = 13
 end

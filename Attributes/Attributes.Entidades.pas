@@ -88,7 +88,7 @@ type
   private
     FCampoDescricaoConsulta: string;
   public
-    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pTabela: string = '';
       pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
       //Propriedade utilizada na consulta da entidade, ela aponta qual é a
       //propriedade que serve como descrição da entidade relacionada
@@ -226,12 +226,12 @@ end;
 { TCampoEstrangeiro }
 
 constructor TCampoEstrangeiro.create(pNome: string; pConfig: TConfiguracaoCampo;
-  pCaption: string = ''; pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
+  pTabela: string = ''; pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
 begin
   self.nome := pNome;
   self.tipo := ftESTRANGEIRO;
   self.propriedades := pConfig;
-  self.caption := pCaption;
+  self.caption := pTabela;
   Self.CampoDescricaoConsulta := pCampoDescricaoConsulta;
   self.Visivel := pVisivel;
   Self.CustomSelect := nil;
@@ -253,7 +253,19 @@ end;
 
 function TCampoListagem.getScriptCampo: string;
 begin
-  getScriptCampo := '';
+  Result := EmptyStr;
+  if self.TipoAssociacao <> taManyToMany then
+    Exit;
+
+  var cRetorno := 'Create Table ' + self.TabelaRelacional + '(' + sLineBreak;
+  cRetorno := cRetorno + 'ID integer not null primary key AUTOINCREMENT,';
+  cRetorno := cRetorno + self.CampoPai + ' integer not null, ';
+  cRetorno := cRetorno + self.CampoFilho + ' integer not null, ';
+  cRetorno := cRetorno + 'FOREIGN KEY(' + self.CampoPai + ') REFERENCES ' +
+    StringReplace(self.CampoPai, '_FK', '', [rfReplaceAll]) + '(ID),';
+  cRetorno := cRetorno + 'FOREIGN KEY(' + self.CampoFilho + ') REFERENCES ' +
+    StringReplace(self.CampoFilho, '_FK', '', [rfReplaceAll]) + '(ID));';
+  Result := cRetorno;
 end;
 
 { TCampoDecimal }

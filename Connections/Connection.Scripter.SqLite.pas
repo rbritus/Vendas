@@ -3,7 +3,8 @@ Unit Connection.Scripter.SqLite;
 Interface
 
 Uses
-   Rtti, SysUtils, Connection.Controller.SqLite, Data.DB;
+   Rtti, SysUtils, Connection.Controller.SqLite, Data.DB, Attributes.Entidades,
+   Objeto.ScriptDML;
 
 type
   TScriptSQL = class
@@ -15,16 +16,21 @@ type
     function ObterNomeTabela: String;
     function ObterScriptParaAdicionarNovosCamposNaTabela: string;
     function ObterScriptParaAdicionarTabelaCompleta: string;
+    procedure CriarTabelaRelacional(Campo: TCampoListagem);
 //    function ObterScriptParaCriarSequence: string;
 //    function ObterScriptParaAtualizarSequencia: string;
   public
     class function RegistrarEntidadeNoBanco(pClasse: TClass): boolean;
+    class function ExecutarScriptNoBanco(Script: TScriptDML): boolean;
   end;
 
 Implementation
 
-Uses
-  Attributes.Entidades;
+procedure TScriptSQL.CriarTabelaRelacional(Campo: TCampoListagem);
+begin
+  var cScript := Campo.getScriptCampo;
+  TConexao.GetInstance.EnviarComando(cScript);
+end;
 
 function TScriptSQL.ObterScriptParaAdicionarNovosCamposNaTabela: string;
 var
@@ -62,7 +68,16 @@ begin
     for var prop in ctx.GetType(FClasse).GetDeclaredProperties do
       for var atrib in prop.GetAttributes do
         if atrib is TAtributoBanco then
-          if not (TAtributoBanco(atrib) is TCampoListagem) then
+          if TAtributoBanco(atrib) is TCampoListagem then
+          begin
+            if TCampoListagem(atrib).TipoAssociacao = taManyToMany then
+            begin
+              if not TConexao.GetInstance.TabelaExiste(TCampoListagem(atrib).TabelaRelacional) then
+                CriarTabelaRelacional(TCampoListagem(atrib));
+            end;
+          end
+          else
+          begin
             if not ExisteCampo(TAtributoBanco(atrib).nome) then
             begin
               cScriptTabela := cScriptTabela + Format(txtPadrao, [FNomeTabela, RetirarNotNull(TAtributoBanco(atrib).getScriptCampo)]);
@@ -72,12 +87,34 @@ begin
 
               cScriptTabela := cScriptTabela + ';' + sLineBreak;
             end;
+          end;
     DataSet.Close;
   finally
     ctx.Free;
     FreeAndNil(DataSet);
   end;
   Result := cScriptTabela;
+end;
+
+class function TScriptSQL.ExecutarScriptNoBanco(Script: TScriptDML): boolean;
+begin
+  Result := False;
+  var DataSet := TConexao.GetInstance.EnviaConsulta(Script.ObterSqlParaVerificarSeScriptFoiExecutado);
+  try
+    if not DataSet.IsEmpty then
+      Exit(True);
+
+    try
+      TConexao.GetInstance.EnviarComando(Script.Script);
+      TConexao.GetInstance.EnviarComando(Script.ObterSqlParaRegistrarExecucaoDoScriptNoBanco);
+      TConexao.GetInstance.Commit;
+      Result := True;
+    except
+      TConexao.GetInstance.Rollback;
+    end;
+  finally
+    FreeAndNil(DataSet);
+  end;
 end;
 
 Function TScriptSQL.ObterNomeTabela: String;
@@ -111,6 +148,16 @@ begin
     begin
       if atrib is TAtributoBanco then
       begin
+        if TAtributoBanco(atrib) is TCampoListagem then
+        begin
+          if TCampoListagem(atrib).TipoAssociacao = taManyToMany then
+          begin
+            if not TConexao.GetInstance.TabelaExiste(TCampoListagem(atrib).TabelaRelacional) then
+              CriarTabelaRelacional(TCampoListagem(atrib));
+          end;
+          Continue;
+        end;
+
         cAuxiliar := TAtributoBanco(atrib).getScriptCampo;
 
         if CHAVE_PRIMARIA in TAtributoBanco(atrib).propriedades then

@@ -7,14 +7,14 @@ uses
 
 type
 
- iServico<T> = interface
+ iServico<T: class> = interface
    ['{B7828FB5-ADD1-4745-8029-AF82D261905F}']
       procedure Gravar(Objeto: TObject);
       procedure Excluir(Objeto: TObject);
-      function ListarTodos(): TList<T>;
+      function ListarTodos(): TObjectList<T>;
       function ListarTodosCDS(): TDataSet;
       function PesquisarPorId(Id: Integer): T;
-      function PesquisarPorCondicao(cSql: string): TList<T>;
+      function PesquisarPorCondicao(cSql: string): TObjectList<T>;
  end;
 
 implementation

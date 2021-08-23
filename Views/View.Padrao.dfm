@@ -17,6 +17,7 @@ object FrmPadrao: TFrmPadrao
   WindowState = wsMaximized
   OnKeyDown = FormKeyDown
   OnResize = FormResize
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object pnlFundo: TPanel
@@ -34,8 +35,6 @@ object FrmPadrao: TFrmPadrao
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 667
-    ExplicitHeight = 377
     object pnlConteudo: TPanel
       AlignWithMargins = True
       Left = 0
@@ -51,8 +50,6 @@ object FrmPadrao: TFrmPadrao
       Padding.Top = 3
       ParentBackground = False
       TabOrder = 0
-      ExplicitWidth = 667
-      ExplicitHeight = 374
     end
   end
 end
