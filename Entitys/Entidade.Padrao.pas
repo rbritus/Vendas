@@ -4,20 +4,21 @@ Interface
 
 uses
   System.Classes, System.Generics.Collections, Services.Padrao, Rtti,
-  Datasnap.DBClient, System.SysUtils, Interfaces.Services.Padrao, Utils.Entidade;
+  Datasnap.DBClient, System.SysUtils, Interfaces.Services.Padrao, Utils.Entidade,
+  Componente.TObjectList;
 
 Type
-   TEntidade<T: class> = Class(TInterfacedPersistent)
-   Public
+  TEntidade<T: class> = class(TInterfacedPersistent)
+  public
     procedure Gravar;
     procedure Excluir;
     procedure Limpar;
     function EstaVazia: Boolean; virtual; abstract;
-    class function ListarTodos: TObjectList<T>;
+    class function ListarTodos: TObjectListFuck<T>;
     class function ListarTodosCDS: TClientDataSet;
     class function PesquisarPorId(Id: Integer): T;
-    class function PesquisarPorCondicao(cSql: string): TObjectList<T>;
-   End;
+    class function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
+  end;
 
 Implementation
 
@@ -40,7 +41,7 @@ begin
   TUtilsEntidade.Limpar(Self)
 end;
 
-class function TEntidade<T>.ListarTodos(): TObjectList<T>;
+class function TEntidade<T>.ListarTodos(): TObjectListFuck<T>;
 begin
   var iServico := TServico<T>.New;
   Result := iServico.ListarTodos();
@@ -49,10 +50,10 @@ end;
 class function TEntidade<T>.ListarTodosCDS: TClientDataSet;
 begin
   var iServico := TServico<T>.New;
-  Result := TClientDataSet(iServico.ListarTodosCDS());
+  Result := TClientDataSet(iServico.ListarTodosCDS);
 end;
 
-class function TEntidade<T>.PesquisarPorCondicao(cSql: string): TObjectList<T>;
+class function TEntidade<T>.PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
 begin
   var iServico := TServico<T>.New;
   Result := iServico.PesquisarPorCondicao(cSql);

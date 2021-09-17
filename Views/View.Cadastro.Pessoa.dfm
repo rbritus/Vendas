@@ -4,26 +4,13 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      object Label1: TLabel
-        Left = 48
-        Top = 21
-        Width = 13
-        Height = 13
-        Caption = 'ID'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
       object Label2: TLabel
         Left = 48
-        Top = 77
-        Width = 32
+        Top = 60
+        Width = 40
         Height = 13
         BiDiMode = bdLeftToRight
-        Caption = 'Nome'
+        Caption = 'Pessoa'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -34,7 +21,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       object Label3: TLabel
         Left = 48
-        Top = 131
+        Top = 108
         Width = 30
         Height = 13
         BiDiMode = bdLeftToRight
@@ -47,23 +34,31 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentBiDiMode = False
         ParentFont = False
       end
-      object edtId: TEdit
+      object Label1: TLabel
         Left = 48
-        Top = 40
-        Width = 57
-        Height = 21
-        TabOrder = 0
+        Top = 14
+        Width = 20
+        Height = 13
+        BiDiMode = bdLeftToRight
+        Caption = 'CPF'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBiDiMode = False
+        ParentFont = False
       end
       object edtNome: TEdit
         Left = 48
-        Top = 96
+        Top = 79
         Width = 614
         Height = 21
         TabOrder = 1
       end
       object ToggleSwitch1: TToggleSwitch
         Left = 48
-        Top = 152
+        Top = 127
         Width = 77
         Height = 20
         Font.Charset = DEFAULT_CHARSET
@@ -78,6 +73,32 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         StateCaptions.CaptionOff = 'N'#227'o'
         TabOrder = 2
         ThumbColor = clHighlight
+      end
+      inline FrameAdicaoEndereco: TFrameAdicaoEndereco
+        Left = 40
+        Top = 166
+        Width = 760
+        Height = 165
+        TabOrder = 3
+        ExplicitLeft = 40
+        ExplicitTop = 166
+        inherited pnlFundo: TPanel
+          inherited pnlConteudo: TPanel
+            inherited DBCtrlGrid1: TDBCtrlGrid
+              Left = -8
+              Top = 6
+              ExplicitLeft = -8
+              ExplicitTop = 6
+            end
+          end
+        end
+      end
+      object edtCPF: TEdit
+        Left = 48
+        Top = 33
+        Width = 169
+        Height = 21
+        TabOrder = 0
       end
     end
   end

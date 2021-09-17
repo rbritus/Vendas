@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Entidade.Padrao, Interfaces.Entidade.Pessoa,
   Attributes.Entidades, System.SysUtils, Objeto.CustomSelect,
-  System.Generics.Collections, Entidade.Endereco;
+  Entidade.Endereco, Componente.TObjectList, Utils.Enumerators;
 
 type
   [TNomeTabela('PESSOA')]
@@ -13,39 +13,38 @@ type
   private
     FId: integer;
     FNome: string;
-    FAtivo: string;
+    FAtivo: TRegistroAtivo;
     FCPF: string;
     FEmail: string;
-    FEnderecos: TObjectList<TEndereco>;
+    FEnderecos: TObjectListFuck<TEndereco>;
     procedure SetId(const Value: integer);
     procedure SetNome(const Value: string);
-    procedure SetAtivo(const Value: string);
+    procedure SetAtivo(const Value: TRegistroAtivo);
     procedure SetCPF(const Value: string);
     procedure SetEmail(const Value: string);
-    procedure SetEnderecos(const Value: TObjectList<TEndereco>);
+    procedure SetEnderecos(const Value: TObjectListFuck<TEndereco>);
     function GetId: Integer;
     function GetNome: string;
-    function GetAtivo: string;
+    function GetAtivo: TRegistroAtivo;
     function GetCPF: string;
     function GetEmail: string;
-    function GetEnderecos: TObjectList<TEndereco>;
+    function GetEnderecos: TObjectListFuck<TEndereco>;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
+    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID',False)]
     property Id: Integer read GetId write SetId;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
-    [TCampoTexto('CPF', 11, [], 'CPF', False)]
+    [TCampoTexto('CPF', 11, [], 'CPF')]
     property CPF: string read GetCPF write SetCPF;
     [TCampoTexto('EMAIL', 200, [], 'E-mail', False)]
     property Email: string read GetEmail write SetEmail;
-    [TCampoTexto('ATIVO', 1, [NOTNULL], TCustomSelectAtivo)]
-    property Ativo: string read GetAtivo write SetAtivo;
+    [TCampoTexto('ATIVO', 1, [NOTNULL], TCustomSelectAtivo,'Situação')]
+    property Ativo: TRegistroAtivo read GetAtivo write SetAtivo default raAtivo;
     [TCampoListagem(taManyToMany, ctCascade, 'PESSOA_FK', 'ENDERECO_FK', 'ENDERECO_PESSOA')]
-    Property Enderecos: TObjectList<TEndereco> read GetEnderecos write SetEnderecos;
+    Property Enderecos: TObjectListFuck<TEndereco> read GetEnderecos write SetEnderecos;
 
     class function New : iPessoa;
     function EstaVazia: Boolean; override;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -65,11 +64,8 @@ begin
   Result := FNome;
 end;
 
-function TPessoa.GetAtivo: string;
+function TPessoa.GetAtivo: TRegistroAtivo;
 begin
-  if (FAtivo).IsEmpty then
-    FAtivo := REGISTROATIVO;
-
   Result := FAtivo
 end;
 
@@ -83,7 +79,7 @@ begin
   Result := FEmail;
 end;
 
-function TPessoa.GetEnderecos: TObjectList<TEndereco>;
+function TPessoa.GetEnderecos: TObjectListFuck<TEndereco>;
 begin
    If not Assigned(FEnderecos) Then
       FEnderecos := TUtilsEntidade.ObterListaComTabelaRelacional<TEndereco>(Self.id,
@@ -102,14 +98,14 @@ begin
   FNome := Value;
 end;
 
-procedure TPessoa.SetAtivo(const Value: string);
+procedure TPessoa.SetAtivo(const Value: TRegistroAtivo);
 begin
   FAtivo := Value;
 end;
 
 procedure TPessoa.SetCPF(const Value: string);
 begin
-   FCPF := Value;
+  FCPF := Value;
 end;
 
 procedure TPessoa.SetEmail(const Value: string);
@@ -117,7 +113,7 @@ begin
   FEmail := Value;
 end;
 
-procedure TPessoa.SetEnderecos(const Value: TObjectList<TEndereco>);
+procedure TPessoa.SetEnderecos(const Value: TObjectListFuck<TEndereco>);
 begin
   FEnderecos := Value;
 end;
@@ -125,11 +121,6 @@ end;
 class function TPessoa.New: iPessoa;
 begin
   Result := Self.Create;
-end;
-
-destructor TPessoa.Destroy;
-begin
-  FreeAndNil(Enderecos);
 end;
 
 function TPessoa.EstaVazia: Boolean;

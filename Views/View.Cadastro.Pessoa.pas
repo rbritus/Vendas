@@ -7,21 +7,27 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Cadastro.Padrao, Vcl.Buttons, Interfaces.Entidade.Pessoa, Vcl.ExtCtrls,
   Entidade.Pessoa, Attributes.Forms, Vcl.StdCtrls, Vcl.WinXCtrls,
-  Utils.Enumerators;
+  Utils.Enumerators, Frame.Padrao, Frame.Adicao.Padrao, Frame.Adicao.Endereco,
+  Entidade.Endereco, Componente.TObjectList;
 
 type
   [TClasseCadastro(TPessoa)]
   TFrmCadastroPessoa = class(TFrmCadastroPadrao)
-    [TCadastroEdit('Id',ftINTEIRO,coNaoObrigatorio)]
-    edtId: TEdit;
-    Label1: TLabel;
+    Label2: TLabel;
     [TCadastroEdit('Nome',ftTEXTO,coObrigatorio)]
     edtNome: TEdit;
-    Label2: TLabel;
     [TCadastroToggleSwitch('Ativo',ftTEXTO,coObrigatorio)]
     ToggleSwitch1: TToggleSwitch;
     Label3: TLabel;
+    FrameAdicaoEndereco: TFrameAdicaoEndereco;
+    [TCadastroEdit('CPF',ftTEXTO,coObrigatorio)]
+    edtCPF: TEdit;
+    Label1: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
   private
+    [TCadastroVariavel('Enderecos',ftLISTAGEM,coNaoObrigatorio)]
+    FEnderecos: TObjectListFuck<TEndereco>;
     { Private declarations }
   public
     { Public declarations }
@@ -33,5 +39,18 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
+begin
+  inherited;
+  FrameAdicaoEndereco.SetarIdObjRelacional(Self.FID);
+  FrameAdicaoEndereco.CarregarDataSet;
+end;
+
+procedure TFrmCadastroPessoa.SpeedButton6Click(Sender: TObject);
+begin
+  FEnderecos := FrameAdicaoEndereco.ObterLista;
+  inherited;
+end;
 
 end.

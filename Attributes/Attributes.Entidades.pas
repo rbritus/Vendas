@@ -48,7 +48,7 @@ type
     constructor create(pNome: string; pTamanho: Integer; pConfig: TConfiguracaoCampo;
       pCaption: string = ''; pVisivel: Boolean = True); overload;
     constructor create(pNome: string; pTamanho: Integer; pConfig: TConfiguracaoCampo;
-      pTCustomSelect: TClasseCustom); overload;
+      pTCustomSelect: TClasseCustom; pCaption: string = ''); overload;
     function getScriptCampo: string; override;
   end;
 
@@ -142,13 +142,13 @@ begin
 end;
 
 constructor TCampoTexto.create(pNome: string; pTamanho: Integer;
-  pConfig: TConfiguracaoCampo; pTCustomSelect: TClasseCustom);
+  pConfig: TConfiguracaoCampo; pTCustomSelect: TClasseCustom; pCaption: string = '');
 begin
   self.nome := pNome;
   self.tipo := ftTEXTO;
   self.tamanho := pTamanho;
   self.propriedades := pConfig;
-  self.caption := EmptyStr;
+  self.caption := pCaption;
   Self.Visivel := True;
   Self.CustomSelect := pTCustomSelect;
 end;
@@ -239,7 +239,8 @@ end;
 
 { TCampoListagem }
 
-constructor TCampoListagem.create(pTipoAssociacao: TTipoAssociacaoEntreTabelas; pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho, pTabelaRelacional: string);
+constructor TCampoListagem.create(pTipoAssociacao: TTipoAssociacaoEntreTabelas;
+  pTipoCascata: TTipoCascata; pCampoPai, pCampoFilho, pTabelaRelacional: string);
 begin
   self.tipo := ftLISTAGEM;
   self.TipoAssociacao := pTipoAssociacao;

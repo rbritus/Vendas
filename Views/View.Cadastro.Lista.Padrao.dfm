@@ -3,7 +3,6 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
   OnDestroy = FormDestroy
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
@@ -11,7 +10,6 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
       Top = 38
       Height = 602
       ExplicitTop = 38
-      ExplicitWidth = 840
       ExplicitHeight = 602
       object grdLista: TDBGrid
         Left = 0

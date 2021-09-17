@@ -5,26 +5,36 @@ interface
 uses
   Utils.Enumerators, Interfaces.Wrapper.PropriedadeCadastro, Attributes.Forms,
   System.Rtti, System.TypInfo, Vcl.StdCtrls, Vcl.WinXCtrls, System.StrUtils,
-  System.Math, System.Classes;
+  System.Math, System.Classes, Componente.TObjectList, Vcl.Dialogs, Vcl.Forms,
+  Utils.Entidade;
 
 type
   TWrapperPropriedadeCadastro = class(TInterfacedObject, iWrapperPropriedadeCadastro)
+  protected
+    FForm: TForm;
+    procedure SetarValorParaComponenteForm(Valor: TValue; Propriedade: TPropriedadeCadastro; Field: TRttiField);
   public
-    class function New: iWrapperPropriedadeCadastro;
-    function ObtemValorComponenteForm(Valor: TValue; Propriedade: TPropriedadeCadastro; Tipo: TTiposDeCampo): TValue;
-    function ObtemValorEntidadeForm(Valor: TValue; Propriedade: TPropriedadeCadastro; Tipo: TTiposDeCampo): TValue;
-    procedure SetarValorParaComponenteForm(Valor: TValue; Propriedade: TPropriedadeCadastro; Componente: TComponent);
+    class function New(pForm: TForm): iWrapperPropriedadeCadastro;
+    procedure PreencherObjetoDoForm(var pEntidade: TPersistent);
+    procedure PreencherFormComEntidade(pEntidade: TPersistent);
+    constructor Create(pForm: TForm);
+  end;
+
+  TTratarVariavel = class
+      class function ObterValorComponenteForm(pForm: TForm; Field: TRttiField; Tipo: TTiposDeCampo): TValue;
+      class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+      class procedure SetarValorParaComponenteForm(pForm: TForm; Field: TRttiField; Valor: TValue);
   end;
 
   TTratarTEdit = class
-      class function ObtemValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
-      class function ObtemValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+      class function ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+      class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(Componente: TComponent; Valor: TValue);
   end;
 
   TTratarTToggleSwitch = class
-      class function ObtemValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
-      class function ObtemValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+      class function ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+      class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(Componente: TComponent; Valor: TValue);
   end;
 
@@ -35,38 +45,93 @@ uses
 
 { TWrapperPropriedadeCadastro }
 
-class function TWrapperPropriedadeCadastro.New: iWrapperPropriedadeCadastro;
+constructor TWrapperPropriedadeCadastro.Create(pForm: TForm);
 begin
-  Result := Self.Create;
+  FForm := pForm;
 end;
 
-function TWrapperPropriedadeCadastro.ObtemValorComponenteForm(Valor: TValue; Propriedade:
-  TPropriedadeCadastro; Tipo: TTiposDeCampo): TValue;
+class function TWrapperPropriedadeCadastro.New(pForm: TForm): iWrapperPropriedadeCadastro;
 begin
-  if Propriedade is TCadastroEdit then
-    Exit(TTratarTEdit.ObtemValorComponenteForm(Valor, Tipo));
-
-  if Propriedade is TCadastroToggleSwitch then
-    Exit(TTratarTToggleSwitch.ObtemValorComponenteForm(Valor, Tipo));
-
-  Result := Valor;
+  Result := Self.Create(pForm);
 end;
 
-function TWrapperPropriedadeCadastro.ObtemValorEntidadeForm(Valor: TValue; Propriedade:
-  TPropriedadeCadastro; Tipo: TTiposDeCampo): TValue;
+procedure TWrapperPropriedadeCadastro.PreencherObjetoDoForm(var pEntidade: TPersistent);
 begin
-  if Propriedade is TCadastroEdit then
-    Exit(TTratarTEdit.ObtemValorEntidadeForm(Valor, Tipo));
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(FForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
 
-  if Propriedade is TCadastroToggleSwitch then
-    Exit(TTratarTToggleSwitch.ObtemValorEntidadeForm(Valor, Tipo));
+    for var FField in Tipo.GetFields do
+    begin
+      for var Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          var Valor: TValue;
+          if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
+            Valor := TTratarVariavel.ObterValorComponenteForm(FForm, FField, TPropriedadeCadastro(Atrib).TipoPropriedade);
 
-  Result := Valor;
+          if TPropriedadeCadastro(Atrib) is TCadastroEdit then
+            Valor := TTratarTEdit.ObterValorComponenteForm(FField.GetValue(FForm), TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          if TPropriedadeCadastro(Atrib) is TCadastroToggleSwitch then
+            Valor := TTratarTToggleSwitch.ObterValorComponenteForm(FField.GetValue(FForm), TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          TUtilsEntidade.SetarValorParaPropriedade(pEntidade, TPropriedadeCadastro(Atrib).NomePropriedade, Valor);
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
+procedure TWrapperPropriedadeCadastro.PreencherFormComEntidade(pEntidade: TPersistent);
+begin
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(FForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    for var FField in Tipo.GetFields do
+    begin
+      for var Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          var ValorPropriedade := TUtilsEntidade.ObterValorPropriedade(pEntidade,TPropriedadeCadastro(Atrib).NomePropriedade);
+          var Valor: TValue;
+          if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
+            Valor := TTratarVariavel.ObterValorEntidadeForm(ValorPropriedade, TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          if TPropriedadeCadastro(Atrib) is TCadastroEdit then
+            Valor := TTratarTEdit.ObterValorEntidadeForm(ValorPropriedade, TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          if TPropriedadeCadastro(Atrib) is TCadastroToggleSwitch then
+            Valor := TTratarTToggleSwitch.ObterValorEntidadeForm(ValorPropriedade, TPropriedadeCadastro(Atrib).TipoPropriedade);
+
+          SetarValorParaComponenteForm(Valor, TPropriedadeCadastro(Atrib), FField);
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
 end;
 
 procedure TWrapperPropriedadeCadastro.SetarValorParaComponenteForm(Valor: TValue;
-  Propriedade: TPropriedadeCadastro; Componente: TComponent);
+  Propriedade: TPropriedadeCadastro; Field: TRttiField);
 begin
+  if Propriedade is TCadastroVariavel then
+  begin
+    TTratarVariavel.SetarValorParaComponenteForm(FForm, Field, Valor);
+    Exit;
+  end;
+
+  var Componente := FForm.FindComponent(Field.Name);
   if Propriedade is TCadastroEdit then
   begin
     TTratarTEdit.SetarValorParaComponenteForm(Componente, Valor);
@@ -82,21 +147,22 @@ end;
 
 { TTratarEdit }
 
-class function TTratarTEdit.ObtemValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
+class function TTratarTEdit.ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
-    ftINTEIRO, ftDECIMAL : Result := StrToIntDef(Valor.AsType<TEdit>.Text,0);
-    ftDATA : Result := StrToDateTime(Valor.AsType<TEdit>.Text);
+    ftINTEIRO, ftDECIMAL : Result := TValue.FromVariant(StrToIntDef(Valor.AsType<TEdit>.Text,0));
+    ftDATA : Result := TValue.FromVariant(StrToDateTime(Valor.AsType<TEdit>.Text));
   else
-    Result := Valor.AsType<TEdit>.Text;
+    Result := TValue.FromVariant(Valor.AsType<TEdit>.Text);
   end;
 end;
 
-class function TTratarTEdit.ObtemValorEntidadeForm(Valor: TValue;
+class function TTratarTEdit.ObterValorEntidadeForm(Valor: TValue;
   Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
-    ftINTEIRO, ftDECIMAL : Result := IntToStr(Valor.AsInteger);
+    ftINTEIRO : Result := IntToStr(Valor.AsInteger);
+    ftDECIMAL : Result := FloatToStr(Valor.AsCurrency);
     ftDATA : Result := DateTimeToStr(Valor.AsType<TDateTime>);
   else
     Result := Valor.AsString;
@@ -117,17 +183,17 @@ end;
 
 { TTratarTToggleSwitch }
 
-class function TTratarTToggleSwitch.ObtemValorComponenteForm(Valor: TValue;
+class function TTratarTToggleSwitch.ObterValorComponenteForm(Valor: TValue;
   Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
-    ftINTEIRO, ftDECIMAL : Result := Ord(Valor.AsType<TToggleSwitch>.State);
+    ftINTEIRO, ftDECIMAL : Result := TValue.FromVariant(Ord(Valor.AsType<TToggleSwitch>.State));
   else
-    Result := ifthen((Valor.AsType<TToggleSwitch>.State = tssOn),'S','N');
+    Result := TValue.FromVariant(ifthen((Valor.AsType<TToggleSwitch>.State = tssOn),'S','N'));
   end;
 end;
 
-class function TTratarTToggleSwitch.ObtemValorEntidadeForm(Valor: TValue;
+class function TTratarTToggleSwitch.ObterValorEntidadeForm(Valor: TValue;
   Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
@@ -148,6 +214,40 @@ begin
   finally
     Ctx.Free;
   end;
+end;
+
+{ TTratarVariavel }
+
+class function TTratarVariavel.ObterValorComponenteForm(pForm: TForm; Field: TRttiField;
+  Tipo: TTiposDeCampo): TValue;
+begin
+  case Tipo of
+    ftINTEIRO : Result := TValue.FromVariant(Field.GetValue(pForm).AsInteger);
+    ftDECIMAL, ftDATA : Result := TValue.FromVariant(Field.GetValue(pForm).AsCurrency);
+    ftLISTAGEM : Result := TValue.From(TObjectListFuck<TPersistent>(Field.GetValue(pForm).AsObject));
+    ftLOGICO : Result := TValue.FromVariant(Field.GetValue(pForm).AsBoolean);
+  else
+    Result := TValue.FromVariant(Field.GetValue(pForm).AsString);
+  end;
+end;
+
+class function TTratarVariavel.ObterValorEntidadeForm(Valor: TValue;
+  Tipo: TTiposDeCampo): TValue;
+begin
+  case Tipo of
+    ftINTEIRO : Result := Valor.AsInteger;
+    ftDECIMAL, ftDATA : Result := Valor.AsCurrency;
+    ftLISTAGEM : Result := TObjectListFuck<TPersistent>(Valor.AsObject);
+    ftLOGICO : Result := Valor.AsBoolean;
+  else
+    Result := Valor.AsString;
+  end;
+end;
+
+class procedure TTratarVariavel.SetarValorParaComponenteForm(pForm: TForm;
+  Field: TRttiField; Valor: TValue);
+begin
+  Field.SetValue(pForm, Valor);
 end;
 
 end.

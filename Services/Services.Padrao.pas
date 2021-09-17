@@ -6,7 +6,7 @@ uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades,
   Interfaces.Services.Padrao, Connection.Controller.SqLite, Datasnap.DBClient,
   Data.DB, System.SysUtils, Utils.Entidade, Controls, FireDAC.Comp.Client,
-  FireDAC.Stan.Param, Utils.Enumerators;
+  FireDAC.Stan.Param, Utils.Enumerators, Componente.TObjectList;
 
 type
   TParametro = record
@@ -20,7 +20,7 @@ type
 
   TServico<T: class> = class(TInterfacedObject, iServico<T>)
   private
-    procedure GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectList<TObject>; EntidadePai: TObject);
+    procedure GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectListFuck<TObject>; EntidadePai: TObject);
     procedure AlterarPropriedadeVisibleDoField(cds: TDataSet);
     procedure PreencherArrayComParametros(Propriedade: TRttiProperty; Objeto: TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
     function ObterArrayComParametrosPreenchidos(Objeto: TObject): TArrayParametros;
@@ -34,21 +34,20 @@ type
     procedure RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
     procedure PersistirPropriedadesTipoLista(Objeto: TObject);
     const ID_ZERADO = 0;
-    const SCRIPT_RECUPERACAO_ID = 'SELECT last_insert_rowid() result_id;';
   public
     procedure Gravar(Objeto: TObject);
     procedure Excluir(Objeto: TObject);
-    function ListarTodos: TObjectList<T>;
+    function ListarTodos: TObjectListFuck<T>;
     function ListarTodosCDS: TDataSet;
     function PesquisarPorId(Id: Integer): T;
-    function PesquisarPorCondicao(cSql: string): TObjectList<T>;
+    function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
     class function New: iServico<T>;
   end;
 
 implementation
 
 uses
-  Objeto.CustomSelect;
+  Objeto.CustomSelect, FireDAC.Phys.Intf;
 
 { TServico<T> }
 
@@ -71,6 +70,23 @@ begin
 
           cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
           cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
+
+          if not TAtributoBanco(Atrib).Visivel then
+            Continue;
+
+          if Assigned(TAtributoBanco(Atrib).CustomSelect) then
+          begin
+            var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
+
+            if cds.FindField(NomeFieldCustom) = nil then
+              Continue;
+
+            cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
+            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
+            cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
+            cds.FieldByName(NomeFieldCustom).Visible := True;
+          end;
+
         end;
       end;
     end;
@@ -86,7 +102,7 @@ var
   Prop: TRttiProperty;
   Tipo, TipoEstr: TRTTIType;
   Atrib: TCustomAttribute;
-  Lista: TObjectList<TObject>;
+  Lista: TObjectListFuck<TObject>;
   ObjEstrangeiro: TObject;
 begin
   if Objeto = Nil then
@@ -94,7 +110,7 @@ begin
 
   cTabela := TUtilsEntidade.ObterNomeDaTabela(Objeto);
   cId := TUtilsEntidade.ObterChavePrimaria(Objeto);
-  cValor := TUtilsEntidade.ObterValorPropriedade(Objeto, cId);
+  cValor := TUtilsEntidade.ObterValorPropriedade(Objeto, cId).AsString;
 
   Ctx := TRttiContext.Create;
   try
@@ -113,15 +129,15 @@ begin
                   case TCampoListagem(Atrib).TipoCascata of
                     ctCascade:
                       begin
-                        Lista := Prop.GetValue(Objeto).AsType<TObjectList<TObject>>;
+                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         for ObjEstrangeiro in Lista do
                           TUtilsEntidade.ExecutarMetodoObjeto(ObjEstrangeiro, 'Excluir', []);
                       end;
                     ctSetNull:
                       begin
-                        Lista := Prop.GetValue(Objeto).AsType<TObjectList<TObject>>;
+                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         for ObjEstrangeiro in Lista do
-                          TConexao.GetInstance.EnviarComando('UPDATE ' + TCampoListagem(Atrib).TabelaRelacional + ' SET ' + TCampoListagem(Atrib).CampoPai + ' = NULL ' + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID')));
+                          TConexao.GetInstance.EnviarComando('UPDATE ' + TCampoListagem(Atrib).TabelaRelacional + ' SET ' + TCampoListagem(Atrib).CampoPai + ' = NULL ' + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID').AsInteger));
                       end;
                     ctRestrict:
                       raise Exception.Create('Erro de exclusão (OneToMany)');
@@ -134,17 +150,17 @@ begin
                       begin
                         TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoPai + ' = ' + cValor);
 
-                        Lista := Prop.GetValue(Objeto).AsType<TObjectList<TObject>>;
+                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         for ObjEstrangeiro in Lista do
                         begin
-                          TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID')));
+                          TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID').AsInteger));
 
                           TUtilsEntidade.ExecutarMetodoObjeto(ObjEstrangeiro, 'Excluir', []);
                         end;
                       end;
                     ctSetNull:
                       begin
-                        Lista := Prop.GetValue(Objeto).AsType<TObjectList<TObject>>;
+                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoPai + ' = ' + cValor);
                       end;
                     ctRestrict:
@@ -178,7 +194,7 @@ begin
   case RecParam.FTipoPropriedade of
     ftESTRANGEIRO:
       begin
-        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsType<TObject>, 'id');
+        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsType<TObject>, 'id').AsString;
         if RecParam.FValorParametro = '0' then
           RecParam.FValorParametro := 'null';
       end;
@@ -196,7 +212,7 @@ begin
         RecParam.FValorParametro := DateToStr(Propriedade.GetValue(Objeto).AsExtended);
       end
   else
-    RecParam.FValorParametro := Propriedade.GetValue(Objeto).AsVariant;
+    RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsString;
   end;
 end;
 
@@ -225,7 +241,7 @@ begin
             Continue;
 //          begin
 //            if not Prop.GetValue(Objeto).IsEmpty then
-//              GravarPropertyLista(Prop, TObjectList<TObject>(Prop.GetValue(Objeto).AsObject), Objeto);
+//              GravarPropertyLista(Prop, TObjectListFuck<TObject>(Prop.GetValue(Objeto).AsObject), Objeto);
 //            Continue;
 //          end;
 
@@ -267,7 +283,10 @@ begin
           if (TAtributoBanco(Atrib).Tipo = ftLISTAGEM) then
           begin
             if not Prop.GetValue(Objeto).IsEmpty then
-              GravarPropertyLista(Prop, TObjectList<TObject>(Prop.GetValue(Objeto).AsObject), Objeto);
+            begin
+              var Lista := TObjectListFuck<TObject>(Prop.GetValue(Objeto).AsObject);
+              GravarPropertyLista(Prop, Lista, Objeto);
+            end;
           end;
         end;
       end;
@@ -280,7 +299,7 @@ end;
 
 function TServico<T>.RegistroJaGravadoEmBanco(Objeto: TObject): Boolean;
 begin
-  var IdBanco: Integer := TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID');
+  var IdBanco: Integer := TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID').AsInteger;
   Result := (IdBanco <> ID_ZERADO)
 end;
 
@@ -321,7 +340,7 @@ begin
     if IndiceArray <> High(Parametros) then
       cSql := cSql + ',';
   end;
-  Result := cSql + ' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID') + ';');
+  Result := cSql + ' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID').AsInteger);
 end;
 
 procedure TServico<T>.PreencherQueryComArray(Qry: TQuery; Parametros: TArrayParametros);
@@ -364,12 +383,13 @@ procedure TServico<T>.ObterSqlParaPersistencia(Qry: TQuery; Objeto: TObject; Par
 begin
   if RegistroJaGravadoEmBanco(Objeto) then
   begin
+    Qry.Command.CommandKind := skUpdate;
     Qry.SQL.Add(CriarSqlParaAtualizacao(Objeto, Parametros));
     Exit;
   end;
 
   Qry.SQL.Add(CriarSqlParaInsercao(Objeto, Parametros));
-  Qry.SQL.Add(SCRIPT_RECUPERACAO_ID);
+  Qry.SQL.Add(TConexao.SELECT_RECUPERACAO_ID);
 end;
 
 procedure TServico<T>.RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
@@ -378,7 +398,7 @@ begin
     Exit;
 
   var Id := qry.FieldByName('result_id').AsInteger;
-  TUtilsEntidade.SetarValorParaPropriedade(Objeto, 'ID', Id);
+  TUtilsEntidade.SetarValorParaPropriedade(Objeto, 'ID', TValue.FromVariant(Id));
 end;
 
 procedure TServico<T>.PersistirObjetoEmBanco(Objeto: TObject; Parametros: TArrayParametros);
@@ -387,7 +407,7 @@ begin
   try
     ObterSqlParaPersistencia(Qry, Objeto, Parametros);
     PreencherQueryComArray(Qry, Parametros);
-    Qry.OpenOrExecute;
+    Qry.ExecScript;
     RecuperarIdParaObjeto(Objeto, Qry);
     PersistirPropriedadesTipoLista(Objeto);
     TConexao.GetInstance.Commit;
@@ -399,7 +419,7 @@ end;
 
 procedure TServico<T>.Gravar(Objeto: TObject);
 begin
-  if Objeto = Nil then
+  if not Assigned(Objeto) then
     Exit;
 
   var Parametros := ObterArrayComParametrosPreenchidos(Objeto);
@@ -411,7 +431,7 @@ begin
 //      Banco.IncluirNaCache(TEntidade(Objeto));
 end;
 
-procedure TServico<T>.GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectList<TObject>; EntidadePai: TObject);
+procedure TServico<T>.GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectListFuck<TObject>; EntidadePai: TObject);
 var
   entFilho: TObject;
   idPai: Integer;
@@ -427,7 +447,7 @@ var
   lAchou: Boolean;
   cIdRemovidos: string;
 begin
-  idPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'id');
+  idPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'id').AsInteger;
 
   Ctx := TRttiContext.Create;
   try
@@ -450,13 +470,13 @@ begin
       try
         for entFilho in Lista do
         begin
-          TUtilsEntidade.ExecutarMetodoObjeto(entFilho,'Gravar',[]);
-          if (DSet.Locate(cCampoFilho, TUtilsEntidade.ObterValorPropriedade(entFilho, 'id'), [])) then
+//          TUtilsEntidade.ExecutarMetodoObjeto(entFilho,'Gravar',[]);
+          if (DSet.Locate(cCampoFilho, TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger, [])) then
             Continue;
 
           TConexao.GetInstance.EnviarComando('insert into ' + cTabela + ' (' + cCampoPai + ',' + cCampoFilho + ') values (' +
           {IntToStr(TConexao.GetInstance.ObterProximaSequencia(cTabela)) + ',' +} IntToStr(idPai) + ',' +
-          IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id')) + ')');
+          IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger) + ')');
         end;
 
         cIdRemovidos := EmptyStr;
@@ -466,7 +486,7 @@ begin
           lAchou := False;
           for entFilho in Lista do
           begin
-            if ((TUtilsEntidade.ObterValorPropriedade(entFilho, 'id')) = (DSet.FieldByName(cCampoFilho).AsInteger)) then
+            if ((TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger) = (DSet.FieldByName(cCampoFilho).AsInteger)) then
             begin
               lAchou := True;
               break;
@@ -498,7 +518,7 @@ begin
 
       for entFilho in Lista do
         TConexao.GetInstance.EnviarComando('update ' + cTabela + ' set ' + cCampoPai + ' = ' + IntToStr(idPai) + ' where ' +
-        cCampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id')));
+        cCampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger));
     end;
   finally
     Ctx.Free;
@@ -530,12 +550,15 @@ begin
         if not Sql.IsEmpty then
           Sql := Sql + ', ';
 
-        if not Assigned(TAtributoBanco(Atrib).CustomSelect) then
+        Sql := Sql + TAtributoBanco(Atrib).nome;
+
+        if  Assigned(TAtributoBanco(Atrib).CustomSelect) then
         begin
-          Sql := Sql + TAtributoBanco(Atrib).nome;
-          Continue;
+          if not Sql.IsEmpty then
+            Sql := Sql + ', ';
+
+          Sql := Sql +  TAtributoBanco(Atrib).CustomSelect.getSelectCustom(TAtributoBanco(Atrib).nome)//TUtilsEntidade.ExecutarMetodoClasse(TAtributoBanco(Atrib).CustomSelect, 'getSelectCustom',[TAtributoBanco(Atrib).nome,TAtributoBanco(Atrib).caption]).AsString;
         end;
-        Sql := Sql + TUtilsEntidade.ExecutarMetodoClasse(TAtributoBanco(Atrib).CustomSelect, 'getSelectCustom', []).AsString;
       end;
     end;
     Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
@@ -563,13 +586,13 @@ begin
   Result := Self.Create;
 end;
 
-function TServico<T>.ListarTodos: TObjectList<T>;
+function TServico<T>.ListarTodos: TObjectListFuck<T>;
 var
   DSet: TDataSet;
-  ListObj: TObjectList<T>;
+  ListObj: TObjectListFuck<T>;
   Objeto: T;
 begin
-  ListObj := TObjectList<T>.Create;
+  ListObj := TObjectListFuck<T>.Create;
   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
 
   try
@@ -593,13 +616,13 @@ begin
   Result := ListObj;
 end;
 
-function TServico<T>.PesquisarPorCondicao(cSql: string): TObjectList<T>;
+function TServico<T>.PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
 var
   DSet: TDataSet;
-  ListObj: TObjectList<T>;
+  ListObj: TObjectListFuck<T>;
   Objeto: T;
 begin
-  ListObj := TObjectList<T>.Create;
+  ListObj := TObjectListFuck<T>.Create;
   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
   DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + cSql);

@@ -42,7 +42,17 @@ uses
   Interfaces.Entidade.Pais in 'Interfaces\Interfaces.Entidade.Pais.pas',
   Controller.Scripter in 'Controllers\Controller.Scripter.pas',
   Scripts.Versao00 in 'Scripts\Scripts.Versao00.pas',
-  Objeto.ScriptDML in 'Objects\Objeto.ScriptDML.pas';
+  Objeto.ScriptDML in 'Objects\Objeto.ScriptDML.pas',
+  Frame.Padrao in 'Frames\Frame.Padrao.pas' {FramePadrao: TFrame},
+  Controller.Cadastro.Lista.Padrao in 'Controllers\Controller.Cadastro.Lista.Padrao.pas',
+  Interfaces.Controller.Cadastro.Lista.Padrao in 'Interfaces\Interfaces.Controller.Cadastro.Lista.Padrao.pas',
+  Utils.DBGrid in 'Utils\Utils.DBGrid.pas',
+  Componente.TObjectList in 'Components\Componente.TObjectList.pas',
+  Frame.Adicao.Padrao in 'Frames\Frame.Adicao.Padrao.pas' {FrameAdicaoPadrao: TFrame},
+  Frame.Adicao.Endereco in 'Frames\Frame.Adicao.Endereco.pas' {FrameAdicaoEndereco: TFrame},
+  Controller.Frame.Adicao.Padrao in 'Controllers\Controller.Frame.Adicao.Padrao.pas',
+  Interfaces.Controller.Frame.Adicao.Padrao in 'Interfaces\Interfaces.Controller.Frame.Adicao.Padrao.pas',
+  Attributes.Enumerators in 'Attributes\Attributes.Enumerators.pas';
 
 {$R *.res}
 

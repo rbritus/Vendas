@@ -159,6 +159,28 @@
         <DCCReference Include="Controllers\Controller.Scripter.pas"/>
         <DCCReference Include="Scripts\Scripts.Versao00.pas"/>
         <DCCReference Include="Objects\Objeto.ScriptDML.pas"/>
+        <DCCReference Include="Frames\Frame.Padrao.pas">
+            <Form>FramePadrao</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Controllers\Controller.Cadastro.Lista.Padrao.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Cadastro.Lista.Padrao.pas"/>
+        <DCCReference Include="Utils\Utils.DBGrid.pas"/>
+        <DCCReference Include="Components\Componente.TObjectList.pas"/>
+        <DCCReference Include="Frames\Frame.Adicao.Padrao.pas">
+            <Form>FrameAdicaoPadrao</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Frame.Adicao.Endereco.pas">
+            <Form>FrameAdicaoEndereco</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Controllers\Controller.Frame.Adicao.Padrao.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Frame.Adicao.Padrao.pas"/>
+        <DCCReference Include="Attributes\Attributes.Enumerators.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

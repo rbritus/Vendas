@@ -33,6 +33,11 @@ type
     property CampoObrigatorio: TCampoObrigatorio read FCampoObrigatorio write FCampoObrigatorio;
   end;
 
+  TCadastroVariavel = class(TPropriedadeCadastro)
+  public
+    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+  end;
+
   TCadastroEdit = class(TPropriedadeCadastro)
   public
     constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
@@ -77,6 +82,16 @@ end;
 constructor TFormularioCadastro.Create(const ClassValue: TComponentClass);
 begin
   FFormClasse := ClassValue;
+end;
+
+{ TCadastroVariavel }
+
+constructor TCadastroVariavel.Create(pNomePropriedade: string;
+  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+begin
+  FNomePropriedade := pNomePropriedade;
+  FTipoPropriedade := pTipoPropriedade;
+  FCampoObrigatorio := pCampoObrigatorio;
 end;
 
 end.

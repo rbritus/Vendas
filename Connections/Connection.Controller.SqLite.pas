@@ -11,7 +11,10 @@ uses
   DB, Datasnap.DBClient, Datasnap.Provider, FireDAC.DApt;
 
 type
-  TQuery = Class(TFDQuery);
+  TQuery = Class(TFDQuery)
+  public
+    procedure ExecScript;
+  end;
 
   TConexao = class(TFDConnection)
   strict private
@@ -31,6 +34,8 @@ type
     function CampoExiste(NomeTabela, NomeCampo: String): Boolean;
     procedure FecharConexao;
     constructor Create(AOwner: TComponent); Override;
+
+    const SELECT_RECUPERACAO_ID = 'SELECT last_insert_rowid() result_id;';
   end;
 
 implementation
@@ -232,5 +237,19 @@ Begin
       FreeAndNil(MyDataSet);
    End;
 End;
+
+{ TQuery }
+
+procedure TQuery.ExecScript;
+begin
+  case Self.Command.CommandKind of
+    skInsert, skUpdate, skDelete,
+    skCreate, skDrop, skAlter: Self.ExecSQL;
+
+    skSelect: Self.Open;
+  else
+    Self.OpenOrExecute;
+  end;
+end;
 
 end.

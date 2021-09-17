@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
   Interfaces.Entidade.Endereco, Interfaces.Entidade.Logradouro,
-  Interfaces.Entidade.Cidade;
+  Interfaces.Entidade.Cidade, Utils.Enumerators;
 
 type
   [TNomeTabela('ENDERECO')]
@@ -18,6 +18,8 @@ type
     FBairro: string;
     FLogradouro: iLogradouro;
     FCidade: iCidade;
+    FTipoEndereco: Integer;
+    FComplemento: string;
     procedure SetId(const Value: integer);
     procedure SetCEP(const Value: string);
     procedure SetEndereco(const Value: string);
@@ -25,6 +27,8 @@ type
     procedure SetBairro(const Value: string);
     procedure SetLogradouro(const Value: iLogradouro);
     procedure SetCidade(const Value: iCidade);
+    procedure SetTipoEndereco(const Value: Integer);
+    procedure SetComplemento(const Value: string);
     function GetId: Integer;
     function GetCEP: string;
     function GetEndereco: string;
@@ -32,6 +36,8 @@ type
     function GetBairro: string;
     function GetLogradouro: iLogradouro;
     function GetCidade: iCidade;
+    function GetTipoEndereco: Integer;
+    function GetComplemento: string;
   public
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
     property Id: Integer read GetId write SetId;
@@ -45,10 +51,12 @@ type
     property Numero: Integer read GetNumero write SetNumero;
     [TCampoTexto('BAIRRO', 100, [], 'Bairro')]
     property Bairro: string read GetBairro write SetBairro;
+    [TCampoTexto('COMPLEMENTO', 200, [], 'Complemento',False)]
+    property Complemento: string read GetComplemento write SetComplemento;
     [TCampoEstrangeiro('CIDADE_FK', [NOTNULL], 'CIDADE', 'Nome')]
     property Cidade: iCidade read GetCidade write SetCidade;
-//    [TCampoInteiro('TIPO_ENDERECO', [NOTNULL], 'Cidade', 'Nome')]
-//    property TipoEndereco: TTipoEndereco;
+    [TCampoInteiro('TIPO_ENDERECO', [NOTNULL], 'Tipo')]
+    property TipoEndereco: Integer read GetTipoEndereco write SetTipoEndereco;
 
     class function New : iEndereco;
     function EstaVazia(): Boolean; override;
@@ -84,6 +92,11 @@ begin
    Result := FCidade;
 end;
 
+function TEndereco.GetComplemento: string;
+begin
+  Result := FComplemento;
+end;
+
 function TEndereco.GetEndereco: string;
 begin
   Result := FEndereco;
@@ -107,6 +120,11 @@ begin
   Result := FNumero;
 end;
 
+function TEndereco.GetTipoEndereco: Integer;
+begin
+  Result := FTipoEndereco;
+end;
+
 class function TEndereco.New: iEndereco;
 begin
   Result := Self.Create;
@@ -127,6 +145,11 @@ begin
   FCidade := Value;
 end;
 
+procedure TEndereco.SetComplemento(const Value: string);
+begin
+  FComplemento := Value;
+end;
+
 procedure TEndereco.SetEndereco(const Value: string);
 begin
   FEndereco := Value;
@@ -145,6 +168,11 @@ end;
 procedure TEndereco.SetNumero(const Value: Integer);
 begin
   FNumero := Value;
+end;
+
+procedure TEndereco.SetTipoEndereco(const Value: Integer);
+begin
+  FTipoEndereco := Value;
 end;
 
 initialization

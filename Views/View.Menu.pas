@@ -58,7 +58,7 @@ implementation
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
   Connection.Scripter.SqLite, Entidade.Pessoa, Entidade.Endereco,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client, View.Cadastro.Pessoa;
 
 procedure TFrmMenu.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
@@ -76,7 +76,7 @@ begin
   if FMenuExpandido then
     pnlMenuLateral.Width := 50
   else
-    pnlMenuLateral.Width := 160;
+    pnlMenuLateral.Width := 200;
   btnMenu.Width := pnlMenuLateral.Width;
   FMenuExpandido := not FMenuExpandido;
 end;
@@ -148,10 +148,13 @@ begin
 //  var ctext := qry.FieldByName('result_id').AsString;
 //
 //exit;
+//  ControllerView.ShowForm(TFrmCadastroPessoa);
   ControllerView.ShowForm(TFrmCadastroListaPessoa);
 //  var Pessoa := TPessoa.PesquisarPorId(1);
+//  ShowMessage(Pessoa.Nome);
+//  Pessoa.Free;
 //  var Pessoa := TPessoa.Create;
-//  Pessoa.Nome := 'Teste gravacao';
+//  Pessoa.Nome := 'Teste gravacao 14/09 2';
 //
 //  var Endereco := TEndereco.Create;
 //  Endereco.CEP := '87053268';
@@ -162,7 +165,7 @@ begin
 //
 //  Pessoa.Gravar;
 //  FreeAndNil(Pessoa);
-//
+////
 //  Pessoa.Enderecos.Add(Endereco);
 //  Pessoa.Gravar;
 end;

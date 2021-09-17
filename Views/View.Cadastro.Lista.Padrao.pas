@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  View.Cadastro.Padrao, Datasnap.DBClient;
+  View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao)
@@ -18,6 +18,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure grdListaDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -25,6 +26,7 @@ type
     procedure ApresentarDadosNaGrid;
     procedure CriarDataSource;
     procedure ExecutarConsulta;
+    procedure AjustarColunasDaGride;
   public
     { Public declarations }
   end;
@@ -35,7 +37,7 @@ var
 implementation
 
 uses
-  Controller.View, Utils.Form, Utils.Entidade;
+  Utils.DBGrid;
 
 {$R *.dfm}
 
@@ -50,12 +52,13 @@ end;
 
 procedure TFrmCadastroListaPadrao.ExecutarConsulta;
 begin
-  var Entidade := TUtilsForm.ObterObjetoDeCadastroDoForm(Self);
-  try
-    FClientDataSet := TUtilsEntidade.ExecutarMetodoClasse(GetClass(Entidade.ClassName),'ListarTodosCDS',[]).AsType<TClientDataSet>;
-  finally
-    FreeAndNil(Entidade);
-  end;
+  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
+  FClientDataSet := ControllerListaView.ObterDataSetComDadosParaGride as TClientDataSet;
+end;
+
+procedure TFrmCadastroListaPadrao.AjustarColunasDaGride;
+begin
+  TUtilsDBGrid.DimensionarGrid(grdLista);
 end;
 
 procedure TFrmCadastroListaPadrao.ApresentarDadosNaGrid;
@@ -71,21 +74,24 @@ begin
   FreeAndNil(FClientDataSet);
 end;
 
+procedure TFrmCadastroListaPadrao.FormResize(Sender: TObject);
+begin
+  inherited;
+  AjustarColunasDaGride;
+end;
+
 procedure TFrmCadastroListaPadrao.FormShow(Sender: TObject);
 begin
   inherited;
   ApresentarDadosNaGrid;
+  AjustarColunasDaGride;
 end;
 
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
+  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
+  ControllerListaView.ApresentarFormParaCadastro(grdLista.DataSource.DataSet.FieldByName('id').AsInteger);
   inherited;
-  var ClasseForm := TUtilsForm.ObterClasseDoFormularioCadastro(Self);
-  var Form : TForm := nil;
-  ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
-  var ID := grdLista.DataSource.DataSet.FieldByName('id').AsInteger;
-  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
-  ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
 end.
