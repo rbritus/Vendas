@@ -2,6 +2,9 @@ unit Objeto.CustomSelect;
 
 interface
 
+uses
+  Utils.Enumerators;
+
 type
   TCustomSelect = class
     class function getSelectCustom(FieldName: string): string; virtual; abstract;
@@ -24,25 +27,21 @@ implementation
 
 class function TCustomSelectAtivo.getSelectCustom(FieldName: string): string;
 begin
-  Result := 'CASE ' + FieldName + ' WHEN ''S'' THEN ''Ativo'' ELSE ''Inativo'' END ' +
-  getFieldNameCustom(FieldName);
+  Result := TEnumerator<TRegistroAtivo>.GetCustomSelect(FieldName);
 end;
 
 { TCustomSelectTipoEndereco }
 
 class function TCustomSelectTipoEndereco.getSelectCustom(FieldName: string): string;
 begin
-  Result := 'CASE  ' + FieldName +
-  '  WHEN 0 THEN ''PRINCIPAL'' '+
-  'WHEN 1 THEN ''RESIDENCIAL'' WHEN 2 THEN ''COMERCIAL'' '+
-  'WHEN 3 THEN ''ENTREGA'' ELSE ''NÃO INFORMADO'' END ' +
-  getFieldNameCustom(FieldName);
+    Result := TEnumerator<TTipoEndereco>.GetCustomSelect(FieldName);
 end;
+
 { TCustomSelect }
 
 class function TCustomSelect.getFieldNameCustom(FieldName: string): string;
 begin
-  Result := FieldName + '_CUSTOM';
+  Result := TEnumerator<TRegistroAtivo>.GetNameCustoField(FieldName);
 end;
 
 end.
