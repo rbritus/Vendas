@@ -16,34 +16,44 @@ type
     imgLista1: TImageList;
     pnlMenuLateral: TPanel;
     pnlTopo: TPanel;
-    SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
-    SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
+    btnConfiguracoes: TSpeedButton;
+    btnRelatorios: TSpeedButton;
+    btnProcessos: TSpeedButton;
+    btnCadastros: TSpeedButton;
     btnMenu: TSpeedButton;
     pnlBarraSuperiorBotao: TPanel;
     pnlBarraLateralBotao: TPanel;
+    pnlCadastros: TPanel;
+    pnlRelatorios: TPanel;
+    pnlConfiguracoes: TPanel;
+    btnCadastroPessoas: TSpeedButton;
+    pnlProcessos: TPanel;
+    ActionList1: TActionList;
+    actMouseEnter: TAction;
+    actMouseLeave: TAction;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton7: TSpeedButton;
     procedure SplitViewMenuOpened(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnMenuClick(Sender: TObject);
     procedure pnlMainFormResize(Sender: TObject);
-    procedure SpeedButton6MouseEnter(Sender: TObject);
-    procedure SpeedButton6MouseLeave(Sender: TObject);
-    procedure SpeedButton5MouseEnter(Sender: TObject);
-    procedure SpeedButton4MouseEnter(Sender: TObject);
-    procedure SpeedButton3MouseEnter(Sender: TObject);
-    procedure SpeedButton5MouseLeave(Sender: TObject);
-    procedure SpeedButton4MouseLeave(Sender: TObject);
-    procedure SpeedButton3MouseLeave(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure actMouseEnterExecute(Sender: TObject);
+    procedure actMouseLeaveExecute(Sender: TObject);
+    procedure btnCadastroPessoasClick(Sender: TObject);
+    procedure btnCadastrosClick(Sender: TObject);
+    procedure btnProcessosClick(Sender: TObject);
+    procedure btnRelatoriosClick(Sender: TObject);
+    procedure btnConfiguracoesClick(Sender: TObject);
   private
     { Private declarations }
     FMenuExpandido: Boolean;
     procedure ExpansaoDoMenu;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
+    procedure AtivarSubMenu(pPanel: TPanel);
   public
     { Public declarations }
   end;
@@ -60,8 +70,14 @@ uses
   Connection.Scripter.SqLite, Entidade.Pessoa, Entidade.Endereco,
   FireDAC.Comp.Client, View.Cadastro.Pessoa;
 
+procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
+begin
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
 procedure TFrmMenu.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
+  pnlBarraLateralBotao.Parent := Botao.Parent;
   pnlBarraLateralBotao.Visible := True;
   pnlBarraLateralBotao.Top := Botao.Top;
 end;
@@ -79,6 +95,42 @@ begin
     pnlMenuLateral.Width := 200;
   btnMenu.Width := pnlMenuLateral.Width;
   FMenuExpandido := not FMenuExpandido;
+end;
+
+procedure TFrmMenu.btnCadastroPessoasClick(Sender: TObject);
+begin
+//  var qry: TFdquery := TConexao.GetInstance.ObterQuery;
+//  qry.SQL.add('insert into pessoa (nome, ativo) values (''Teste multi2'',''S'');');
+//  qry.SQL.add('SELECT last_insert_rowid() result_id;');
+//  qry.OpenOrExecute;
+//  var ctext := qry.FieldByName('result_id').AsString;
+//
+//exit;
+//  ControllerView.ShowForm(TFrmCadastroPessoa);
+  ControllerView.ShowForm(TFrmCadastroListaPessoa);
+//  var Pessoa := TPessoa.PesquisarPorId(37);
+//  try
+//    Pessoa.Enderecos;
+//  finally
+//    Pessoa.Free;
+//  end;
+//  ShowMessage(Pessoa.Nome);
+//  Pessoa.Free;
+//  var Pessoa := TPessoa.Create;
+//  Pessoa.Nome := 'Teste gravacao 14/09 2';
+//
+//  var Endereco := TEndereco.Create;
+//  Endereco.CEP := '87053268';
+//  Endereco.Endereco := 'Teste 02';
+//  Endereco.Numero := 275;
+//  Endereco.Bairro := 'Zona2';
+//  Pessoa.Enderecos.Add(Endereco);
+//
+//  Pessoa.Gravar;
+//  FreeAndNil(Pessoa);
+////
+//  Pessoa.Enderecos.Add(Endereco);
+//  Pessoa.Gravar;
 end;
 
 procedure TFrmMenu.btnMenuClick(Sender: TObject);
@@ -109,75 +161,34 @@ begin
 //  ControllerView.Arredondarcantos(pnlMainForm);
 end;
 
-procedure TFrmMenu.SpeedButton3MouseEnter(Sender: TObject);
-begin
-  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
-end;
-
-procedure TFrmMenu.SpeedButton3MouseLeave(Sender: TObject);
+procedure TFrmMenu.actMouseLeaveExecute(Sender: TObject);
 begin
   OcultarBarraLateralDoBotao;
 end;
 
-procedure TFrmMenu.SpeedButton4MouseEnter(Sender: TObject);
+procedure TFrmMenu.btnConfiguracoesClick(Sender: TObject);
 begin
-  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AtivarSubMenu(pnlConfiguracoes);
 end;
 
-procedure TFrmMenu.SpeedButton4MouseLeave(Sender: TObject);
+procedure TFrmMenu.btnRelatoriosClick(Sender: TObject);
 begin
-  OcultarBarraLateralDoBotao;
+  AtivarSubMenu(pnlRelatorios);
 end;
 
-procedure TFrmMenu.SpeedButton5MouseEnter(Sender: TObject);
+procedure TFrmMenu.btnProcessosClick(Sender: TObject);
 begin
-  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AtivarSubMenu(pnlProcessos);
 end;
 
-procedure TFrmMenu.SpeedButton5MouseLeave(Sender: TObject);
+procedure TFrmMenu.btnCadastrosClick(Sender: TObject);
 begin
-  OcultarBarraLateralDoBotao;
+  AtivarSubMenu(pnlCadastros);
 end;
 
-procedure TFrmMenu.SpeedButton6Click(Sender: TObject);
+procedure TFrmMenu.AtivarSubMenu(pPanel: TPanel);
 begin
-//  var qry: TFdquery := TConexao.GetInstance.ObterQuery;
-//  qry.SQL.add('insert into pessoa (nome, ativo) values (''Teste multi2'',''S'');');
-//  qry.SQL.add('SELECT last_insert_rowid() result_id;');
-//  qry.OpenOrExecute;
-//  var ctext := qry.FieldByName('result_id').AsString;
-//
-//exit;
-//  ControllerView.ShowForm(TFrmCadastroPessoa);
-  ControllerView.ShowForm(TFrmCadastroListaPessoa);
-//  var Pessoa := TPessoa.PesquisarPorId(1);
-//  ShowMessage(Pessoa.Nome);
-//  Pessoa.Free;
-//  var Pessoa := TPessoa.Create;
-//  Pessoa.Nome := 'Teste gravacao 14/09 2';
-//
-//  var Endereco := TEndereco.Create;
-//  Endereco.CEP := '87053268';
-//  Endereco.Endereco := 'Teste 02';
-//  Endereco.Numero := 275;
-//  Endereco.Bairro := 'Zona2';
-//  Pessoa.Enderecos.Add(Endereco);
-//
-//  Pessoa.Gravar;
-//  FreeAndNil(Pessoa);
-////
-//  Pessoa.Enderecos.Add(Endereco);
-//  Pessoa.Gravar;
-end;
-
-procedure TFrmMenu.SpeedButton6MouseEnter(Sender: TObject);
-begin
-  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
-end;
-
-procedure TFrmMenu.SpeedButton6MouseLeave(Sender: TObject);
-begin
-  OcultarBarraLateralDoBotao;
+  pPanel.Visible := True;
 end;
 
 procedure TFrmMenu.SplitViewMenuOpened(Sender: TObject);

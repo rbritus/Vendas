@@ -34,6 +34,9 @@ type
     procedure CarregarDataSet;
     function ObterSqlParaDatSet: string; virtual; Abstract;
     function ObterSqlDeTabelaRelacional: string;
+    function ObterObjetoDoFrame: TObject;
+    procedure CriarDataSet; virtual; Abstract;
+    procedure PreencherDataSet(Obj: TObject); virtual; Abstract;
   end;
 
 var
@@ -49,15 +52,31 @@ uses
 { TFrameAdicaoPadrao }
 
 procedure TFrameAdicaoPadrao.CarregarDataSet;
+var
+  Obj: TObject;
 begin
-  var cSql := ObterSqlParaDatSet;
+  CriarDataSet;
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  var cds := ControllerFrame.CarregarDataSet(cSql);
+  var Lista := ControllerFrame.CarregarListaDeObjetosParaFrame(FIdObjRelacional);
+
+  if not Assigned(Lista) then
+    Exit;
+
   try
-    cdsDados.Data := TClientDataSet(cds).Data;
+    for Obj in Lista do
+      PreencherDataSet(Obj);
   finally
-    FreeAndNil(cds);
+    Lista.Free;
   end;
+
+//  var cSql := ObterSqlParaDatSet;
+//  var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
+//  var cds := ControllerFrame.CarregarDataSet(cSql);
+//  try
+//    cdsDados.Data := TClientDataSet(cds).Data;
+//  finally
+//    FreeAndNil(cds);
+//  end;
 end;
 
 procedure TFrameAdicaoPadrao.Image1Click(Sender: TObject);
@@ -69,7 +88,13 @@ end;
 procedure TFrameAdicaoPadrao.ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
 begin
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  ControllerFrame.ObterListaPreenchida(cdsDados,Lista);
+  ControllerFrame.ObterListaPreenchidaDoFrame(cdsDados,Lista);
+end;
+
+function TFrameAdicaoPadrao.ObterObjetoDoFrame: TObject;
+begin
+  var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
+  Result := ControllerFrame.ObterObjetoDoFrame;
 end;
 
 function TFrameAdicaoPadrao.ObterSqlDeTabelaRelacional: string;

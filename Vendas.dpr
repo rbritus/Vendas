@@ -50,9 +50,11 @@ uses
   Componente.TObjectList in 'Components\Componente.TObjectList.pas',
   Frame.Adicao.Padrao in 'Frames\Frame.Adicao.Padrao.pas' {FrameAdicaoPadrao: TFrame},
   Frame.Adicao.Endereco in 'Frames\Frame.Adicao.Endereco.pas' {FrameAdicaoEndereco: TFrame},
-  Controller.Frame.Adicao.Padrao in 'Controllers\Controller.Frame.Adicao.Padrao.pas',
   Interfaces.Controller.Frame.Adicao.Padrao in 'Interfaces\Interfaces.Controller.Frame.Adicao.Padrao.pas',
-  Attributes.Enumerators in 'Attributes\Attributes.Enumerators.pas';
+  Attributes.Enumerators in 'Attributes\Attributes.Enumerators.pas',
+  Utils.ClientDataSet in 'Utils\Utils.ClientDataSet.pas',
+  Controller.Frame.Adicao.Padrao in 'Controllers\Controller.Frame.Adicao.Padrao.pas',
+  Frame.Pesquisa.Entidade.Padrao in 'Frames\Frame.Pesquisa.Entidade.Padrao.pas' {FramePadrao1: TFrame};
 
 {$R *.res}
 

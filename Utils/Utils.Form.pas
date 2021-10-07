@@ -14,6 +14,7 @@ type
     class procedure PreencherEntidadeComCamposDoForm(var pEntidade: TPersistent;pForm: TForm);
     class procedure PreencherFormComCamposDaEntidade(var pEntidade: TPersistent;pForm: TForm);
     class function ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TPersistentClass; static;
+    class procedure LimparCamposDoForm(pForm: TForm);
   end;
 
 implementation
@@ -86,6 +87,12 @@ begin
 end;
 
 { TUtilsForm }
+
+class procedure TUtilsForm.LimparCamposDoForm(pForm: TForm);
+begin
+  var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
+  Wrapper.InicializarCamposEditaveisDoForm;
+end;
 
 class function TUtilsForm.ObterClasseDoFormularioCadastro(pForm: TForm): TFormClass;
 begin

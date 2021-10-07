@@ -17,6 +17,7 @@ type
     class function New(pForm: TForm): iWrapperPropriedadeCadastro;
     procedure PreencherObjetoDoForm(var pEntidade: TPersistent);
     procedure PreencherFormComEntidade(pEntidade: TPersistent);
+    procedure InicializarCamposEditaveisDoForm;
     constructor Create(pForm: TForm);
   end;
 
@@ -24,18 +25,21 @@ type
       class function ObterValorComponenteForm(pForm: TForm; Field: TRttiField; Tipo: TTiposDeCampo): TValue;
       class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(pForm: TForm; Field: TRttiField; Valor: TValue);
+      class procedure Inicializar(Field: TRttiField; pForm: TForm);
   end;
 
   TTratarTEdit = class
       class function ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(Componente: TComponent; Valor: TValue);
+      class procedure Inicializar(Componente: TComponent);
   end;
 
   TTratarTToggleSwitch = class
       class function ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class function ObterValorEntidadeForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(Componente: TComponent; Valor: TValue);
+      class procedure Inicializar(Componente: TComponent);
   end;
 
 implementation
@@ -48,6 +52,37 @@ uses
 constructor TWrapperPropriedadeCadastro.Create(pForm: TForm);
 begin
   FForm := pForm;
+end;
+
+procedure TWrapperPropriedadeCadastro.InicializarCamposEditaveisDoForm;
+begin
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(FForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    for var FField in Tipo.GetFields do
+    begin
+      for var Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
+            TTratarVariavel.Inicializar(FField, FForm);
+
+          var Componente := FForm.FindComponent(FField.Name);
+          if TPropriedadeCadastro(Atrib) is TCadastroEdit then
+            TTratarTEdit.Inicializar(Componente);
+
+          if TPropriedadeCadastro(Atrib) is TCadastroToggleSwitch then
+            TTratarTToggleSwitch.Inicializar(Componente);
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
 end;
 
 class function TWrapperPropriedadeCadastro.New(pForm: TForm): iWrapperPropriedadeCadastro;
@@ -147,6 +182,11 @@ end;
 
 { TTratarEdit }
 
+class procedure TTratarTEdit.Inicializar(Componente: TComponent);
+begin
+  Tedit(Componente).Clear;
+end;
+
 class function TTratarTEdit.ObterValorComponenteForm(Valor: TValue; Tipo: TTiposDeCampo): TValue;
 begin
   case Tipo of
@@ -183,6 +223,11 @@ end;
 
 { TTratarTToggleSwitch }
 
+class procedure TTratarTToggleSwitch.Inicializar(Componente: TComponent);
+begin
+  TToggleSwitch(Componente).State := tssOn;
+end;
+
 class function TTratarTToggleSwitch.ObterValorComponenteForm(Valor: TValue;
   Tipo: TTiposDeCampo): TValue;
 begin
@@ -217,6 +262,29 @@ begin
 end;
 
 { TTratarVariavel }
+
+class procedure TTratarVariavel.Inicializar(Field: TRttiField; pForm: TForm);
+begin
+  case Field.FieldType.TypeKind of
+//    tkClass:
+//      begin
+//        var Obj := Field.GetValue(pForm).AsObject;
+//        if Assigned(Obj) then
+//          Obj.Free;
+//      end;
+    tkInteger, tkFloat:
+      Field.SetValue(pForm, 0);
+    tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
+      Field.SetValue(pForm, EmptyStr);
+    tkVariant:
+      Field.SetValue(pForm, EmptyStr);
+    tkEnumeration:
+      begin
+        var Value := TValue.FromOrdinal(Field.GetValue(pForm).TypeInfo, 0);
+        Field.SetValue(pForm, Value);
+      end;
+  end;
+end;
 
 class function TTratarVariavel.ObterValorComponenteForm(pForm: TForm; Field: TRttiField;
   Tipo: TTiposDeCampo): TValue;

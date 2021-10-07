@@ -14,6 +14,7 @@ type
     FMainForm: TForm;
     FParent: TPanel;
     FTitle: TPanel;
+    function CarregarForm(Value: TComponentClass): TForm;
   public
     constructor Create;
     destructor Destroy; override;
@@ -25,9 +26,11 @@ type
     function ModuloForm(aForm: Tform): string;
     procedure ArredondarCantos(componente: TWinControl);
     procedure CaptionShow(aForm: Tform);
+    procedure CriarSublinhadoParaCamposEditaveis(Componente: TWinControl);
 
     procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
     procedure ShowForm(Value: TComponentClass);
+    procedure ShowFormModal(Value: TComponentClass);
 
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
@@ -41,7 +44,7 @@ implementation
 
 { TControllerView }
 
-procedure TControllerView.ShowForm(Value: TComponentClass);
+function TControllerView.CarregarForm(Value: TComponentClass): TForm;
 var
   aForm: TForm;
   LabelCaminhoForm: Tlabel;
@@ -67,7 +70,17 @@ begin
     if LabelAtual <> nil then
       LabelAtual.Caption := aForm.Caption;
   end;
-  aForm.Show;
+  Result := aForm;
+end;
+
+procedure TControllerView.ShowForm(Value: TComponentClass);
+begin
+  CarregarForm(Value).Show;
+end;
+
+procedure TControllerView.ShowFormModal(Value: TComponentClass);
+begin
+  CarregarForm(Value).ShowModal;
 end;
 
 procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
@@ -77,6 +90,18 @@ begin
     Application.CreateForm(Value, pForm);
     ListaForm.Add(Value, pForm);
   end;
+end;
+
+procedure TControllerView.CriarSublinhadoParaCamposEditaveis(
+  Componente: TWinControl);
+begin
+  var panel := TPanel.Create(Componente.Owner);
+  panel.Name := 'pnl' + Componente.Name + Random(1000000).ToString;
+  panel.Top := Componente.Top + Componente.Height;
+  panel.Left := Componente.Left;
+  panel.Width := Componente.Width;
+  panel.Height := 2;
+  panel.Parent := Componente.Parent;
 end;
 
 procedure TControllerView.ArredondarCantos(componente: TWinControl);

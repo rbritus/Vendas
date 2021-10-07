@@ -5,10 +5,12 @@ Interface
 uses
   System.Classes, System.Generics.Collections, Services.Padrao, Rtti,
   Datasnap.DBClient, System.SysUtils, Interfaces.Services.Padrao, Utils.Entidade,
-  Componente.TObjectList;
+  Componente.TObjectList, Winapi.Windows;
 
 Type
   TEntidade<T: class> = class(TInterfacedPersistent)
+  private
+    FRefCount: Integer;
   public
     procedure Gravar;
     procedure Excluir;
@@ -18,11 +20,20 @@ Type
     class function ListarTodosCDS: TClientDataSet;
     class function PesquisarPorId(Id: Integer): T;
     class function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
+    Destructor Destroy; override;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   end;
 
 Implementation
 
 { TEntidade }
+
+destructor TEntidade<T>.Destroy;
+begin
+  TUtilsEntidade.LimparEntidades(Self);
+  inherited;
+end;
 
 procedure TEntidade<T>.Excluir;
 begin
@@ -63,6 +74,20 @@ class function TEntidade<T>.PesquisarPorId(Id: Integer): T;
 begin
   var iServico := TServico<T>.New;
   Result := iServico.PesquisarPorId(Id);
+end;
+
+function TEntidade<T>._AddRef: Integer;
+begin
+  Result := inherited _AddRef;
+  InterlockedIncrement(FRefCount);
+end;
+
+function TEntidade<T>._Release: Integer;
+begin
+  Result := inherited _Release;
+  InterlockedDecrement(FRefCount);
+  if FRefCount <=0 then
+    Free;
 end;
 
 end.

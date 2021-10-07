@@ -11,7 +11,9 @@ type
     ['{2B0418C5-FE1E-4A9E-92E3-781CF12FBFC8}']
     function CarregarDataSet(pSql: string): TDataSet;
     function ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
-    procedure ObterListaPreenchida(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
+    procedure ObterListaPreenchidaDoFrame(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
+    function ObterObjetoDoFrame: TObject;
+    function CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
   end;
 
 implementation

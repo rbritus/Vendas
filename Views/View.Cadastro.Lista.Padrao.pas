@@ -19,6 +19,7 @@ type
     procedure grdListaDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -90,8 +91,15 @@ end;
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
-  ControllerListaView.ApresentarFormParaCadastro(grdLista.DataSource.DataSet.FieldByName('id').AsInteger);
+  ControllerListaView.ApresentarFormParaEdicao(grdLista.DataSource.DataSet.FieldByName('id').AsInteger);
   inherited;
+end;
+
+procedure TFrmCadastroListaPadrao.SpeedButton6Click(Sender: TObject);
+begin
+  inherited;
+  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
+  ControllerListaView.ApresentarFormParaCadastro;
 end;
 
 end.

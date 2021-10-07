@@ -81,6 +81,7 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
+        OnClick = SpeedButton6Click
       end
       object pnlBarraLateralBotao: TPanel
         Left = 0

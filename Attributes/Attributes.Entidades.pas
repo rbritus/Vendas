@@ -55,7 +55,9 @@ type
   TCampoInteiro = class(TAtributoBanco)
   public
     constructor create(pNome: string; pConfig: TConfiguracaoCampo; pCaption: string = '';
-      pVisivel: Boolean = True);
+      pVisivel: Boolean = True); overload;
+    constructor create(pNome: string; pConfig: TConfiguracaoCampo; pTCustomSelect: TClasseCustom;
+      pCaption: string = ''; pVisivel: Boolean = True); overload;
     function getScriptCampo: string; override;
   end;
 
@@ -177,6 +179,17 @@ begin
   self.caption := pCaption;
   Self.Visivel := pVisivel;
   Self.CustomSelect := nil;
+end;
+
+constructor TCampoInteiro.create(pNome: string; pConfig: TConfiguracaoCampo;
+  pTCustomSelect: TClasseCustom; pCaption: string; pVisivel: Boolean);
+begin
+  self.nome := pNome;
+  self.tipo := ftINTEIRO;
+  self.propriedades := pConfig;
+  self.caption := pCaption;
+  Self.Visivel := pVisivel;
+  Self.CustomSelect := pTCustomSelect;
 end;
 
 function TCampoInteiro.getScriptCampo: string;

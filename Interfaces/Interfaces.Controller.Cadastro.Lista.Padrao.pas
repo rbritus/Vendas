@@ -10,7 +10,8 @@ type
   iControllerCadastroListaPadrao = interface
     ['{E53FF557-9668-4463-BF94-95D7333E7B13}']
     function ObterDataSetComDadosParaGride: TDataSet;
-    procedure ApresentarFormParaCadastro(ID: Integer);
+    procedure ApresentarFormParaEdicao(ID: Integer);
+    procedure ApresentarFormParaCadastro;
   end;
 
 implementation

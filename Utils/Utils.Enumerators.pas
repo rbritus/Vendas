@@ -22,6 +22,9 @@ type
     class function GetNameCustoField(const FieldName: string): string;
   end;
 
+  TEnumGenerics = record
+  end;
+
   [TEnumAttribute(0,'Inteiro',0)]
   [TEnumAttribute(1,'Texto',1)]
   [TEnumAttribute(2,'Decimal',2)]

@@ -3,7 +3,8 @@ unit Controller.Cadastro.Padrao;
 interface
 
 uses
-  Vcl.Forms, System.Classes, Interfaces.Controller.Cadastro.Padrao;
+  Vcl.Forms, System.Classes, Interfaces.Controller.Cadastro.Padrao, Vcl.ExtCtrls,
+  Vcl.Controls, Vcl.StdCtrls;
 
 type
   TControllerCadastroPadrao = class(TInterfacedObject, iControllerCadastroPadrao)
@@ -17,9 +18,12 @@ type
     constructor Create(pForm: TForm);
     procedure DestruirEntidade;
     procedure PreencherFormComCamposDaEntidade;
+    procedure ModificarLayoutEdit(edt: TEdit);
   public
     procedure GravarEntidade;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
+    procedure CarregarLayoutDeCamposEditaveis;
+    procedure LimparCamposEditaveis;
 
     class function New(pForm: TForm): iControllerCadastroPadrao;
   end;
@@ -27,7 +31,7 @@ type
 implementation
 
 uses
-  Utils.Entidade, Utils.Form;
+  Utils.Entidade, Utils.Form, Controller.View;
 
 { TControllerCadastroPadrao }
 
@@ -42,6 +46,21 @@ begin
   FEntidade := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[pId]).AsType<TPersistent>;
   PreencherFormComCamposDaEntidade;
   DestruirEntidade;
+end;
+
+procedure TControllerCadastroPadrao.ModificarLayoutEdit(edt: TEdit);
+begin
+  edt.BorderStyle := bsNOne;
+end;
+
+procedure TControllerCadastroPadrao.CarregarLayoutDeCamposEditaveis;
+begin
+  for var Indice := 0 to FForm.ComponentCount do
+    if FForm.Components[Indice].ClassType = TEdit then
+    begin
+      ModificarLayoutEdit(FForm.Components[Indice] as TEdit);
+      ControllerView.CriarSublinhadoParaCamposEditaveis(FForm.Components[Indice] as TWinControl);
+    end;
 end;
 
 constructor TControllerCadastroPadrao.Create(pForm: TForm);
@@ -65,6 +84,11 @@ begin
   PreencherEntidadeComCamposDoForm;
   Gravar;
   DestruirEntidade;
+end;
+
+procedure TControllerCadastroPadrao.LimparCamposEditaveis;
+begin
+  TUtilsForm.LimparCamposDoForm(FForm);
 end;
 
 class function TControllerCadastroPadrao.New(pForm: TForm): iControllerCadastroPadrao;

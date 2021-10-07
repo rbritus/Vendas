@@ -7,10 +7,10 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       object Label2: TLabel
         Left = 48
         Top = 60
-        Width = 40
+        Width = 32
         Height = 13
         BiDiMode = bdLeftToRight
-        Caption = 'Pessoa'
+        Caption = 'Nome'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11

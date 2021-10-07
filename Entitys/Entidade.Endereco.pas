@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
   Interfaces.Entidade.Endereco, Interfaces.Entidade.Logradouro,
-  Interfaces.Entidade.Cidade, Utils.Enumerators;
+  Interfaces.Entidade.Cidade, Utils.Enumerators, Objeto.CustomSelect;
 
 type
   [TNomeTabela('ENDERECO')]
@@ -18,7 +18,7 @@ type
     FBairro: string;
     FLogradouro: iLogradouro;
     FCidade: iCidade;
-    FTipoEndereco: Integer;
+    FTipoEndereco: TTipoEndereco;
     FComplemento: string;
     procedure SetId(const Value: integer);
     procedure SetCEP(const Value: string);
@@ -27,7 +27,7 @@ type
     procedure SetBairro(const Value: string);
     procedure SetLogradouro(const Value: iLogradouro);
     procedure SetCidade(const Value: iCidade);
-    procedure SetTipoEndereco(const Value: Integer);
+    procedure SetTipoEndereco(const Value: TTipoEndereco);
     procedure SetComplemento(const Value: string);
     function GetId: Integer;
     function GetCEP: string;
@@ -36,7 +36,7 @@ type
     function GetBairro: string;
     function GetLogradouro: iLogradouro;
     function GetCidade: iCidade;
-    function GetTipoEndereco: Integer;
+    function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
   public
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
@@ -55,8 +55,8 @@ type
     property Complemento: string read GetComplemento write SetComplemento;
     [TCampoEstrangeiro('CIDADE_FK', [NOTNULL], 'CIDADE', 'Nome')]
     property Cidade: iCidade read GetCidade write SetCidade;
-    [TCampoInteiro('TIPO_ENDERECO', [NOTNULL], 'Tipo')]
-    property TipoEndereco: Integer read GetTipoEndereco write SetTipoEndereco;
+    [TCampoInteiro('TIPO_ENDERECO', [NOTNULL], TCustomSelectTipoEndereco, 'Tipo')]
+    property TipoEndereco: TTipoEndereco read GetTipoEndereco write SetTipoEndereco;
 
     class function New : iEndereco;
     function EstaVazia(): Boolean; override;
@@ -120,7 +120,7 @@ begin
   Result := FNumero;
 end;
 
-function TEndereco.GetTipoEndereco: Integer;
+function TEndereco.GetTipoEndereco: TTipoEndereco;
 begin
   Result := FTipoEndereco;
 end;
@@ -170,7 +170,7 @@ begin
   FNumero := Value;
 end;
 
-procedure TEndereco.SetTipoEndereco(const Value: Integer);
+procedure TEndereco.SetTipoEndereco(const Value: TTipoEndereco);
 begin
   FTipoEndereco := Value;
 end;

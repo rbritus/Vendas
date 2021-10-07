@@ -5,7 +5,8 @@ interface
 uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades, System.SysUtils, Data.DB,
   Connection.Controller.SqLite, Utils.Enumerators, Componente.TObjectList,
-  Attributes.Enumerators, System.TypInfo;
+  Attributes.Enumerators, System.TypInfo, Data.DBXJSON, Data.DBXJSONReflect,
+  System.JSON;
 
 type
   TUtilsEntidade = class
@@ -15,6 +16,7 @@ type
     class function GetValueEnumerator(Prop: TRttiProperty; Obj: TObject): TValue; overload; static;
 //    class function GetValueEnumerator(Field: TRttiField; Obj: TObject): TValue; overload; static;
   public
+    class function ObterCloneObjeto(ObjetoClone: TObject): TObject;
     class function ObterObjetoGenerico<T>: T;
     class function ObterNomeDaTabela(Classe: TPersistentClass): string; overload;
     class function ObterNomeDaTabela(Objeto: TObject): string; overload;
@@ -31,9 +33,11 @@ type
     class function ObterObjetoChaveEstrangeira(ObjPai: TObject; ClasseObjEstrangeiro: TPersistentClass): TObject;
     class function ObterListaComTabelaRelacional<T: class>(ID: Integer; CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
          ClasseDestino: TPersistentClass): TObjectListFuck<T>;
+    class function GetCaptionEnumerator(Prop: TRttiProperty; Obj: TObject): string; static;
 
     class procedure PreencheObjeto(var Obj: TObject; DSet: TDataSet);
     class procedure Limpar(Objeto: TObject);
+    class procedure LimparEntidades(Objeto: TObject); static;
   end;
 
 implementation
@@ -216,7 +220,7 @@ begin
       ' where ' + cPK + ' = ' + IntToStr(DSetSelf.FieldByName(cTabela + '_FK').AsInteger));
     try
       if DSetEstrangeiro.IsEmpty then
-        Exit(Nil);
+        Exit(ObjEstrangeiro);
 
       PreencheObjeto(ObjEstrangeiro, DSetEstrangeiro);
       Result := ObjEstrangeiro;
@@ -264,12 +268,14 @@ end;
 class function TUtilsEntidade.ObterListaComTabelaRelacional<T>(ID: Integer;
   CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
   ClasseDestino: TPersistentClass): TObjectListFuck<T>;
+var
+  ListObj: TObjectListFuck<T>;
 Begin
   const ctSelect = 'select TAB1.* from %s TAB1 inner join %s TAB2 on TAB2.%s = TAB1.ID where TAB2.%s = %d';
   var sql := Format(ctSelect, [TUtilsEntidade.ObterNomeDaTabela(ClasseDestino),
     TabelaIntermediaria, CampoRelacionalTerceiro, CampoRelacionalProprio, ID]);
 
-  var ListObj := TObjectListFuck<T>.Create;
+  ListObj := TObjectListFuck<T>.Create;
   var DSet := TConexao.GetInstance.EnviaConsulta(sql);
   try
 
@@ -289,7 +295,7 @@ Begin
   end;
 
   Result := ListObj;
-  ListObj.Free;
+//  ListObj.Free;
 end;
 
 class function TUtilsEntidade.ObterNomeDaTabela(Classe: TPersistentClass): string;
@@ -317,26 +323,22 @@ end;
 class function TUtilsEntidade.ObterNomeDaTabela(Objeto: TObject): string;
 begin
   Result := TUtilsEntidade.ObterNomeDaTabela(TPersistentClass(Objeto.ClassType));
-end;      
+end;
 
 class function TUtilsEntidade.GetEnumerator(Field: TRttiField; Obj: TObject;
   Valor: Variant): TValue;
 begin
   Result := TValue.From(0);
-  var Ctx := TRttiContext.Create;
-  try
-    for var CustomAttribute in Field.FieldType.GetAttributes do
-    begin
-      if CustomAttribute is TEnumAttribute then
-        if TEnumAttribute(CustomAttribute).Value = Valor then
-        begin
-          var Value := Field.GetValue(Obj);
-          Result := TValue.FromOrdinal(Value.TypeInfo, TEnumAttribute(CustomAttribute).Indice);
-          Break;
-        end;
-    end;
-  finally
-    Ctx.Free;
+
+  for var CustomAttribute in Field.FieldType.GetAttributes do
+  begin
+    if CustomAttribute is TEnumAttribute then
+      if TEnumAttribute(CustomAttribute).Value = Valor then
+      begin
+        var Value := Field.GetValue(Obj);
+        Result := TValue.FromOrdinal(Value.TypeInfo, TEnumAttribute(CustomAttribute).Indice);
+        Break;
+      end;
   end;
 end;
 
@@ -366,24 +368,37 @@ end;
 
 class function TUtilsEntidade.GetValueEnumerator(Prop: TRttiProperty; Obj: TObject): TValue;
 var
-  Ctx: TRttiContext;
   CustomAttribute: TCustomAttribute;
 begin
   Result := TValue.From(0);
-  Ctx := TRttiContext.Create;
-  try
-    var Enum := Prop.GetValue(Obj);
-    for CustomAttribute in Prop.PropertyType.GetAttributes do
-    begin
-      if CustomAttribute is TEnumAttribute then
-        if TEnumAttribute(CustomAttribute).Indice = Enum.AsOrdinal then
-        begin
-          Result := TValue.From(TEnumAttribute(CustomAttribute).Value);
-          Break;
-        end;
-    end;
-  finally
-    Ctx.Free;
+
+  var Enum := Prop.GetValue(Obj);
+  for CustomAttribute in Prop.PropertyType.GetAttributes do
+  begin
+    if CustomAttribute is TEnumAttribute then
+      if TEnumAttribute(CustomAttribute).Indice = Enum.AsOrdinal then
+      begin
+        Result := TValue.From(TEnumAttribute(CustomAttribute).Value);
+        Break;
+      end;
+  end;
+end;
+
+class function TUtilsEntidade.GetCaptionEnumerator(Prop: TRttiProperty; Obj: TObject): string;
+var
+  CustomAttribute: TCustomAttribute;
+begin
+  Result := EmptyStr;
+
+  var Enum := Prop.GetValue(Obj);
+  for CustomAttribute in Prop.PropertyType.GetAttributes do
+  begin
+    if CustomAttribute is TEnumAttribute then
+      if TEnumAttribute(CustomAttribute).Indice = Enum.AsOrdinal then
+      begin
+        Result := TEnumAttribute(CustomAttribute).Caption;
+        Break;
+      end;
   end;
 end;
 
@@ -430,20 +445,16 @@ end;
 class function TUtilsEntidade.GetEnumerator(Prop: TRttiProperty; Obj: TObject; Valor: Variant): TValue;
 begin
   Result := TValue.From(0);
-  var Ctx := TRttiContext.Create;
-  try
-    for var CustomAttribute in Prop.PropertyType.GetAttributes do
-    begin
-      if CustomAttribute is TEnumAttribute then
-        if TEnumAttribute(CustomAttribute).Value = Valor then
-        begin
-          var Value := Prop.GetValue(Obj);
-          Result := TValue.FromOrdinal(Value.TypeInfo, TEnumAttribute(CustomAttribute).Indice);
-          Break;
-        end;
-    end;
-  finally
-    Ctx.Free;
+
+  for var CustomAttribute in Prop.PropertyType.GetAttributes do
+  begin
+    if CustomAttribute is TEnumAttribute then
+      if TEnumAttribute(CustomAttribute).Value = Valor then
+      begin
+        var Value := Prop.GetValue(Obj);
+        Result := TValue.FromOrdinal(Value.TypeInfo, TEnumAttribute(CustomAttribute).Indice);
+        Break;
+      end;
   end;
 end;
 
@@ -539,7 +550,7 @@ var
   Ctx: TRttiContext;
   Prop: TRttiProperty;
   Tipo: TRTTIType;
-  Atrib: TCustomAttribute;
+//  Atrib: TCustomAttribute;
 begin
   Ctx := TRttiContext.Create;
   Tipo := Ctx.GetType(Objeto.ClassType);
@@ -549,12 +560,16 @@ begin
     begin
       for Prop in Tipo.GetDeclaredProperties do
       begin
-        for Atrib in Prop.GetAttributes do
-        begin
+//        for Atrib in Prop.GetAttributes do
+//        begin
 
           case Prop.PropertyType.TypeKind of
             tkClass:
-              Prop.SetValue(Objeto, nil);
+              begin
+                var Obj := Prop.GetValue(Objeto).AsObject;
+                if Assigned(Obj) then
+                  Obj.Free;
+              end;
             tkInteger, tkFloat:
               Prop.SetValue(Objeto, 0);
             tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
@@ -584,11 +599,62 @@ begin
 //              Prop.SetValue(Objeto, EmptyStr);
 //            end;
 //          end;
+//        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
+class procedure TUtilsEntidade.LimparEntidades(Objeto: TObject);
+begin
+  if not Assigned(Objeto) then
+    Exit;
+
+  var Ctx := TRttiContext.Create;
+  var Tipo := Ctx.GetType(Objeto.ClassType);
+
+  try
+    if Assigned(Tipo) then
+    begin
+      for var Prop in Tipo.GetDeclaredProperties do
+      begin
+        case Prop.PropertyType.TypeKind of
+          tkClass:
+          begin
+            var Obj := Prop.GetValue(Objeto).AsObject;
+            if Assigned(Obj) then
+              Obj.Free;
+          end;
         end;
       end;
     end;
   finally
     Ctx.Free;
+  end;
+end;
+
+class function TUtilsEntidade.ObterCloneObjeto(ObjetoClone: TObject): TObject;
+var
+  MarshalObj: TJSONMarshal;
+  UnMarshalObj: TJSONUnMarshal;
+  JSONValue: TJSONValue;
+begin
+  Result:= nil;
+  MarshalObj := TJSONMarshal.Create;
+  UnMarshalObj := TJSONUnMarshal.Create;
+  try
+    JSONValue := MarshalObj.Marshal(ObjetoClone);
+    try
+      if Assigned(JSONValue) then
+        Result:= UnMarshalObj.Unmarshal(JSONValue);
+    finally
+      JSONValue.Free;
+    end;
+  finally
+    MarshalObj.Free;
+    UnMarshalObj.Free;
   end;
 end;
 

@@ -21,7 +21,7 @@ type
   TServico<T: class> = class(TInterfacedObject, iServico<T>)
   private
     procedure GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectListFuck<TObject>; EntidadePai: TObject);
-    procedure AlterarPropriedadeVisibleDoField(cds: TDataSet);
+    procedure AlterarCaptionEVisibilidadeDoField(cds: TDataSet);
     procedure PreencherArrayComParametros(Propriedade: TRttiProperty; Objeto: TObject; Atrib: TAtributoBanco; var RecParam: TParametro);
     function ObterArrayComParametrosPreenchidos(Objeto: TObject): TArrayParametros;
     function RegistroJaGravadoEmBanco(Objeto: TObject): Boolean;
@@ -47,52 +47,58 @@ type
 implementation
 
 uses
-  Objeto.CustomSelect, FireDAC.Phys.Intf;
+  Objeto.CustomSelect, FireDAC.Phys.Intf, Utils.ClientDataSet;
 
 { TServico<T> }
 
-procedure TServico<T>.AlterarPropriedadeVisibleDoField(cds: TDataSet);
+procedure TServico<T>.AlterarCaptionEVisibilidadeDoField(cds: TDataSet);
 begin
-  var Ctx := TRttiContext.Create;
+  var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
   try
-    var Tipo := Ctx.GetType(TypeInfo(T));
-    if not Assigned(Tipo) then
-      Exit;
-
-    for var Prop in Tipo.GetDeclaredProperties do
-    begin
-      for var Atrib in Prop.GetAttributes do
-      begin
-        if Atrib is TAtributoBanco then
-        begin
-          if cds.FindField(TAtributoBanco(Atrib).nome) = nil then
-            Continue;
-
-          cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
-          cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
-
-          if not TAtributoBanco(Atrib).Visivel then
-            Continue;
-
-          if Assigned(TAtributoBanco(Atrib).CustomSelect) then
-          begin
-            var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
-
-            if cds.FindField(NomeFieldCustom) = nil then
-              Continue;
-
-            cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
-            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
-            cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
-            cds.FieldByName(NomeFieldCustom).Visible := True;
-          end;
-
-        end;
-      end;
-    end;
+    TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(TClientDataSet(cds),TPersistent(Objeto));
   finally
-    Ctx.Free;
+    Objeto.Free;
   end;
+//  var Ctx := TRttiContext.Create;
+//  try
+//    var Tipo := Ctx.GetType(TypeInfo(T));
+//    if not Assigned(Tipo) then
+//      Exit;
+//
+//    for var Prop in Tipo.GetDeclaredProperties do
+//    begin
+//      for var Atrib in Prop.GetAttributes do
+//      begin
+//        if Atrib is TAtributoBanco then
+//        begin
+//          if cds.FindField(TAtributoBanco(Atrib).nome) = nil then
+//            Continue;
+//
+//          cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
+//          cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
+//
+//          if not TAtributoBanco(Atrib).Visivel then
+//            Continue;
+//
+//          if Assigned(TAtributoBanco(Atrib).CustomSelect) then
+//          begin
+//            var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
+//
+//            if cds.FindField(NomeFieldCustom) = nil then
+//              Continue;
+//
+//            cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
+//            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
+//            cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
+//            cds.FieldByName(NomeFieldCustom).Visible := True;
+//          end;
+//
+//        end;
+//      end;
+//    end;
+//  finally
+//    Ctx.Free;
+//  end;
 end;
 
 procedure TServico<T>.Excluir(Objeto: TObject);
@@ -577,7 +583,7 @@ function TServico<T>.ListarTodosCDS: TDataSet;
 begin
   var Sql := ObterSqlCustomizada;
   var DSet := TConexao.GetInstance.EnviaConsulta(Sql);
-  AlterarPropriedadeVisibleDoField(DSet);
+  AlterarCaptionEVisibilidadeDoField(DSet);
   Result := DSet;
 end;
 
@@ -664,8 +670,8 @@ begin
   if DSet.IsEmpty then
   begin
     FreeAndNil(DSet);
-    Result := T(Nil);
-    raise Exception.Create('Dados não encontrados. (PesquisarPorId)');
+    Exit(Objeto);
+//    raise Exception.Create('Dados não encontrados. (PesquisarPorId)');
   end;
 
   try

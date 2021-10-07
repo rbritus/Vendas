@@ -8,7 +8,7 @@ uses
   Frame.Adicao.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Entidade.Endereco,
   Attributes.Forms, Vcl.Imaging.pngimage, Vcl.DBCGrids, System.ImageList,
   Vcl.ImgList, Vcl.StdCtrls, Vcl.DBCtrls, Componente.TObjectList, Data.DB,
-  Datasnap.DBClient, Objeto.CustomSelect;
+  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade;
 
 type
   [TClasseCadastro(TEndereco)]
@@ -26,6 +26,8 @@ type
     { Public declarations }
     function ObterSqlParaDatSet: string; override;
     function ObterLista: TObjectListFuck<TEndereco>;
+    procedure CriarDataSet; override;
+    procedure PreencherDataSet(Obj: TObject); override;
   end;
 
 var
@@ -33,9 +35,28 @@ var
 
 implementation
 
+uses
+  Utils.ClientDataSet;
+
 {$R *.dfm}
 
 { TFrameAdicaoEndereco }
+
+procedure TFrameAdicaoEndereco.CriarDataSet;
+begin
+  inherited;
+  var Obj := Self.ObterObjetoDoFrame;
+  try
+    TUtilsClientDataSet.PrepararClientDataSet(cdsDados);
+    TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj as TPersistent);
+    TUtilsClientDataSet.CreateField(cdsDados,'ESTADO',ftString,2);
+    TUtilsClientDataSet.CreateField(cdsDados,'CIDADE',ftString,200);
+    TUtilsClientDataSet.CreateField(cdsDados,'LOGRADOURO',ftString,20);
+    TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj as TPersistent);
+  finally
+    Obj.Free
+  end;
+end;
 
 function TFrameAdicaoEndereco.ObterLista: TObjectListFuck<TEndereco>;
 begin
@@ -59,6 +80,22 @@ begin
   'INNER JOIN CIDADE ON (CIDADE.ID = ENDERECO.CIDADE_FK) '+
   'INNER JOIN ESTADO ON (ESTADO.ID = CIDADE.ESTADO_FK) ';
   Result := cSql + Self.ObterSqlDeTabelaRelacional;
+end;
+
+procedure TFrameAdicaoEndereco.PreencherDataSet(Obj: TObject);
+begin
+  inherited;
+  var Endereco := TEndereco(Obj);
+
+  if cdsDados.Locate('ID',Endereco.Id,[]) then
+    cdsDados.Delete;
+
+  cdsDados.Append;
+  TUtilsClientDataSet.PreencherDataSet(cdsDados,TPersistent(Endereco));
+  cdsDados.FieldByName('ESTADO').AsString := Endereco.Cidade.Estado.Abreviacao;
+  cdsDados.FieldByName('CIDADE').AsString := Endereco.Cidade.Nome;
+  cdsDados.FieldByName('LOGRADOURO').AsString := Endereco.Logradouro.Abreviacao;
+  cdsDados.Post;
 end;
 
 end.

@@ -19,7 +19,6 @@ type
     FEntidadeRelacional: TObject;
     constructor Create(pFrame: TFrame);
     function ObterNomeDaTabela(Obj: TObject): string;
-    function ObterObjetoDoFrame: TObject;
     function ObterObjetoDeClassRelacional: TObject;
     function ObterObjetoDoFormParent(SelfParent: TWinControl): TWinControl;
     function RelacionamentoPorCampoEstrangeiro: Boolean;
@@ -30,12 +29,15 @@ type
     function ObterCondicaoWhere: string;
     procedure RelacionamentoCondicionaisPorCampoListagem(var TabelaRelacional,
       CampoObjPrimario, CampoObjFrame: string);
+    function ObterListaDeObjetosDaEntidadeRelacional: TObjectListFuck<TObject>;
   public
     class function New(pFrame: TFrame): iControllerFrameAdicaoPadrao;
 
     function CarregarDataSet(pSql: string): TDataSet;
     function ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
-    procedure ObterListaPreenchida(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
+    procedure ObterListaPreenchidaDoFrame(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
+    function CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
+    function ObterObjetoDoFrame: TObject;
   end;
 
 implementation
@@ -112,7 +114,7 @@ begin
   Result := cSql;
 end;
 
-procedure TControllerFrameAdicaoPadrao.ObterListaPreenchida(cds: TDataSet;
+procedure TControllerFrameAdicaoPadrao.ObterListaPreenchidaDoFrame(cds: TDataSet;
   var Lista: TObjectListFuck<TObject>);
 begin
   cds.First;
@@ -260,7 +262,8 @@ begin
     begin
       if Atrib is TClasseCadastro then
       begin
-        Entidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
+        Entidade := TUtilsEntidade.ExecutarMetodoClasse(TClasseCadastro(Atrib).Classe,'PesquisarPorId',[FIdObjRelacional]).AsObject;
+//        Entidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
         Break;
       end;
     end;
@@ -302,6 +305,57 @@ function TControllerFrameAdicaoPadrao.CarregarDataSet(pSql: string): TDataSet;
 begin
   var cds := TConexao.GetInstance.EnviaConsulta(pSql);
   Result := cds;
+end;
+
+function TControllerFrameAdicaoPadrao.ObterListaDeObjetosDaEntidadeRelacional: TObjectListFuck<TObject>;
+begin
+  Result := nil;
+  var TabelaObjPrimario := ObterNomeDaTabela(FEntidadeRelacional);
+  var TabelaObjFrame := ObterNomeDaTabela(FEntidadeFrame);
+  var Ctx := TRttiContext.Create;
+  var Tipo := Ctx.GetType(FEntidadeRelacional.ClassType);
+  try
+    if Assigned(Tipo) then
+      for var Prop in Tipo.GetDeclaredProperties do
+        for var Atrib in Prop.GetAttributes do
+          if Atrib is TCampoListagem then
+          begin
+            case TCampoListagem(Atrib).TipoAssociacao of
+              taManyToMany:
+                begin
+                  if (TCampoListagem(Atrib).CampoPai = TabelaObjPrimario + '_FK') and
+                    (TCampoListagem(Atrib).CampoFilho = TabelaObjFrame + '_FK') then
+                  begin
+                    Result := TObjectListFuck<TObject>(Prop.GetValue(FEntidadeRelacional).AsObject);
+                    Break;
+                  end;
+                end
+            else
+               if (TCampoListagem(Atrib).TabelaRelacional = TabelaObjFrame) then
+                begin
+                  Result := TObjectListFuck<TObject>(Prop.GetValue(FEntidadeRelacional).AsObject);
+                  Break;
+                end;
+            end;
+          end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
+function TControllerFrameAdicaoPadrao.CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
+begin
+  FIdObjRelacional := pIdObjetoRelacional;
+  FEntidadeFrame := ObterObjetoDoFrame;
+  FEntidadeRelacional := ObterObjetoDeClassRelacional;
+  try
+    var Lista := TObjectListFuck<TObject>.Create;
+    Lista.CopyTo(ObterListaDeObjetosDaEntidadeRelacional);
+    Result := Lista;
+  finally
+    FEntidadeFrame.Free;
+    FEntidadeRelacional.Free;
+  end;
 end;
 
 constructor TControllerFrameAdicaoPadrao.Create(pFrame: TFrame);

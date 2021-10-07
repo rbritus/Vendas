@@ -41,7 +41,7 @@ end;
 
 class function TCustomSelect.getFieldNameCustom(FieldName: string): string;
 begin
-  Result := TEnumerator<TRegistroAtivo>.GetNameCustoField(FieldName);
+  Result := TEnumerator<TEnumGenerics>.GetNameCustoField(FieldName);
 end;
 
 end.

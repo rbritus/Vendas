@@ -27,12 +27,15 @@ type
     procedure OcultarBarraLateralDoBotao;
     procedure GravarEntidade;
     procedure InicializarID;
+    procedure CarregarLayoutDinamico;
+    procedure LimparCampos;
   protected
     [TCadastroVariavel('ID',ftINTEIRO,coNaoObrigatorio)]
     FID: Integer;
   public
     { Public declarations }
     procedure CarregarEntidadeParaEdicao(pId: Integer);
+    procedure CarregarFormParaCadastro;
   end;
 
 var
@@ -41,7 +44,7 @@ var
 implementation
 
 uses
-  Controller.View, Interfaces.Controller.Cadastro.Padrao;
+  Interfaces.Controller.Cadastro.Padrao;
 
 {$R *.dfm}
 
@@ -59,8 +62,15 @@ end;
 procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
   FID := pId;
+  LimparCampos;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarEntidadeParaEdicao(pId);
+end;
+
+procedure TFrmCadastroPadrao.CarregarFormParaCadastro;
+begin
+  InicializarID;
+  LimparCampos;
 end;
 
 procedure TFrmCadastroPadrao.InicializarID;
@@ -68,10 +78,22 @@ begin
   FID := 0;
 end;
 
+procedure TFrmCadastroPadrao.LimparCampos;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.LimparCamposEditaveis;
+end;
+
+procedure TFrmCadastroPadrao.CarregarLayoutDinamico;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.CarregarLayoutDeCamposEditaveis;
+end;
+
 procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);
 begin
   inherited;
-  InicializarID;
+  CarregarLayoutDinamico;
 end;
 
 procedure TFrmCadastroPadrao.SpeedButton5Click(Sender: TObject);
