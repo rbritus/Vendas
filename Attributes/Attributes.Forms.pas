@@ -14,6 +14,22 @@ type
     constructor Create(const ClassValue: TPersistentClass);
   end;
 
+  TClassePesquisa = class(TCustomAttribute)
+  private
+    FClasse: TPersistentClass;
+  public
+    property Classe: TPersistentClass read FClasse write FClasse;
+    constructor Create(const ClassValue: TPersistentClass);
+  end;
+
+  TCampoExibicao = class(TCustomAttribute)
+  private
+    FCampo: string;
+  public
+    property Campo: string read FCampo write FCampo;
+    constructor Create(const Campo: string);
+  end;
+
   TFormularioCadastro = class(TCustomAttribute)
   private
     FFormClasse: TComponentClass;
@@ -92,6 +108,20 @@ begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;
   FCampoObrigatorio := pCampoObrigatorio;
+end;
+
+{ TCampoExibicao }
+
+constructor TCampoExibicao.Create(const Campo: string);
+begin
+  FCampo := Campo;
+end;
+
+{ TClassePesquisa }
+
+constructor TClassePesquisa.Create(const ClassValue: TPersistentClass);
+begin
+  FClasse := ClassValue;
 end;
 
 end.

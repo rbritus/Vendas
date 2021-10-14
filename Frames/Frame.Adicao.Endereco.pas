@@ -22,12 +22,13 @@ type
     edtCidade: TDBText;
     edtEstado: TDBText;
     lblTraco: TLabel;
-  public
-    { Public declarations }
+  protected
     function ObterSqlParaDatSet: string; override;
-    function ObterLista: TObjectListFuck<TEndereco>;
     procedure CriarDataSet; override;
     procedure PreencherDataSet(Obj: TObject); override;
+  public
+    { Public declarations }
+    function ObterLista: TObjectListFuck<TEndereco>;
   end;
 
 var

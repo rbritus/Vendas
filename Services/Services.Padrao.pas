@@ -33,6 +33,7 @@ type
     function ObterSqlCustomizada: string;
     procedure RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
     procedure PersistirPropriedadesTipoLista(Objeto: TObject);
+    procedure NotificarObservadores(Objeto: TObject);
     const ID_ZERADO = 0;
   public
     procedure Gravar(Objeto: TObject);
@@ -47,7 +48,8 @@ type
 implementation
 
 uses
-  Objeto.CustomSelect, FireDAC.Phys.Intf, Utils.ClientDataSet;
+  Objeto.CustomSelect, FireDAC.Phys.Intf, Utils.ClientDataSet,
+  Controller.Padrao.Observer;
 
 { TServico<T> }
 
@@ -55,7 +57,7 @@ procedure TServico<T>.AlterarCaptionEVisibilidadeDoField(cds: TDataSet);
 begin
   var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
   try
-    TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(TClientDataSet(cds),TPersistent(Objeto));
+    TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(TClientDataSet(cds),Objeto);
   finally
     Objeto.Free;
   end;
@@ -416,11 +418,15 @@ begin
     Qry.ExecScript;
     RecuperarIdParaObjeto(Objeto, Qry);
     PersistirPropriedadesTipoLista(Objeto);
-    TConexao.GetInstance.Commit;
     Qry.Close;
   finally
     FreeAndNil(Qry);
   end;
+end;
+
+procedure TServico<T>.NotificarObservadores(Objeto: TObject);
+begin
+  ControllerObserverEntidade.Notificar(Objeto);
 end;
 
 procedure TServico<T>.Gravar(Objeto: TObject);
@@ -431,6 +437,8 @@ begin
   var Parametros := ObterArrayComParametrosPreenchidos(Objeto);
   try
     PersistirObjetoEmBanco(Objeto, Parametros);
+    TConexao.GetInstance.Commit;
+    NotificarObservadores(Objeto);
   finally
     SetLength(Parametros, 0);
   end;

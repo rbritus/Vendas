@@ -54,7 +54,12 @@ uses
   Attributes.Enumerators in 'Attributes\Attributes.Enumerators.pas',
   Utils.ClientDataSet in 'Utils\Utils.ClientDataSet.pas',
   Controller.Frame.Adicao.Padrao in 'Controllers\Controller.Frame.Adicao.Padrao.pas',
-  Frame.Pesquisa.Entidade.Padrao in 'Frames\Frame.Pesquisa.Entidade.Padrao.pas' {FramePadrao1: TFrame};
+  Frame.Pesquisa.Entidade.Padrao in 'Frames\Frame.Pesquisa.Entidade.Padrao.pas' {FramePesquisaEntidadePadrao: TFrame},
+  View.Cadastro.Endereco in 'Views\View.Cadastro.Endereco.pas' {FrmCadastroEndereco},
+  Controller.Frame.Pesquisa.Entidade.Padrao in 'Controllers\Controller.Frame.Pesquisa.Entidade.Padrao.pas',
+  Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao in 'Interfaces\Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao.pas',
+  Interfaces.Padrao.Observer in 'Interfaces\Interfaces.Padrao.Observer.pas',
+  Controller.Padrao.Observer in 'Controllers\Controller.Padrao.Observer.pas';
 
 {$R *.res}
 

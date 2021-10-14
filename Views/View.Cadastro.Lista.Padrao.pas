@@ -6,10 +6,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao;
+  View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
+  Interfaces.Padrao.Observer;
 
 type
-  TFrmCadastroListaPadrao = class(TFrmPadrao)
+  TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
@@ -20,6 +21,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure SpeedButton6Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -28,6 +30,7 @@ type
     procedure CriarDataSource;
     procedure ExecutarConsulta;
     procedure AjustarColunasDaGride;
+    procedure UpdateItem(Value : TObject);
   public
     { Public declarations }
   end;
@@ -38,7 +41,7 @@ var
 implementation
 
 uses
-  Utils.DBGrid;
+  Utils.DBGrid, Controller.Padrao.Observer, Utils.ClientDataSet, Utils.Entidade;
 
 {$R *.dfm}
 
@@ -66,6 +69,14 @@ procedure TFrmCadastroListaPadrao.ApresentarDadosNaGrid;
 begin
   ExecutarConsulta;
   CriarDataSource;
+end;
+
+procedure TFrmCadastroListaPadrao.FormCreate(Sender: TObject);
+begin
+  inherited;
+  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
+  var ClasseEntidade := ControllerListaView.ObterClasseDaEntidadeDeCadastro;
+  ControllerObserverEntidade.ObservarEntidade(Self,ClasseEntidade);
 end;
 
 procedure TFrmCadastroListaPadrao.FormDestroy(Sender: TObject);
@@ -100,6 +111,18 @@ begin
   inherited;
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   ControllerListaView.ApresentarFormParaCadastro;
+end;
+
+procedure TFrmCadastroListaPadrao.UpdateItem(Value: TObject);
+begin
+  var ID := TUtilsEntidade.ObterValorPropriedade(Value,'Id').AsInteger;
+  if FClientDataSet.Locate('ID',ID,[]) then
+    FClientDataSet.Edit
+  else
+    FClientDataSet.Append;
+
+  TUtilsClientDataSet.PreencherDataSet(FClientDataSet,Value);
+  FClientDataSet.Post;
 end;
 
 end.

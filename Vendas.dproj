@@ -183,10 +183,18 @@
         <DCCReference Include="Utils\Utils.ClientDataSet.pas"/>
         <DCCReference Include="Controllers\Controller.Frame.Adicao.Padrao.pas"/>
         <DCCReference Include="Frames\Frame.Pesquisa.Entidade.Padrao.pas">
-            <Form>FramePadrao1</Form>
+            <Form>FramePesquisaEntidadePadrao</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="Views\View.Cadastro.Endereco.pas">
+            <Form>FrmCadastroEndereco</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Controllers\Controller.Frame.Pesquisa.Entidade.Padrao.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Padrao.Observer.pas"/>
+        <DCCReference Include="Controllers\Controller.Padrao.Observer.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

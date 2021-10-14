@@ -43,8 +43,7 @@ implementation
 procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin
   inherited;
-  FrameAdicaoEndereco.SetarIdObjRelacional(Self.FID);
-  FrameAdicaoEndereco.CarregarDataSet;
+  FrameAdicaoEndereco.CarregarFrame(Self.FID);
 end;
 
 procedure TFrmCadastroPessoa.SpeedButton6Click(Sender: TObject);

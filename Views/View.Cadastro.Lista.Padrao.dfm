@@ -2,6 +2,7 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
   Caption = 'FrmCadastroListaPadrao'
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13

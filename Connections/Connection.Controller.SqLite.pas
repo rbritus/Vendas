@@ -8,7 +8,8 @@ uses
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, Data.DbxSqlite, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.Stan.Intf,
-  DB, Datasnap.DBClient, Datasnap.Provider, FireDAC.DApt;
+  DB, Datasnap.DBClient, Datasnap.Provider, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.BatchMove.DataSet, FireDAC.Comp.BatchMove;
 
 type
   TQuery = Class(TFDQuery)
@@ -143,7 +144,7 @@ Function TConexao.EnviaConsulta(Consulta: String): TDataSet;
 Begin
   var MyDataSet := ObterQuery;
   var dsp := TDataSetProvider.Create(Self.Owner);
-  var cds: TClientDataSet := TClientDataSet.Create(Self.Owner);
+  var cds := TClientDataSet.Create(Self.Owner);
   try
     MyDataSet.SQL.Add(Consulta);
     dsp.Name := 'dspTConexao';
@@ -160,6 +161,7 @@ Begin
     MyDataSet.Close;
     cds.SetProvider(nil);
     cds.ProviderName := EmptyStr;
+    cds.LogChanges := False;
   finally
     FreeAndNil(dsp);
     FreeAndNil(MyDataSet);

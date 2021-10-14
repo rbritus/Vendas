@@ -10,7 +10,7 @@ type
   TControllerCadastroPadrao = class(TInterfacedObject, iControllerCadastroPadrao)
   strict private
     FForm: TForm;
-    FEntidade: TPersistent;
+    FEntidade: TObject;
   private
     procedure ObterObjeto;
     procedure PreencherEntidadeComCamposDoForm;
@@ -43,7 +43,7 @@ end;
 procedure TControllerCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
   var Classe := TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(FForm);
-  FEntidade := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[pId]).AsType<TPersistent>;
+  FEntidade := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[pId]).AsType<TObject>;
   PreencherFormComCamposDaEntidade;
   DestruirEntidade;
 end;

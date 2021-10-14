@@ -26,17 +26,17 @@ type
   private
     { Private declarations }
     FIdObjRelacional: Integer;
+    procedure CarregarDataSet;
   protected
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
-  public
-    { Public declarations }
-    procedure SetarIdObjRelacional(pID: Integer);
-    procedure CarregarDataSet;
     function ObterSqlParaDatSet: string; virtual; Abstract;
     function ObterSqlDeTabelaRelacional: string;
     function ObterObjetoDoFrame: TObject;
     procedure CriarDataSet; virtual; Abstract;
     procedure PreencherDataSet(Obj: TObject); virtual; Abstract;
+  public
+    { Public declarations }
+    procedure CarregarFrame(IdEntidade: Integer);
   end;
 
 var
@@ -103,9 +103,10 @@ begin
   Result := ControllerFrame.ObterSqlDeTabelaRelacional(FIdObjRelacional);
 end;
 
-procedure TFrameAdicaoPadrao.SetarIdObjRelacional(pID: Integer);
+procedure TFrameAdicaoPadrao.CarregarFrame(IdEntidade: Integer);
 begin
-  FIdObjRelacional := pID;
+  FIdObjRelacional := IdEntidade;
+  CarregarDataSet;
 end;
 
 end.

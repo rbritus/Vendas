@@ -13,6 +13,7 @@ type
   private
     constructor Create(pForm: TForm);
   public
+    function ObterClasseDaEntidadeDeCadastro: TClass;
     function ObterDataSetComDadosParaGride: TDataSet;
     procedure ApresentarFormParaEdicao(ID: Integer);
     procedure ApresentarFormParaCadastro;
@@ -33,7 +34,7 @@ begin
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarFormParaCadastro',[]);
-  ControllerView.ShowFormModal(TComponentClass(ClasseForm));
+  ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
 procedure TControllerCadastroListaPadrao.ApresentarFormParaEdicao(ID: Integer);
@@ -42,7 +43,7 @@ begin
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
-  ControllerView.ShowFormModal(TComponentClass(ClasseForm));
+  ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
 constructor TControllerCadastroListaPadrao.Create(pForm: TForm);
@@ -53,6 +54,11 @@ end;
 class function TControllerCadastroListaPadrao.New(pForm: TForm): iControllerCadastroListaPadrao;
 begin
   Result := Self.Create(pForm);
+end;
+
+function TControllerCadastroListaPadrao.ObterClasseDaEntidadeDeCadastro: TClass;
+begin
+  Result := TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(FForm);
 end;
 
 function TControllerCadastroListaPadrao.ObterDataSetComDadosParaGride: TDataSet;

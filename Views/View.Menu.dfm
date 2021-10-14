@@ -248,8 +248,6 @@ object FrmMenu: TFrmMenu
       ParentBackground = False
       TabOrder = 2
       Visible = False
-      ExplicitLeft = 0
-      ExplicitWidth = 200
       object btnCadastroPessoas: TSpeedButton
         AlignWithMargins = True
         Left = 0

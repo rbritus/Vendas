@@ -15,17 +15,17 @@ type
     class procedure PrepararClientDataSet(cds: TClientDataSet);
     class procedure CreateField(cds: TClientDataSet; Nome: string;Tipo: TFieldType); overload;
     class procedure CreateField(cds: TClientDataSet; Nome: string;Tipo: TFieldType; Tamanho: Integer); overload;
-    class procedure CreateFielsdByEntidade(cds: TClientDataSet; Entidade: TPersistent);
-    class procedure ConcluirClientDataSet(cds: TClientDataSet; Entidade: TPersistent);
-    class procedure AlterarPropriedadeCaptionEVisibleDoField(cds: TClientDataSet; Entidade: TPersistent);
-    class procedure PreencherDataSet(cds: TClientDataSet; Entidade: TPersistent);
+    class procedure CreateFielsdByEntidade(cds: TClientDataSet; Entidade: TObject);
+    class procedure ConcluirClientDataSet(cds: TClientDataSet; Entidade: TObject);
+    class procedure AlterarPropriedadeCaptionEVisibleDoField(cds: TClientDataSet; Entidade: TObject);
+    class procedure PreencherDataSet(cds: TClientDataSet; Entidade: TObject);
   end;
 
 implementation
 
 { TUtilsClientDataSet }
 
-class procedure TUtilsClientDataSet.ConcluirClientDataSet(cds: TClientDataSet; Entidade: TPersistent);
+class procedure TUtilsClientDataSet.ConcluirClientDataSet(cds: TClientDataSet; Entidade: TObject);
 begin
   cds.CreateDataSet;
   TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(cds,Entidade);
@@ -86,7 +86,7 @@ end;
 //end;
 
 class procedure TUtilsClientDataSet.CreateFielsdByEntidade(cds: TClientDataSet;
-  Entidade: TPersistent);
+  Entidade: TObject);
 //var
 //  ObjEstrangeiro: TObject;
 begin
@@ -138,7 +138,7 @@ begin
 end;
 
 class procedure TUtilsClientDataSet.PreencherDataSet(cds: TClientDataSet;
-  Entidade: TPersistent);
+  Entidade: TObject);
 begin
   var Ctx := TRttiContext.Create;
   try
@@ -192,7 +192,7 @@ begin
 end;
 
 class procedure TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(cds: TClientDataSet;
-  Entidade: TPersistent);
+  Entidade: TObject);
 begin
   var Ctx := TRttiContext.Create;
   try

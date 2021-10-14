@@ -30,7 +30,7 @@ type
 
     procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
     procedure ShowForm(Value: TComponentClass);
-    procedure ShowFormModal(Value: TComponentClass);
+//    procedure ShowFormModal(Value: TComponentClass);
 
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
@@ -78,10 +78,10 @@ begin
   CarregarForm(Value).Show;
 end;
 
-procedure TControllerView.ShowFormModal(Value: TComponentClass);
-begin
-  CarregarForm(Value).ShowModal;
-end;
+//procedure TControllerView.ShowFormModal(Value: TComponentClass);
+//begin
+//  CarregarForm(Value).ShowModal;
+//end;
 
 procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
 begin

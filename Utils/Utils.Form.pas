@@ -9,11 +9,11 @@ uses
 type
   TUtilsForm = class
   public
-    class function ObterObjetoDeCadastroDoForm(pForm: TForm): TPersistent;
+    class function ObterObjetoDeCadastroDoForm(pForm: TForm): TObject;
     class function ObterClasseDoFormularioCadastro(pForm: TForm): TFormClass;
-    class procedure PreencherEntidadeComCamposDoForm(var pEntidade: TPersistent;pForm: TForm);
-    class procedure PreencherFormComCamposDaEntidade(var pEntidade: TPersistent;pForm: TForm);
-    class function ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TPersistentClass; static;
+    class procedure PreencherEntidadeComCamposDoForm(var pEntidade: TObject;pForm: TForm);
+    class procedure PreencherFormComCamposDaEntidade(var pEntidade: TObject;pForm: TForm);
+    class function ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TClass; static;
     class procedure LimparCamposDoForm(pForm: TForm);
   end;
 
@@ -25,7 +25,7 @@ uses
 
 { TUtilsForm }
 
-class procedure TUtilsForm.PreencherEntidadeComCamposDoForm(var pEntidade: TPersistent;
+class procedure TUtilsForm.PreencherEntidadeComCamposDoForm(var pEntidade: TObject;
   pForm: TForm);
 begin
   var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
@@ -53,7 +53,7 @@ begin
 //  end;
 end;
 
-class procedure TUtilsForm.PreencherFormComCamposDaEntidade(var pEntidade: TPersistent;
+class procedure TUtilsForm.PreencherFormComCamposDaEntidade(var pEntidade: TObject;
   pForm: TForm);
 begin
   var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
@@ -117,9 +117,9 @@ begin
   Result := ClasseForm;
 end;
 
-class function TUtilsForm.ObterObjetoDeCadastroDoForm(pForm: TForm): TPersistent;
+class function TUtilsForm.ObterObjetoDeCadastroDoForm(pForm: TForm): TObject;
 begin
-  var Entidade: TPersistent := nil;
+  var Entidade: TObject := nil;
   var Ctx := TRttiContext.Create;
   try
     var Tipo := Ctx.GetType(pForm.ClassType);
@@ -130,7 +130,7 @@ begin
     begin
       if Atrib is TClasseCadastro then
       begin
-        Entidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
+        Entidade := TClass(TClasseCadastro(Atrib).Classe).Create;
         Break;
       end;
     end;
@@ -140,9 +140,9 @@ begin
   Result := Entidade;
 end;
 
-class function TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TPersistentClass;
+class function TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TClass;
 begin
-  var Classe: TPersistentClass := nil;
+  var Classe: TClass := nil;
   var Ctx := TRttiContext.Create;
   try
     var Tipo := Ctx.GetType(pForm.ClassType);

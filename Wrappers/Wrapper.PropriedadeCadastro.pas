@@ -15,8 +15,8 @@ type
     procedure SetarValorParaComponenteForm(Valor: TValue; Propriedade: TPropriedadeCadastro; Field: TRttiField);
   public
     class function New(pForm: TForm): iWrapperPropriedadeCadastro;
-    procedure PreencherObjetoDoForm(var pEntidade: TPersistent);
-    procedure PreencherFormComEntidade(pEntidade: TPersistent);
+    procedure PreencherObjetoDoForm(var pEntidade: TObject);
+    procedure PreencherFormComEntidade(pEntidade: TObject);
     procedure InicializarCamposEditaveisDoForm;
     constructor Create(pForm: TForm);
   end;
@@ -90,7 +90,7 @@ begin
   Result := Self.Create(pForm);
 end;
 
-procedure TWrapperPropriedadeCadastro.PreencherObjetoDoForm(var pEntidade: TPersistent);
+procedure TWrapperPropriedadeCadastro.PreencherObjetoDoForm(var pEntidade: TObject);
 begin
   var Ctx := TRttiContext.Create;
   try
@@ -123,7 +123,7 @@ begin
   end;
 end;
 
-procedure TWrapperPropriedadeCadastro.PreencherFormComEntidade(pEntidade: TPersistent);
+procedure TWrapperPropriedadeCadastro.PreencherFormComEntidade(pEntidade: TObject);
 begin
   var Ctx := TRttiContext.Create;
   try
@@ -292,7 +292,7 @@ begin
   case Tipo of
     ftINTEIRO : Result := TValue.FromVariant(Field.GetValue(pForm).AsInteger);
     ftDECIMAL, ftDATA : Result := TValue.FromVariant(Field.GetValue(pForm).AsCurrency);
-    ftLISTAGEM : Result := TValue.From(TObjectListFuck<TPersistent>(Field.GetValue(pForm).AsObject));
+    ftLISTAGEM : Result := TValue.From(TObjectListFuck<TObject>(Field.GetValue(pForm).AsObject));
     ftLOGICO : Result := TValue.FromVariant(Field.GetValue(pForm).AsBoolean);
   else
     Result := TValue.FromVariant(Field.GetValue(pForm).AsString);
@@ -305,7 +305,7 @@ begin
   case Tipo of
     ftINTEIRO : Result := Valor.AsInteger;
     ftDECIMAL, ftDATA : Result := Valor.AsCurrency;
-    ftLISTAGEM : Result := TObjectListFuck<TPersistent>(Valor.AsObject);
+    ftLISTAGEM : Result := TObjectListFuck<TObject>(Valor.AsObject);
     ftLOGICO : Result := Valor.AsBoolean;
   else
     Result := Valor.AsString;
