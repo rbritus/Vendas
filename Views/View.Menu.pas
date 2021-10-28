@@ -50,6 +50,9 @@ type
     procedure btnProcessosClick(Sender: TObject);
     procedure btnRelatoriosClick(Sender: TObject);
     procedure btnConfiguracoesClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
   private
     { Private declarations }
     FMenuExpandido: Boolean;
@@ -71,7 +74,7 @@ implementation
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
   Connection.Scripter.SqLite, FireDAC.Comp.Client, View.Cadastro.Endereco,
-  Utils.Entidade;
+  Utils.Entidade, Utils.Menssages;
 
 procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
 begin
@@ -199,6 +202,21 @@ end;
 procedure TFrmMenu.AtivarSubMenu(pPanel: TPanel);
 begin
   pPanel.Visible := not pPanel.Visible;
+end;
+
+procedure TFrmMenu.SpeedButton1Click(Sender: TObject);
+begin
+  TUtilsMenssages.ShowMessageDialog('Ferramenta não implementada.');
+end;
+
+procedure TFrmMenu.SpeedButton2Click(Sender: TObject);
+begin
+  TUtilsMenssages.ShowMessageDialog('Ferramenta não implementada.');
+end;
+
+procedure TFrmMenu.SpeedButton7Click(Sender: TObject);
+begin
+  TUtilsMenssages.ShowMessageDialog('Ferramenta não implementada.');
 end;
 
 procedure TFrmMenu.SplitViewMenuOpened(Sender: TObject);

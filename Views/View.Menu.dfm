@@ -89,8 +89,6 @@ object FrmMenu: TFrmMenu
     Color = clWhite
     ParentBackground = False
     TabOrder = 1
-    ExplicitLeft = -3
-    ExplicitTop = 63
     object pnlBarraLateralBotao: TPanel
       Left = 0
       Top = 1
@@ -168,8 +166,6 @@ object FrmMenu: TFrmMenu
         ParentBackground = False
         TabOrder = 0
         Visible = False
-        ExplicitTop = 46
-        ExplicitWidth = 195
         object btnCadastroPessoas: TSpeedButton
           AlignWithMargins = True
           Left = 0
@@ -222,8 +218,6 @@ object FrmMenu: TFrmMenu
       ParentBackground = False
       ParentCtl3D = False
       TabOrder = 2
-      ExplicitLeft = 10
-      ExplicitTop = 120
       object btnProcessos: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -271,7 +265,6 @@ object FrmMenu: TFrmMenu
         ParentBackground = False
         TabOrder = 0
         Visible = False
-        ExplicitTop = 0
         object SpeedButton1: TSpeedButton
           AlignWithMargins = True
           Left = 0
@@ -297,6 +290,7 @@ object FrmMenu: TFrmMenu
           ParentFont = False
           Spacing = 10
           Transparent = False
+          OnClick = SpeedButton1Click
           OnMouseEnter = actMouseEnterExecute
           OnMouseLeave = actMouseLeaveExecute
           ExplicitTop = 8
@@ -323,7 +317,6 @@ object FrmMenu: TFrmMenu
       ParentBackground = False
       ParentCtl3D = False
       TabOrder = 3
-      ExplicitTop = 226
       object btnRelatorios: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -398,6 +391,7 @@ object FrmMenu: TFrmMenu
           ParentFont = False
           Spacing = 10
           Transparent = False
+          OnClick = SpeedButton2Click
           OnMouseEnter = actMouseEnterExecute
           OnMouseLeave = actMouseLeaveExecute
           ExplicitTop = 8
@@ -427,7 +421,6 @@ object FrmMenu: TFrmMenu
       ShowCaption = False
       ShowHint = False
       TabOrder = 4
-      ExplicitTop = 315
       object btnConfiguracoes: TSpeedButton
         AlignWithMargins = True
         Left = 0
@@ -502,6 +495,7 @@ object FrmMenu: TFrmMenu
           ParentFont = False
           Spacing = 10
           Transparent = False
+          OnClick = SpeedButton7Click
           OnMouseEnter = actMouseEnterExecute
           OnMouseLeave = actMouseLeaveExecute
           ExplicitTop = 8

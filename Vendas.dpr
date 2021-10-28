@@ -65,7 +65,8 @@ uses
   Objeto.ConsultaCEP in 'Objects\Objeto.ConsultaCEP.pas',
   Controller.Objeto.ConsultaCEP in 'Controllers\Controller.Objeto.ConsultaCEP.pas',
   Interfaces.Objeto.ConsultaCEP in 'Interfaces\Interfaces.Objeto.ConsultaCEP.pas',
-  Utils.Frame in 'Utils\Utils.Frame.pas';
+  Utils.Frame in 'Utils\Utils.Frame.pas',
+  Utils.Menssages in 'Utils\Utils.Menssages.pas';
 
 {$R *.res}
 
