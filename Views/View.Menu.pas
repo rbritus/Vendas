@@ -16,23 +16,26 @@ type
     imgLista1: TImageList;
     pnlMenuLateral: TPanel;
     pnlTopo: TPanel;
-    btnConfiguracoes: TSpeedButton;
-    btnRelatorios: TSpeedButton;
-    btnProcessos: TSpeedButton;
-    btnCadastros: TSpeedButton;
     btnMenu: TSpeedButton;
-    pnlBarraSuperiorBotao: TPanel;
     pnlBarraLateralBotao: TPanel;
-    pnlCadastros: TPanel;
-    pnlRelatorios: TPanel;
-    pnlConfiguracoes: TPanel;
-    btnCadastroPessoas: TSpeedButton;
-    pnlProcessos: TPanel;
     ActionList1: TActionList;
     actMouseEnter: TAction;
     actMouseLeave: TAction;
+    pnlDockCadastro: TPanel;
+    btnCadastros: TSpeedButton;
+    pnlCadastros: TPanel;
+    btnCadastroPessoas: TSpeedButton;
+    pnlDockProcessos: TPanel;
+    btnProcessos: TSpeedButton;
+    pnlProcessos: TPanel;
     SpeedButton1: TSpeedButton;
+    pnlDockRelatorios: TPanel;
+    btnRelatorios: TSpeedButton;
+    pnlRelatorios: TPanel;
     SpeedButton2: TSpeedButton;
+    pnlDockConfiguracoes: TPanel;
+    btnConfiguracoes: TSpeedButton;
+    pnlConfiguracoes: TPanel;
     SpeedButton7: TSpeedButton;
     procedure SplitViewMenuOpened(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -195,7 +198,7 @@ end;
 
 procedure TFrmMenu.AtivarSubMenu(pPanel: TPanel);
 begin
-  pPanel.Visible := True;
+  pPanel.Visible := not pPanel.Visible;
 end;
 
 procedure TFrmMenu.SplitViewMenuOpened(Sender: TObject);

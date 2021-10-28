@@ -24,6 +24,9 @@ uses
 
 procedure TObjectListFuck<T>.CopyTo(Lista: TObjectListFuck<T>);
 begin
+  if not Assigned(Lista) then
+    Exit;
+
   Self.Clear;
   for var Obj in Lista do
     Self.Add(Self.Clone(Obj));

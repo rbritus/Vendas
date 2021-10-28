@@ -89,137 +89,8 @@ object FrmMenu: TFrmMenu
     Color = clWhite
     ParentBackground = False
     TabOrder = 1
-    object btnConfiguracoes: TSpeedButton
-      AlignWithMargins = True
-      Left = 0
-      Top = 271
-      Width = 200
-      Height = 45
-      Margins.Left = 0
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Align = alTop
-      GroupIndex = 1
-      Caption = 'Configura'#231#245'es'
-      ImageIndex = 0
-      Images = imgLista1
-      Flat = True
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = 6710886
-      Font.Height = -16
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      Margin = 10
-      ParentFont = False
-      Spacing = 10
-      OnClick = btnConfiguracoesClick
-      OnMouseEnter = actMouseEnterExecute
-      OnMouseLeave = actMouseLeaveExecute
-      ExplicitTop = 144
-      ExplicitWidth = 153
-    end
-    object btnRelatorios: TSpeedButton
-      AlignWithMargins = True
-      Left = 0
-      Top = 181
-      Width = 200
-      Height = 45
-      Margins.Left = 0
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Align = alTop
-      GroupIndex = 1
-      Caption = 'Relat'#243'rios'
-      ImageIndex = 0
-      Images = imgLista1
-      Flat = True
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = 6710886
-      Font.Height = -16
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      Margin = 10
-      ParentFont = False
-      Spacing = 10
-      OnClick = btnRelatoriosClick
-      OnMouseEnter = actMouseEnterExecute
-      OnMouseLeave = actMouseLeaveExecute
-      ExplicitTop = 108
-      ExplicitWidth = 153
-    end
-    object btnProcessos: TSpeedButton
-      AlignWithMargins = True
-      Left = 0
-      Top = 91
-      Width = 200
-      Height = 45
-      Margins.Left = 0
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Align = alTop
-      GroupIndex = 1
-      Caption = 'Processos'
-      ImageIndex = 0
-      Images = imgLista1
-      Flat = True
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = 6710886
-      Font.Height = -16
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      Margin = 10
-      ParentFont = False
-      Spacing = 10
-      OnClick = btnProcessosClick
-      OnMouseEnter = actMouseEnterExecute
-      OnMouseLeave = actMouseLeaveExecute
-      ExplicitLeft = -3
-      ExplicitTop = 84
-      ExplicitWidth = 153
-    end
-    object btnCadastros: TSpeedButton
-      AlignWithMargins = True
-      Left = 0
-      Top = 1
-      Width = 200
-      Height = 45
-      Margins.Left = 0
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Align = alTop
-      GroupIndex = 1
-      Caption = 'Cadastros'
-      ImageIndex = 0
-      Images = imgLista1
-      Flat = True
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = 6710886
-      Font.Height = -16
-      Font.Name = 'Segoe UI'
-      Font.Style = [fsBold]
-      Margin = 10
-      ParentFont = False
-      Spacing = 10
-      OnClick = btnCadastrosClick
-      OnMouseEnter = actMouseEnterExecute
-      OnMouseLeave = actMouseLeaveExecute
-      ExplicitTop = 36
-      ExplicitWidth = 153
-    end
-    object pnlBarraSuperiorBotao: TPanel
-      Left = 0
-      Top = 0
-      Width = 200
-      Height = 1
-      Align = alTop
-      Color = clSilver
-      ParentBackground = False
-      TabOrder = 0
-    end
+    ExplicitLeft = -3
+    ExplicitTop = 63
     object pnlBarraLateralBotao: TPanel
       Left = 0
       Top = 1
@@ -228,15 +99,116 @@ object FrmMenu: TFrmMenu
       BevelOuter = bvNone
       Color = 16744448
       ParentBackground = False
+      TabOrder = 0
+      Visible = False
+    end
+    object pnlDockCadastro: TPanel
+      AlignWithMargins = True
+      Left = 5
+      Top = 0
+      Width = 195
+      Height = 90
+      Margins.Left = 5
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Align = alTop
+      AutoSize = True
+      BevelOuter = bvNone
+      Color = clWhite
+      Ctl3D = True
+      UseDockManager = False
+      ParentBackground = False
+      ParentCtl3D = False
       TabOrder = 1
-      Visible = False
+      object btnCadastros: TSpeedButton
+        AlignWithMargins = True
+        Left = 0
+        Top = 0
+        Width = 195
+        Height = 45
+        Margins.Left = 0
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Align = alTop
+        GroupIndex = 1
+        Caption = 'Cadastros'
+        ImageIndex = 0
+        Images = imgLista1
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 6710886
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        Margin = 10
+        ParentFont = False
+        Spacing = 10
+        OnClick = btnCadastrosClick
+        OnMouseEnter = actMouseEnterExecute
+        OnMouseLeave = actMouseLeaveExecute
+        ExplicitTop = 3
+      end
+      object pnlCadastros: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 45
+        Width = 190
+        Height = 45
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Align = alTop
+        AutoSize = True
+        BevelOuter = bvNone
+        Color = 13882323
+        UseDockManager = False
+        DockSite = True
+        ParentBackground = False
+        TabOrder = 0
+        Visible = False
+        ExplicitTop = 46
+        ExplicitWidth = 195
+        object btnCadastroPessoas: TSpeedButton
+          AlignWithMargins = True
+          Left = 0
+          Top = 0
+          Width = 190
+          Height = 45
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alTop
+          GroupIndex = 1
+          Caption = 'Pessoas'
+          ImageIndex = 0
+          Images = imgLista1
+          Flat = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 6710886
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          Margin = 10
+          ParentFont = False
+          Spacing = 10
+          Transparent = False
+          OnClick = btnCadastroPessoasClick
+          OnMouseEnter = actMouseEnterExecute
+          OnMouseLeave = actMouseLeaveExecute
+          ExplicitLeft = 1
+          ExplicitWidth = 195
+        end
+      end
     end
-    object pnlCadastros: TPanel
+    object pnlDockProcessos: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 46
+      Top = 90
       Width = 195
-      Height = 45
+      Height = 90
       Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
@@ -244,11 +216,15 @@ object FrmMenu: TFrmMenu
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      Color = 13882323
+      Color = clWhite
+      Ctl3D = True
+      UseDockManager = False
       ParentBackground = False
+      ParentCtl3D = False
       TabOrder = 2
-      Visible = False
-      object btnCadastroPessoas: TSpeedButton
+      ExplicitLeft = 10
+      ExplicitTop = 120
+      object btnProcessos: TSpeedButton
         AlignWithMargins = True
         Left = 0
         Top = 0
@@ -260,10 +236,9 @@ object FrmMenu: TFrmMenu
         Margins.Bottom = 0
         Align = alTop
         GroupIndex = 1
-        Caption = 'Pessoas'
+        Caption = 'Processos'
         ImageIndex = 0
         Images = imgLista1
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
@@ -272,19 +247,69 @@ object FrmMenu: TFrmMenu
         Margin = 10
         ParentFont = False
         Spacing = 10
-        Transparent = False
-        OnClick = btnCadastroPessoasClick
+        OnClick = btnProcessosClick
         OnMouseEnter = actMouseEnterExecute
         OnMouseLeave = actMouseLeaveExecute
-        ExplicitLeft = 1
+        ExplicitTop = -11
+      end
+      object pnlProcessos: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 45
+        Width = 190
+        Height = 45
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Align = alTop
+        AutoSize = True
+        BevelOuter = bvNone
+        Color = 13882323
+        DockSite = True
+        Locked = True
+        ParentBackground = False
+        TabOrder = 0
+        Visible = False
+        ExplicitTop = 0
+        object SpeedButton1: TSpeedButton
+          AlignWithMargins = True
+          Left = 0
+          Top = 0
+          Width = 190
+          Height = 45
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alTop
+          GroupIndex = 1
+          Caption = 'Submenu'
+          ImageIndex = 0
+          Images = imgLista1
+          Flat = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 6710886
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          Margin = 10
+          ParentFont = False
+          Spacing = 10
+          Transparent = False
+          OnMouseEnter = actMouseEnterExecute
+          OnMouseLeave = actMouseLeaveExecute
+          ExplicitTop = 8
+          ExplicitWidth = 195
+        end
       end
     end
-    object pnlRelatorios: TPanel
+    object pnlDockRelatorios: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 226
+      Top = 180
       Width = 195
-      Height = 45
+      Height = 90
       Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
@@ -292,11 +317,14 @@ object FrmMenu: TFrmMenu
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      Color = 13882323
+      Color = clWhite
+      Ctl3D = True
+      UseDockManager = False
       ParentBackground = False
+      ParentCtl3D = False
       TabOrder = 3
-      Visible = False
-      object SpeedButton2: TSpeedButton
+      ExplicitTop = 226
+      object btnRelatorios: TSpeedButton
         AlignWithMargins = True
         Left = 0
         Top = 0
@@ -308,10 +336,9 @@ object FrmMenu: TFrmMenu
         Margins.Bottom = 0
         Align = alTop
         GroupIndex = 1
-        Caption = 'Submenu'
+        Caption = 'Relat'#243'rios'
         ImageIndex = 0
         Images = imgLista1
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
@@ -320,19 +347,70 @@ object FrmMenu: TFrmMenu
         Margin = 10
         ParentFont = False
         Spacing = 10
-        Transparent = False
-        OnClick = btnCadastroPessoasClick
+        OnClick = btnRelatoriosClick
         OnMouseEnter = actMouseEnterExecute
         OnMouseLeave = actMouseLeaveExecute
-        ExplicitTop = 8
+        ExplicitLeft = -5
+        ExplicitTop = -3
+        ExplicitWidth = 835
+      end
+      object pnlRelatorios: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 45
+        Width = 190
+        Height = 45
+        Margins.Left = 5
+        Margins.Top = 0
+        Margins.Right = 0
+        Margins.Bottom = 0
+        Align = alTop
+        AutoSize = True
+        BevelOuter = bvNone
+        Color = 13882323
+        DockSite = True
+        Locked = True
+        ParentBackground = False
+        TabOrder = 0
+        Visible = False
+        object SpeedButton2: TSpeedButton
+          AlignWithMargins = True
+          Left = 0
+          Top = 0
+          Width = 190
+          Height = 45
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alTop
+          GroupIndex = 1
+          Caption = 'Submenu'
+          ImageIndex = 0
+          Images = imgLista1
+          Flat = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 6710886
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          Margin = 10
+          ParentFont = False
+          Spacing = 10
+          Transparent = False
+          OnMouseEnter = actMouseEnterExecute
+          OnMouseLeave = actMouseLeaveExecute
+          ExplicitTop = 8
+          ExplicitWidth = 195
+        end
       end
     end
-    object pnlConfiguracoes: TPanel
+    object pnlDockConfiguracoes: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 316
+      Top = 270
       Width = 195
-      Height = 45
+      Height = 90
       Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
@@ -340,11 +418,17 @@ object FrmMenu: TFrmMenu
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      Color = 13882323
+      Color = clWhite
+      Ctl3D = True
+      UseDockManager = False
       ParentBackground = False
+      ParentCtl3D = False
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = False
       TabOrder = 4
-      Visible = False
-      object SpeedButton7: TSpeedButton
+      ExplicitTop = 315
+      object btnConfiguracoes: TSpeedButton
         AlignWithMargins = True
         Left = 0
         Top = 0
@@ -356,10 +440,9 @@ object FrmMenu: TFrmMenu
         Margins.Bottom = 0
         Align = alTop
         GroupIndex = 1
-        Caption = 'Submenu'
+        Caption = 'Configura'#231#245'es'
         ImageIndex = 0
         Images = imgLista1
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
@@ -368,59 +451,62 @@ object FrmMenu: TFrmMenu
         Margin = 10
         ParentFont = False
         Spacing = 10
-        Transparent = False
-        OnClick = btnCadastroPessoasClick
+        OnClick = btnConfiguracoesClick
         OnMouseEnter = actMouseEnterExecute
         OnMouseLeave = actMouseLeaveExecute
-        ExplicitTop = 8
+        ExplicitLeft = -5
+        ExplicitTop = -11
+        ExplicitWidth = 835
       end
-    end
-    object pnlProcessos: TPanel
-      AlignWithMargins = True
-      Left = 5
-      Top = 136
-      Width = 195
-      Height = 45
-      Margins.Left = 5
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Align = alTop
-      AutoSize = True
-      BevelOuter = bvNone
-      Color = 13882323
-      ParentBackground = False
-      TabOrder = 5
-      Visible = False
-      object SpeedButton1: TSpeedButton
+      object pnlConfiguracoes: TPanel
         AlignWithMargins = True
-        Left = 0
-        Top = 0
-        Width = 195
+        Left = 5
+        Top = 45
+        Width = 190
         Height = 45
-        Margins.Left = 0
+        Margins.Left = 5
         Margins.Top = 0
         Margins.Right = 0
         Margins.Bottom = 0
         Align = alTop
-        GroupIndex = 1
-        Caption = 'Submenu'
-        ImageIndex = 0
-        Images = imgLista1
-        Flat = True
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = 6710886
-        Font.Height = -16
-        Font.Name = 'Segoe UI'
-        Font.Style = [fsBold]
-        Margin = 10
-        ParentFont = False
-        Spacing = 10
-        Transparent = False
-        OnClick = btnCadastroPessoasClick
-        OnMouseEnter = actMouseEnterExecute
-        OnMouseLeave = actMouseLeaveExecute
-        ExplicitTop = 8
+        AutoSize = True
+        BevelOuter = bvNone
+        Color = 13882323
+        DockSite = True
+        Locked = True
+        ParentBackground = False
+        TabOrder = 0
+        Visible = False
+        object SpeedButton7: TSpeedButton
+          AlignWithMargins = True
+          Left = 0
+          Top = 0
+          Width = 190
+          Height = 45
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alTop
+          GroupIndex = 1
+          Caption = 'Submenu'
+          ImageIndex = 0
+          Images = imgLista1
+          Flat = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = 6710886
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          Margin = 10
+          ParentFont = False
+          Spacing = 10
+          Transparent = False
+          OnMouseEnter = actMouseEnterExecute
+          OnMouseLeave = actMouseLeaveExecute
+          ExplicitTop = 8
+          ExplicitWidth = 195
+        end
       end
     end
   end

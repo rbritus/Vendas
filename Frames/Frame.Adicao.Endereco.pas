@@ -26,6 +26,7 @@ type
     function ObterSqlParaDatSet: string; override;
     procedure CriarDataSet; override;
     procedure PreencherDataSet(Obj: TObject); override;
+    procedure UpdateItem(Value : TObject); override;
   public
     { Public declarations }
     function ObterLista: TObjectListFuck<TEndereco>;
@@ -95,6 +96,12 @@ begin
   cdsDados.FieldByName('CIDADE').AsString := Endereco.Cidade.Nome;
 //  cdsDados.FieldByName('LOGRADOURO').AsString := Endereco.Logradouro.Abreviacao;
   cdsDados.Post;
+end;
+
+procedure TFrameAdicaoEndereco.UpdateItem(Value: TObject);
+begin
+  PreencherDataSet(Value);
+  inherited;
 end;
 
 end.

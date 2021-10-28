@@ -220,7 +220,10 @@ begin
       ' where ' + cPK + ' = ' + IntToStr(DSetSelf.FieldByName(cTabela + '_FK').AsInteger));
     try
       if DSetEstrangeiro.IsEmpty then
-        Exit(ObjEstrangeiro);
+      begin
+        ObjEstrangeiro.Free;
+        Exit(nil);
+      end;
 
       PreencheObjeto(ObjEstrangeiro, DSetEstrangeiro);
       Result := ObjEstrangeiro;
@@ -278,6 +281,11 @@ Begin
   ListObj := TObjectListFuck<T>.Create;
   var DSet := TConexao.GetInstance.EnviaConsulta(sql);
   try
+    if DSet.IsEmpty then
+    begin
+      ListObj.Free;
+      Exit(nil);
+    end;
 
     DSet.First;
     while not DSet.Eof do

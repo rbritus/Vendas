@@ -13,6 +13,7 @@ type
       constructor Create;
       destructor Destroy; override;
       class function New : iObservavel;
+      procedure Remove(Value : iObservador);
       procedure Add(Value : iObservador);
       procedure Notify(Value : TObject);
   end;
@@ -23,7 +24,10 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure ObservarEntidade(pForm: TForm; ClasseEntidade: TClass);
+    procedure ObservarEntidade(AForm: TForm; ClasseEntidade: TClass); overload;
+    procedure ObservarEntidade(AFrame: TFrame; ClasseEntidade: TClass); overload;
+    procedure PararDeObservarEntidade(AForm: TForm; ClasseEntidade: TClass); overload;
+    procedure PararDeObservarEntidade(AFrame: TFrame; ClasseEntidade: TClass); overload;
     procedure Notificar(Entidade: TObject);
   end;
 
@@ -61,6 +65,14 @@ begin
     FList[Indice].UpdateItem(Value);
 end;
 
+procedure TControllerPadraoObserver.Remove(Value: iObservador);
+begin
+  Flist.Remove(Value);
+//  for var Indice := 0 to Pred(FList.Count) do
+//    if TForm(FList[Indice]).Name = TForm(Value).Name then
+//      Flist.Remove(Value)
+end;
+
 { TEntidadePadraoObserver }
 
 constructor TControllerObserverEntidade.Create;
@@ -83,7 +95,7 @@ begin
     ControllerObserver.Notify(Entidade);
 end;
 
-procedure TControllerObserverEntidade.ObservarEntidade(pForm: TForm;
+procedure TControllerObserverEntidade.ObservarEntidade(AFrame: TFrame;
   ClasseEntidade: TClass);
 var
   ControllerObserver: iObservavel;
@@ -93,7 +105,38 @@ begin
     ControllerObserver := TControllerPadraoObserver.New as TControllerPadraoObserver;
     FLista.Add(ClasseEntidade, ControllerObserver);
   end;
-  ControllerObserver.Add(pForm as iObservador);
+  ControllerObserver.Add(AFrame as iObservador);
+end;
+
+procedure TControllerObserverEntidade.PararDeObservarEntidade(AFrame: TFrame;
+  ClasseEntidade: TClass);
+var
+  ControllerObserver: iObservavel;
+begin
+  if FLista.TryGetValue(ClasseEntidade, ControllerObserver) then
+    ControllerObserver.Remove(AFrame as iObservador);
+end;
+
+procedure TControllerObserverEntidade.ObservarEntidade(AForm: TForm;
+  ClasseEntidade: TClass);
+var
+  ControllerObserver: iObservavel;
+begin
+  if not FLista.TryGetValue(ClasseEntidade, ControllerObserver) then
+  begin
+    ControllerObserver := TControllerPadraoObserver.New as TControllerPadraoObserver;
+    FLista.Add(ClasseEntidade, ControllerObserver);
+  end;
+  ControllerObserver.Add(AForm as iObservador);
+end;
+
+procedure TControllerObserverEntidade.PararDeObservarEntidade(AForm: TForm;
+  ClasseEntidade: TClass);
+var
+  ControllerObserver: iObservavel;
+begin
+  if FLista.TryGetValue(ClasseEntidade, ControllerObserver) then
+    ControllerObserver.Remove(AForm as iObservador);
 end;
 
 initialization

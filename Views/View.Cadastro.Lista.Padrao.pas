@@ -31,6 +31,7 @@ type
     procedure ObterDataSetPreenchido;
     procedure AjustarColunasDaGride;
     procedure UpdateItem(Value : TObject);
+    procedure ObservarEntidadeDeCadastro;
   public
     { Public declarations }
   end;
@@ -74,9 +75,7 @@ end;
 procedure TFrmCadastroListaPadrao.FormCreate(Sender: TObject);
 begin
   inherited;
-  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
-  var ClasseEntidade := ControllerListaView.ObterClasseDaEntidadeDeCadastro;
-  ControllerObserverEntidade.ObservarEntidade(Self,ClasseEntidade);
+  ObservarEntidadeDeCadastro;
 end;
 
 procedure TFrmCadastroListaPadrao.FormDestroy(Sender: TObject);
@@ -111,6 +110,13 @@ begin
   inherited;
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   ControllerListaView.ApresentarFormParaCadastro;
+end;
+
+procedure TFrmCadastroListaPadrao.ObservarEntidadeDeCadastro;
+begin
+  var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
+  var ClasseEntidade := ControllerListaView.ObterClasseDaEntidadeDeCadastro;
+  ControllerObserverEntidade.ObservarEntidade(Self,ClasseEntidade);
 end;
 
 procedure TFrmCadastroListaPadrao.UpdateItem(Value: TObject);

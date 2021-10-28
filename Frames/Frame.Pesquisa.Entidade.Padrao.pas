@@ -25,7 +25,7 @@ type
   public
     { Public declarations }
     function ObterEntidade: TObject;
-    procedure CarregarEntidade(pID: Integer);
+    procedure CarregarEntidade(AID: Integer);
   end;
 
 var
@@ -55,16 +55,21 @@ begin
   inherited;
   var Controller := TControllerFrameAdicaoPadrao.New(Self);
   Controller.ExibirListaDeRegistrosParaSelecao();
-  FIdObjeto := Controller.ObterIdDaEntidadeDoRegistroSelecionado;
+  var Id := Controller.ObterIdDaEntidadeDoRegistroSelecionado;
+
+  if Id = TConstantsInteger.ZERO  then
+    Exit;
+
+  FIdObjeto := Id;
   AplicarDescricaoDoObjetoNoEdit;
 end;
 
-procedure TFramePesquisaEntidadePadrao.CarregarEntidade(pID: Integer);
+procedure TFramePesquisaEntidadePadrao.CarregarEntidade(AID: Integer);
 begin
-  if pID = TConstantsInteger.ZERO then
+  if AID = TConstantsInteger.ZERO then
     Exit;
 
-  FIdObjeto := pID;
+  FIdObjeto := AID;
   AplicarDescricaoDoObjetoNoEdit;
 end;
 

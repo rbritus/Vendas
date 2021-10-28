@@ -33,18 +33,21 @@ type
   public
     class function New(pFrame: TFrame): iControllerFrameAdicaoPadrao;
 
+    procedure ApresentarFormParaCadastro;
+    procedure ApresentarFormParaEdicao(ID: Integer);
     function CarregarDataSet(pSql: string): TDataSet;
     function ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
     procedure ObterListaPreenchidaDoFrame(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
     function CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
     function ObterObjetoDoFrame: TObject;
+    function ObterClasseDaEntidadeDeCadastro: TClass;
   end;
 
 implementation
 
 uses
   Utils.Entidade, Attributes.Entidades, Connection.Controller.SqLite,
-  System.SysUtils;
+  System.SysUtils, Utils.Frame, Controller.View;
 
 { TControllerFrameAdicaoPadrao }
 
@@ -204,6 +207,11 @@ begin
   end;
 end;
 
+function TControllerFrameAdicaoPadrao.ObterClasseDaEntidadeDeCadastro: TClass;
+begin
+  Result := TUtilsFrame.ObterClasseDoObjetoDeCadastroDoFrame(FFrame);
+end;
+
 function TControllerFrameAdicaoPadrao.ObterSqlPorCampoEstrangeiro: string;
 begin
   var TabelaObjPrimario := ObterNomeDaTabela(FEntidadeRelacional);
@@ -274,25 +282,7 @@ end;
 
 function TControllerFrameAdicaoPadrao.ObterObjetoDoFrame: TObject;
 begin
-  var Entidade: TObject := nil;
-  var Ctx := TRttiContext.Create;
-  try
-    var Tipo := Ctx.GetType(FFrame.ClassType);
-    if not Assigned(Tipo) then
-      Exit(nil);
-
-    for var Atrib in Tipo.GetAttributes do
-    begin
-      if Atrib is TClasseCadastro then
-      begin
-        Entidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
-        Break;
-      end;
-    end;
-  finally
-    Ctx.Free;
-  end;
-  Result := Entidade;
+  Result := TUtilsFrame.ObterObjetoDeCadastroDoFrame(FFrame);
 end;
 
 function TControllerFrameAdicaoPadrao.ObterNomeDaTabela(Obj: TObject): string;
@@ -348,13 +338,35 @@ begin
   FEntidadeFrame := ObterObjetoDoFrame;
   FEntidadeRelacional := ObterObjetoDeClassRelacional;
   try
+    var ListaParaClone := ObterListaDeObjetosDaEntidadeRelacional;
+    if not Assigned(ListaParaClone) then
+      Exit(nil);
+
     var Lista := TObjectListFuck<TObject>.Create;
-    Lista.CopyTo(ObterListaDeObjetosDaEntidadeRelacional);
+    Lista.CopyTo(ListaParaClone);
     Result := Lista;
   finally
     FEntidadeFrame.Free;
     FEntidadeRelacional.Free;
   end;
+end;
+
+procedure TControllerFrameAdicaoPadrao.ApresentarFormParaCadastro;
+begin
+  var ClasseForm := TUtilsFrame.ObterClasseDoFormularioCadastro(FFrame);
+  var Form : TForm := nil;
+  ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarFormParaCadastro',[]);
+  ControllerView.ShowForm(TComponentClass(ClasseForm));
+end;
+
+procedure TControllerFrameAdicaoPadrao.ApresentarFormParaEdicao(ID: Integer);
+begin
+  var ClasseForm := TUtilsFrame.ObterClasseDoFormularioCadastro(FFrame);
+  var Form : TForm := nil;
+  ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
+  ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
 constructor TControllerFrameAdicaoPadrao.Create(pFrame: TFrame);

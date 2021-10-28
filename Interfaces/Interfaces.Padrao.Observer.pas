@@ -12,6 +12,7 @@ type
     ['{9F801546-806A-4295-93A7-4AFA5E1FF43F}']
     procedure Add(Value : iObservador);
     procedure Notify(Value : TObject);
+    procedure Remove(Value : iObservador);
   end;
 
 implementation

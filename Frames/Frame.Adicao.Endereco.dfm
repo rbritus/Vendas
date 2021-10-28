@@ -96,11 +96,11 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           Height = 42
           ExplicitLeft = 683
           ExplicitHeight = 42
-          inherited Image1: TImage
+          inherited imgBtnExcluir: TImage
             Top = 8
             ExplicitTop = 8
           end
-          inherited Image2: TImage
+          inherited imgBtnAlterar: TImage
             Top = 8
             ExplicitTop = 8
           end

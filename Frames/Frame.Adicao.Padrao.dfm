@@ -30,12 +30,14 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
           ShowCaption = False
           TabOrder = 0
           StyleElements = [seFont, seClient]
-          object Image1: TImage
+          object imgBtnExcluir: TImage
             Left = 35
             Top = 12
             Width = 20
             Height = 26
             Cursor = crHandPoint
+            Hint = 'Excluir registro'
+            ParentShowHint = False
             Picture.Data = {
               0954506E67496D61676589504E470D0A1A0A0000000D49484452000000180000
               001A08030000009A616CC10000000467414D410000B18F0BFC6105000001BC50
@@ -70,15 +72,18 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
               30323A34372B30303A3030DF7810010000002574455874646174653A6D6F6469
               667900323032312D30382D32395432323A30323A34372B30303A3030AE25A8BD
               0000000049454E44AE426082}
-            OnClick = Image1Click
+            ShowHint = True
+            OnClick = imgBtnExcluirClick
           end
-          object Image2: TImage
+          object imgBtnAlterar: TImage
             Left = 6
             Top = 12
             Width = 24
             Height = 26
             Cursor = crHandPoint
+            Hint = 'Alterar registro'
             Center = True
+            ParentShowHint = False
             Picture.Data = {
               0954506E67496D61676589504E470D0A1A0A0000000D49484452000000100000
               00100804000000B5FA37EA0000000467414D410000B18F0BFC61050000000262
@@ -95,6 +100,8 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
               726561746500323032312D30382D32395432323A30363A31372B30303A30309E
               73BE1F0000002574455874646174653A6D6F6469667900323032312D30382D32
               395432323A30363A31372B30303A3030EF2E06A30000000049454E44AE426082}
+            ShowHint = True
+            OnClick = imgBtnAlterarClick
           end
           object Panel4: TPanel
             Left = 0
@@ -165,6 +172,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
+        OnClick = SpeedButton6Click
       end
       object pnlBarraLateralBotao: TPanel
         Left = 0

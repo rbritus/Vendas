@@ -18,6 +18,8 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
         Width = 840
         Height = 599
         Align = alClient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText

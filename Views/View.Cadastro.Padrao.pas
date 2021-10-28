@@ -105,8 +105,8 @@ procedure TFrmCadastroPadrao.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
   inherited;
-  var ControllerView := TControllerCadastroPadrao.New(Self);
-  ControllerView.DestruirEntidadesPosCadastro;
+//  var ControllerView := TControllerCadastroPadrao.New(Self);
+//  ControllerView.DestruirEntidadesPosCadastro;
 end;
 
 procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);

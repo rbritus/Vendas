@@ -16,7 +16,6 @@ type
     FLogradouro: string;
     FNumero: Integer;
     FBairro: string;
-//    FLogradouro: iLogradouro;
     FCidade: TCidade;
     FTipoEndereco: TTipoEndereco;
     FComplemento: string;
@@ -25,7 +24,6 @@ type
     procedure SetLogradouro(const Value: string);
     procedure SetNumero(const Value: Integer);
     procedure SetBairro(const Value: string);
-//    procedure SetLogradouro(const Value: iLogradouro);
     procedure SetCidade(const Value: TCidade);
     procedure SetTipoEndereco(const Value: TTipoEndereco);
     procedure SetComplemento(const Value: string);
@@ -34,7 +32,6 @@ type
     function GetLogradouro: string;
     function GetNumero: Integer;
     function GetBairro: string;
-//    function GetLogradouro: iLogradouro;
     function GetCidade: TCidade;
     function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
@@ -43,8 +40,6 @@ type
     property Id: Integer read GetId write SetId;
     [TCampoTexto('CEP', 10, [], 'CEP')]
     property CEP: string read GetCEP write SetCEP;
-//    [TCampoEstrangeiro('LOGRADOURO_FK', [NOTNULL], 'LOGRADOURO', 'Abreviacao')]
-//    property Logradouro: iLogradouro read GetLogradouro write SetLogradouro;
     [TCampoTexto('LOGRADOURO', 200, [], 'Endereço')]
     property Logradouro: string read GetLogradouro write SetLogradouro;
     [TCampoInteiro('NUMERO', [], 'Número')]
@@ -107,14 +102,6 @@ begin
   Result := FId;
 end;
 
-//function TEndereco.GetLogradouro: iLogradouro;
-//begin
-//   If Not Assigned(FLogradouro) Then
-//      FLogradouro := TUtilsEntidade.ObterObjetoChaveEstrangeira(Self as TObject, TLogradouro) as TLogradouro;
-//
-//   Result := FLogradouro;
-//end;
-
 function TEndereco.GetNumero: Integer;
 begin
   Result := FNumero;
@@ -159,11 +146,6 @@ procedure TEndereco.SetId(const Value: integer);
 begin
   FId := Value;
 end;
-
-//procedure TEndereco.SetLogradouro(const Value: iLogradouro);
-//begin
-//  FLogradouro := Value;
-//end;
 
 procedure TEndereco.SetNumero(const Value: Integer);
 begin

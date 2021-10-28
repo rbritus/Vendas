@@ -26,6 +26,7 @@ type
     Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure SpeedButton6Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     [TCadastroVariavel('Enderecos',ftLISTAGEM,coNaoObrigatorio)]
     FEnderecos: TObjectListFuck<TEndereco>;
@@ -40,6 +41,13 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFrmCadastroPessoa.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  FrameAdicaoEndereco.FinalizarFrame;
+  inherited;
+end;
 
 procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin

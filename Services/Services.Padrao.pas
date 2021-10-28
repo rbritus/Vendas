@@ -425,6 +425,7 @@ var
   Tipo: TRTTIType;
   Atrib: TCustomAttribute;
   nRelacao: TTipoAssociacaoEntreTabelas;
+  TipoCascata: TTipoCascata;
   DSet: TDataSet;
   lAchou: Boolean;
   cIdRemovidos: string;
@@ -441,6 +442,7 @@ begin
         cCampoPai := TCampoListagem(Atrib).CampoPai;
         cCampoFilho := TCampoListagem(Atrib).CampoFilho;
         nRelacao := TCampoListagem(Atrib).TipoAssociacao;
+        TipoCascata := TCampoListagem(Atrib).TipoCascata;
 
         Break;
       end;
@@ -488,6 +490,12 @@ begin
         begin
           TConexao.GetInstance.EnviarComando('delete from ' + cTabela + ' where ' + cCampoPai + ' = ' + IntToStr(idPai) + ' and ' +
           cCampoFilho + ' in (' + cIdRemovidos + ')');
+
+          if TipoCascata = ctCascade then
+          begin
+            var TabelaCampoFilho := StringReplace(cCampoFilho, '_FK', '', [rfReplaceAll]);
+            TConexao.GetInstance.EnviarComando('delete from ' + TabelaCampoFilho + ' where ID in (' + cIdRemovidos + ')');
+          end;
         end;
         DSet.Close;
       finally

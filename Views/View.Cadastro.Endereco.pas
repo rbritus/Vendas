@@ -51,7 +51,6 @@ type
     procedure PreencherDadosDaTela(ConsultaCEP: iConsultaCEP);
     procedure PreencherFrameCidade(ACidade: TCidade);
     procedure PreencherCidadePeloCodigoIBGE(IBGE: string);
-//    procedure PreencherComboBoxTipoEndereco;
   public
     { Public declarations }
   end;
@@ -65,11 +64,6 @@ uses
   Controller.Objeto.ConsultaCEP, Utils.Entidade;
 
 {$R *.dfm}
-
-//procedure TFrmCadastroEndereco.PreencherComboBoxTipoEndereco;
-//begin
-//  TEnumerator<TTipoEndereco>.PopulateList(cmbTipoEndereco);
-//end;
 
 procedure TFrmCadastroEndereco.PreencherFrameCidade(ACidade: TCidade);
 begin
@@ -119,7 +113,6 @@ procedure TFrmCadastroEndereco.FormShow(Sender: TObject);
 begin
   inherited;
   PreencherFrameCidade(FCidade);
-//  PreencherComboBoxTipoEndereco;
 end;
 
 procedure TFrmCadastroEndereco.FramePesquisaCidadeEdit1Change(Sender: TObject);
