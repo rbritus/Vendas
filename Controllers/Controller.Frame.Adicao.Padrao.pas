@@ -263,7 +263,6 @@ begin
       if Atrib is TClasseCadastro then
       begin
         Entidade := TUtilsEntidade.ExecutarMetodoClasse(TClasseCadastro(Atrib).Classe,'PesquisarPorId',[FIdObjRelacional]).AsObject;
-//        Entidade := TPersistentClass(TClasseCadastro(Atrib).Classe).Create;
         Break;
       end;
     end;

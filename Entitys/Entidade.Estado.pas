@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Estado, Interfaces.Entidade.Pais;
+  Interfaces.Entidade.Estado, Entidade.Pais;
 
 type
   [TNomeTabela('ESTADO')]
@@ -14,17 +14,17 @@ type
     FNome: string;
     FAbreviacao: string;
     FCodigoUF: Integer;
-    FPais: iPais;
+    FPais: TPais;
     procedure SetId(const Value: Integer);
     procedure SetNome(const Value: string);
     procedure SetAbreviacao(const Value: string);
     procedure SetCodigoUF(const Value: Integer);
-    procedure SetPais(const Value: iPais);
+    procedure SetPais(const Value: TPais);
     function GetId: Integer;
     function GetNome: string;
     function GetAbreviacao: string;
     function GetCodigoUF: Integer;
-    function GetPais: iPais;
+    function GetPais: TPais;
   public
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
     property Id: Integer read GetId write SetId;
@@ -35,7 +35,7 @@ type
     [TCampoInteiro('CODIGO_UF', [], 'Código',False)]
     property CodigoUF: Integer read GetCodigoUF write SetCodigoUF;
     [TCampoEstrangeiro('PAIS_FK', [NOTNULL], 'PAIS', 'Abreviacao')]
-    property Pais: iPais read GetPais write SetPais;
+    property Pais: TPais read GetPais write SetPais;
 
     class function New : iEstado;
     function EstaVazia(): Boolean; override;
@@ -44,7 +44,7 @@ type
 implementation
 
 uses
-  Utils.Entidade, Entidade.Pais;
+  Utils.Entidade;
 
 { TEstado }
 
@@ -73,7 +73,7 @@ begin
   Result := FNome;
 end;
 
-function TEstado.GetPais: iPais;
+function TEstado.GetPais: TPais;
 begin
    If Not Assigned(FPais) Then
       FPais := TUtilsEntidade.ObterObjetoChaveEstrangeira(Self as TObject, TPais) as TPais;
@@ -106,7 +106,7 @@ begin
   FNome := Value;
 end;
 
-procedure TEstado.SetPais(const Value: iPais);
+procedure TEstado.SetPais(const Value: TPais);
 begin
   FPais := Value;
 end;

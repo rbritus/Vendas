@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Cidade, Interfaces.Entidade.Estado;
+  Interfaces.Entidade.Cidade, Entidade.Estado;
 
 type
   [TNomeTabela('CIDADE')]
@@ -15,20 +15,20 @@ type
     FCodigoIBGE: Integer;
     FCodigoMunicipio: string;
     FCodigoDistrito: string;
-    FEstado: iEstado;
+    FEstado: TEstado;
     FCodigoSubdistrito: string;
     procedure SetId(const Value: Integer);
     procedure SetNome(const Value: string);
     procedure SetCodigoIBGE(const Value: Integer);
     procedure SetCodigoMunicipio(const Value: string);
     procedure SetCodigoDistrito(const Value: string);
-    procedure SetEstado(const Value: iEstado);
+    procedure SetEstado(const Value: TEstado);
     function GetId: Integer;
     function GetNome: string;
     function GetCodigoIBGE: Integer;
     function GetCodigoMunicipio: string;
     function GetCodigoDistrito: string;
-    function GetEstado: iEstado;
+    function GetEstado: TEstado;
     procedure SetCodigoSubdistrito(const Value: string);
     function GetCodigoSubdistrito: string;
   public
@@ -45,7 +45,7 @@ type
     [TCampoTexto('CODIGO_SUBDISTRITO', 10, [], 'Cód. Subdistrito', False)]
     property CodigoSubdistrito: string read GetCodigoSubdistrito write SetCodigoSubdistrito;
     [TCampoEstrangeiro('ESTADO_FK', [NOTNULL], 'ESTADO', 'Abreviacao')]
-    property Estado: iEstado read GetEstado write SetEstado;
+    property Estado: TEstado read GetEstado write SetEstado;
 
     class function New : iCidade;
     function EstaVazia(): Boolean; override;
@@ -54,7 +54,7 @@ type
 implementation
 
 uses
-  Entidade.Estado, Utils.Entidade;
+  Utils.Entidade;
 
 { TCidade }
 
@@ -83,7 +83,7 @@ begin
   Result := FCodigoSubdistrito;
 end;
 
-function TCidade.GetEstado: iEstado;
+function TCidade.GetEstado: TEstado;
 begin
    If Not Assigned(FEstado) Then
       FEstado := TUtilsEntidade.ObterObjetoChaveEstrangeira(Self as TObject, TEstado) as TEstado;
@@ -126,7 +126,7 @@ begin
   FCodigoSubdistrito := Value;
 end;
 
-procedure TCidade.SetEstado(const Value: iEstado);
+procedure TCidade.SetEstado(const Value: TEstado);
 begin
   FEstado := Value;
 end;

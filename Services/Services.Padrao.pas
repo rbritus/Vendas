@@ -61,46 +61,6 @@ begin
   finally
     Objeto.Free;
   end;
-//  var Ctx := TRttiContext.Create;
-//  try
-//    var Tipo := Ctx.GetType(TypeInfo(T));
-//    if not Assigned(Tipo) then
-//      Exit;
-//
-//    for var Prop in Tipo.GetDeclaredProperties do
-//    begin
-//      for var Atrib in Prop.GetAttributes do
-//      begin
-//        if Atrib is TAtributoBanco then
-//        begin
-//          if cds.FindField(TAtributoBanco(Atrib).nome) = nil then
-//            Continue;
-//
-//          cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
-//          cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
-//
-//          if not TAtributoBanco(Atrib).Visivel then
-//            Continue;
-//
-//          if Assigned(TAtributoBanco(Atrib).CustomSelect) then
-//          begin
-//            var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
-//
-//            if cds.FindField(NomeFieldCustom) = nil then
-//              Continue;
-//
-//            cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
-//            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
-//            cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
-//            cds.FieldByName(NomeFieldCustom).Visible := True;
-//          end;
-//
-//        end;
-//      end;
-//    end;
-//  finally
-//    Ctx.Free;
-//  end;
 end;
 
 procedure TServico<T>.Excluir(Objeto: TObject);
@@ -202,7 +162,7 @@ begin
   case RecParam.FTipoPropriedade of
     ftESTRANGEIRO:
       begin
-        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsType<TObject>, 'id').AsString;
+        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsObject, 'id').AsInteger.ToString;
         if RecParam.FValorParametro = '0' then
           RecParam.FValorParametro := 'null';
       end;
@@ -213,12 +173,20 @@ begin
       end;
     ftLOGICO:
       begin
-        RecParam.FValorParametro := BoolToStr(Propriedade.GetValue(Objeto).AsBoolean);
+        RecParam.FValorParametro := BoolToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsBoolean);
       end;
     ftDATA:
       begin
-        RecParam.FValorParametro := DateToStr(Propriedade.GetValue(Objeto).AsExtended);
-      end
+        RecParam.FValorParametro := DateToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsExtended);
+      end;
+    ftINTEIRO:
+      begin
+        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsInteger.ToString;
+      end;
+    ftDECIMAL:
+      begin
+        RecParam.FValorParametro := FloatToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsCurrency);
+      end;
   else
     RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Objeto, Propriedade.Name).AsString;
   end;
@@ -634,12 +602,14 @@ function TServico<T>.PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
 var
   DSet: TDataSet;
   ListObj: TObjectListFuck<T>;
-  Objeto: T;
 begin
   ListObj := TObjectListFuck<T>.Create;
-  Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
-
-  DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + cSql);
+  var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
+  try
+    DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + cSql);
+  finally
+    Objeto.Free;
+  end;
 
   if DSet.IsEmpty then
   begin

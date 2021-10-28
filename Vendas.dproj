@@ -148,8 +148,6 @@
         <DCCReference Include="Utils\Utils.Form.pas"/>
         <DCCReference Include="Entitys\Entidade.Endereco.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Entidade.Endereco.pas"/>
-        <DCCReference Include="Entitys\Entidade.Logradouro.pas"/>
-        <DCCReference Include="Interfaces\Interfaces.Entidade.Logradouro.pas"/>
         <DCCReference Include="Entitys\Entidade.Cidade.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Entidade.Cidade.pas"/>
         <DCCReference Include="Entitys\Entidade.Estado.pas"/>
@@ -195,6 +193,16 @@
         <DCCReference Include="Interfaces\Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Padrao.Observer.pas"/>
         <DCCReference Include="Controllers\Controller.Padrao.Observer.pas"/>
+        <DCCReference Include="Views\View.Lista.Selecao.Entidade.pas">
+            <Form>FrmListaSelecaoEntidade</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Controllers\Controller.Lista.Selecao.Entidade.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Lista.Selecao.Entidade.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Objeto.ConsultaCEP.pas"/>
+        <DCCReference Include="Objects\Objeto.ConsultaCEP.pas"/>
+        <DCCReference Include="Controllers\Controller.Objeto.ConsultaCEP.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Objeto.ConsultaCEP.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

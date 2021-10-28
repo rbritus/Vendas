@@ -9,7 +9,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         Left = 0
         Top = 3
         Width = 800
-        Height = 200
+        Height = 203
         Align = alClient
         AllowDelete = False
         AllowInsert = False
@@ -18,7 +18,6 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         PanelWidth = 783
         TabOrder = 0
         RowCount = 4
-        ExplicitHeight = 203
         object Panel3: TPanel
           Left = 723
           Top = 0

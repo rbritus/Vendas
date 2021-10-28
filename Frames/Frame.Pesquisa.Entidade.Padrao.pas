@@ -16,23 +16,62 @@ type
     Edit1: TEdit;
     btnInserir: TBitBtn;
     btnExcluir: TBitBtn;
+    procedure btnInserirClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
   private
     { Private declarations }
+    FIdObjeto: Integer;
+    procedure AplicarDescricaoDoObjetoNoEdit;
   public
     { Public declarations }
+    function ObterEntidade: TObject;
+    procedure CarregarEntidade(pID: Integer);
   end;
 
 var
   FramePesquisaEntidadePadrao: TFramePesquisaEntidadePadrao;
 
-
 implementation
+
+uses
+  Controller.Frame.Pesquisa.Entidade.Padrao, Utils.Constants;
 
 {$R *.dfm}
 
-uses
-  Controller.Frame.Pesquisa.Entidade.Padrao;
+procedure TFramePesquisaEntidadePadrao.AplicarDescricaoDoObjetoNoEdit;
+begin
+  var Controller := TControllerFrameAdicaoPadrao.New(Self);
+  Edit1.Text := Controller.ObterValorDoCampoDeExibicao(FIdObjeto);
+end;
 
-{ TFramePesquisaEntidadePadrao }
+procedure TFramePesquisaEntidadePadrao.btnExcluirClick(Sender: TObject);
+begin
+  inherited;
+  Edit1.Clear;
+end;
+
+procedure TFramePesquisaEntidadePadrao.btnInserirClick(Sender: TObject);
+begin
+  inherited;
+  var Controller := TControllerFrameAdicaoPadrao.New(Self);
+  Controller.ExibirListaDeRegistrosParaSelecao();
+  FIdObjeto := Controller.ObterIdDaEntidadeDoRegistroSelecionado;
+  AplicarDescricaoDoObjetoNoEdit;
+end;
+
+procedure TFramePesquisaEntidadePadrao.CarregarEntidade(pID: Integer);
+begin
+  if pID = TConstantsInteger.ZERO then
+    Exit;
+
+  FIdObjeto := pID;
+  AplicarDescricaoDoObjetoNoEdit;
+end;
+
+function TFramePesquisaEntidadePadrao.ObterEntidade: TObject;
+begin
+  var Controller := TControllerFrameAdicaoPadrao.New(Self);
+  Result := Controller.ObterEntidade(FIdObjeto);
+end;
 
 end.

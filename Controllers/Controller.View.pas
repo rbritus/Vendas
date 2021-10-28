@@ -15,6 +15,7 @@ type
     FParent: TPanel;
     FTitle: TPanel;
     function CarregarForm(Value: TComponentClass): TForm;
+    function CarregarFormModal(Value: TComponentClass): TForm;
   public
     constructor Create;
     destructor Destroy; override;
@@ -30,7 +31,7 @@ type
 
     procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
     procedure ShowForm(Value: TComponentClass);
-//    procedure ShowFormModal(Value: TComponentClass);
+    function ShowFormModal(Value: TComponentClass): TForm;
 
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
@@ -78,10 +79,42 @@ begin
   CarregarForm(Value).Show;
 end;
 
-//procedure TControllerView.ShowFormModal(Value: TComponentClass);
-//begin
-//  CarregarForm(Value).ShowModal;
-//end;
+function TControllerView.CarregarFormModal(Value: TComponentClass): TForm;
+var
+  aForm: TForm;
+  LabelCaminhoForm: Tlabel;
+  LabelAtual: Tlabel;
+begin
+  AdicionarFormNalista(Value,aForm);
+  Parent.Visible := True;
+  Title.Visible := True;
+  aForm.Align := alNone;
+  aForm.BorderStyle := bsNone;
+  aForm.Position := poDesigned;
+  aForm.FormStyle := fsNormal;
+  aForm.Top   := MainForm.Top + Parent.Top  + Trunc((Parent.Height - aForm.Height)/2);
+  aForm.Left  := MainForm.Left + Parent.Left + Trunc((Parent.Width - aForm.Width)/2);
+  if Assigned(Title) then
+  begin
+    Title.Caption := aForm.Caption;
+    LabelCaminhoForm := MainForm.FindComponent('LabelCaminhoFormAtual') as TLabel;
+    if LabelCaminhoForm <> nil then
+      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
+    LabelAtual := MainForm.FindComponent('LabelFormAtual') as TLabel;
+    if LabelCaminhoForm <> nil then
+      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
+    if LabelAtual <> nil then
+      LabelAtual.Caption := aForm.Caption;
+  end;
+  Result := aForm;
+end;
+
+function TControllerView.ShowFormModal(Value: TComponentClass): TForm;
+begin
+  var FormModal := CarregarFormModal(Value);
+  FormModal.ShowModal;
+  Result := FormModal;
+end;
 
 procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
 begin

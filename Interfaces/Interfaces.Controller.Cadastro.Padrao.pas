@@ -13,6 +13,8 @@ type
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
+    procedure DestruirEntidadesPosCadastro;
+    procedure CarregarComboBoxComEnumerators;
   end;
 
 implementation

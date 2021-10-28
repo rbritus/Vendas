@@ -32,8 +32,6 @@ uses
   Utils.Form in 'Utils\Utils.Form.pas',
   Entidade.Endereco in 'Entitys\Entidade.Endereco.pas',
   Interfaces.Entidade.Endereco in 'Interfaces\Interfaces.Entidade.Endereco.pas',
-  Entidade.Logradouro in 'Entitys\Entidade.Logradouro.pas',
-  Interfaces.Entidade.Logradouro in 'Interfaces\Interfaces.Entidade.Logradouro.pas',
   Entidade.Cidade in 'Entitys\Entidade.Cidade.pas',
   Interfaces.Entidade.Cidade in 'Interfaces\Interfaces.Entidade.Cidade.pas',
   Entidade.Estado in 'Entitys\Entidade.Estado.pas',
@@ -59,7 +57,14 @@ uses
   Controller.Frame.Pesquisa.Entidade.Padrao in 'Controllers\Controller.Frame.Pesquisa.Entidade.Padrao.pas',
   Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao in 'Interfaces\Interfaces.Controller.Frame.Pesquisa.Entidade.Padrao.pas',
   Interfaces.Padrao.Observer in 'Interfaces\Interfaces.Padrao.Observer.pas',
-  Controller.Padrao.Observer in 'Controllers\Controller.Padrao.Observer.pas';
+  Controller.Padrao.Observer in 'Controllers\Controller.Padrao.Observer.pas',
+  View.Lista.Selecao.Entidade in 'Views\View.Lista.Selecao.Entidade.pas' {FrmListaSelecaoEntidade},
+  Controller.Lista.Selecao.Entidade in 'Controllers\Controller.Lista.Selecao.Entidade.pas',
+  Interfaces.Controller.Lista.Selecao.Entidade in 'Interfaces\Interfaces.Controller.Lista.Selecao.Entidade.pas',
+  Interfaces.Controller.Objeto.ConsultaCEP in 'Interfaces\Interfaces.Controller.Objeto.ConsultaCEP.pas',
+  Objeto.ConsultaCEP in 'Objects\Objeto.ConsultaCEP.pas',
+  Controller.Objeto.ConsultaCEP in 'Controllers\Controller.Objeto.ConsultaCEP.pas',
+  Interfaces.Objeto.ConsultaCEP in 'Interfaces\Interfaces.Objeto.ConsultaCEP.pas';
 
 {$R *.res}
 

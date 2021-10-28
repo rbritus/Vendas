@@ -17,10 +17,10 @@ type
 implementation
 
 uses
-  Connection.Scripter.SqLite, Entidade.Endereco, Entidade.Pessoa,
-  Entidade.Pais, Entidade.Estado, Entidade.Cidade, Entidade.Logradouro,
-  System.Threading, System.SysUtils, System.Classes, Scripts.Versao00,
-  Objeto.ScriptDML;
+  Connection.Scripter.SqLite, Entidade.Endereco, Entidade.Pessoa, Entidade.Pais,
+  Entidade.Estado, Entidade.Cidade, System.Threading, System.SysUtils,
+  System.Classes, Scripts.Versao00, Objeto.ScriptDML;
+
 
 { TScriptSQL }
 
@@ -46,7 +46,6 @@ begin
   TScriptSQL.RegistrarEntidadeNoBanco(TPais);
   TScriptSQL.RegistrarEntidadeNoBanco(TEstado);
   TScriptSQL.RegistrarEntidadeNoBanco(TCidade);
-  TScriptSQL.RegistrarEntidadeNoBanco(TLogradouro);
   TScriptSQL.RegistrarEntidadeNoBanco(TEndereco);
   TScriptSQL.RegistrarEntidadeNoBanco(TPessoa);
 end;

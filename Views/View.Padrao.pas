@@ -5,12 +5,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Controller.View,
-  System.Actions, Vcl.ActnList;
+  System.Actions, Vcl.ActnList, Vcl.BaseImageCollection, Vcl.ImageCollection,
+  System.ImageList, Vcl.ImgList, Vcl.VirtualImageList;
 
 type
   TFrmPadrao = class(TForm)
     pnlFundo: TPanel;
     pnlConteudo: TPanel;
+    imgListaBotoes: TImageList;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);

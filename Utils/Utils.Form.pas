@@ -4,102 +4,127 @@ interface
 
 uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades, System.SysUtils,
-  Vcl.Forms, Attributes.Forms;
+  Vcl.Forms, Attributes.Forms, Attributes.Enumerators, Vcl.StdCtrls;
 
 type
   TUtilsForm = class
   public
-    class function ObterObjetoDeCadastroDoForm(pForm: TForm): TObject;
-    class function ObterClasseDoFormularioCadastro(pForm: TForm): TFormClass;
-    class procedure PreencherEntidadeComCamposDoForm(var pEntidade: TObject;pForm: TForm);
-    class procedure PreencherFormComCamposDaEntidade(var pEntidade: TObject;pForm: TForm);
-    class function ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TClass; static;
-    class procedure LimparCamposDoForm(pForm: TForm);
+    class function ObterObjetoDeCadastroDoForm(AForm: TForm): TObject;
+    class function ObterClasseDoObjetoDeCadastroDoForm(AForm: TForm): TClass; static;
+    class function ObterClasseDoFormularioCadastro(AForm: TForm): TFormClass;
+    class procedure PreencherEntidadeComCamposDoForm(var AEntidade: TObject;AForm: TForm);
+    class procedure PreencherFormComCamposDaEntidade(var AEntidade: TObject;AForm: TForm);
+    class procedure LimparCamposDoForm(AForm: TForm);
+    class procedure DestruirEntidadesEstrangeiras(AForm: TForm);
+    class procedure CarregarComboBoxComEnumerators(var AEntidade: TObject;AForm: TForm);
   end;
 
 implementation
 
 uses
   Interfaces.Wrapper.PropriedadeCadastro, Wrapper.PropriedadeCadastro,
-  Utils.Entidade;
+  Utils.Entidade, Utils.Enumerators;
 
 { TUtilsForm }
 
-class procedure TUtilsForm.PreencherEntidadeComCamposDoForm(var pEntidade: TObject;
-  pForm: TForm);
+class procedure TUtilsForm.PreencherEntidadeComCamposDoForm(var AEntidade: TObject;
+  AForm: TForm);
 begin
-  var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
-  Wrapper.PreencherObjetoDoForm(pEntidade);
-//  var Ctx := TRttiContext.Create;
-//  try
-//    var Tipo := Ctx.GetType(pForm.ClassType);
-//    if not Assigned(Tipo) then
-//      Exit;
-//
-//    for var FField in Tipo.GetFields do
-//    begin
-//      for var Atrib in FField.GetAttributes do
-//      begin
-//        if Atrib is TPropriedadeCadastro then
-//        begin
-//          var Valor := Wrapper.ObtemValorComponenteForm(FField.GetValue(pForm), TPropriedadeCadastro(Atrib), TPropriedadeCadastro(Atrib).TipoPropriedade);
-//
-//          TUtilsEntidade.SetarValorParaPropriedade(pEntidade, TPropriedadeCadastro(Atrib).NomePropriedade, Valor);
-//        end;
-//      end;
-//    end;
-//  finally
-//    Ctx.Free;
-//  end;
+  var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
+  Wrapper.PreencherEntidadeDeCadastroComDadosDoForm(AEntidade);
 end;
 
-class procedure TUtilsForm.PreencherFormComCamposDaEntidade(var pEntidade: TObject;
-  pForm: TForm);
+class procedure TUtilsForm.PreencherFormComCamposDaEntidade(var AEntidade: TObject;
+  AForm: TForm);
 begin
-  var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
-  Wrapper.PreencherFormComEntidade(pEntidade);
-//  var Ctx := TRttiContext.Create;
-//  try
-//    var Tipo := Ctx.GetType(pForm.ClassType);
-//    if not Assigned(Tipo) then
-//      Exit;
-//
-//    for var FField in Tipo.GetFields do
-//    begin
-//      for var Atrib in FField.GetAttributes do
-//      begin
-//        if Atrib is TPropriedadeCadastro then
-//        begin
-//          var ValorPropriedade: TValue := TValue.From(TUtilsEntidade.ObterValorPropriedade(pEntidade,TPropriedadeCadastro(Atrib).NomePropriedade));
-//          var Valor := Wrapper.ObtemValorEntidadeForm(ValorPropriedade, TPropriedadeCadastro(Atrib), TPropriedadeCadastro(Atrib).TipoPropriedade);
-//          var Componente := pForm.FindComponent(FField.Name);
-//          if Assigned(Componente) then
-//            Wrapper.SetarValorParaComponenteForm(Valor, TPropriedadeCadastro(Atrib), Componente);
-//
-//          if Assigned(Componente) then
-//            Wrapper.SetarValorParaComponenteForm(Valor, TPropriedadeCadastro(Atrib), Componente);
-//        end;
-//      end;
-//    end;
-//  finally
-//    Ctx.Free;
-//  end;
+  var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
+  Wrapper.PreencherFormComEntidade(AEntidade);
 end;
 
-{ TUtilsForm }
-
-class procedure TUtilsForm.LimparCamposDoForm(pForm: TForm);
+class procedure TUtilsForm.CarregarComboBoxComEnumerators(
+  var AEntidade: TObject; AForm: TForm);
+var
+  CustomAttribute: TCustomAttribute;
 begin
-  var Wrapper := TWrapperPropriedadeCadastro.New(pForm);
+  var CtxForm := TRttiContext.Create;
+  try
+    var Tipo := CtxForm.GetType(AForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    for var FieldForm in Tipo.GetDeclaredFields do
+    begin
+      for var AtribForm in FieldForm.GetAttributes do
+      begin
+        if AtribForm is TCadastroComboBox then
+        begin
+          if TCadastroComboBox(AtribForm).TipoPropriedade = ftENUMERATOR then
+          begin
+              var ctx := TRttiContext.Create;
+              try
+                var lType := ctx.GetType(AEntidade.ClassType);
+                var prop := lType.GetProperty(TCadastroComboBox(AtribForm).NomePropriedade);
+                if prop.PropertyType.TypeKind = tkEnumeration then
+                begin
+                  var AComponente := AForm.FindComponent(FieldForm.Name);
+                  for CustomAttribute in Prop.PropertyType.GetAttributes do
+                  begin
+                    if CustomAttribute is TEnumAttribute then
+                      TComboBox(AComponente).Items.Add(TEnumAttribute(CustomAttribute).Caption);
+                  end;
+                end;
+              finally
+                ctx.Free;
+              end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    CtxForm.Free;
+  end;
+end;
+
+class procedure TUtilsForm.DestruirEntidadesEstrangeiras(AForm: TForm);
+begin
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(AForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    for var Field in Tipo.GetDeclaredFields do
+    begin
+      for var Atrib in Field.GetAttributes do
+      begin
+        if Atrib is TCadastroVariavel then
+        begin
+          if TAtributoBanco(Atrib).tipo = ftESTRANGEIRO then
+          begin
+            var Obj := Field.GetValue(AForm).AsObject;
+            if Assigned(Obj) then
+              Obj.Free;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
+class procedure TUtilsForm.LimparCamposDoForm(AForm: TForm);
+begin
+  var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
   Wrapper.InicializarCamposEditaveisDoForm;
 end;
 
-class function TUtilsForm.ObterClasseDoFormularioCadastro(pForm: TForm): TFormClass;
+class function TUtilsForm.ObterClasseDoFormularioCadastro(AForm: TForm): TFormClass;
 begin
   var ClasseForm: TFormClass := nil;
   var Ctx := TRttiContext.Create;
   try
-    var Tipo := Ctx.GetType(pForm.ClassType);
+    var Tipo := Ctx.GetType(AForm.ClassType);
     if not Assigned(Tipo) then
       Exit(nil);
 
@@ -117,12 +142,12 @@ begin
   Result := ClasseForm;
 end;
 
-class function TUtilsForm.ObterObjetoDeCadastroDoForm(pForm: TForm): TObject;
+class function TUtilsForm.ObterObjetoDeCadastroDoForm(AForm: TForm): TObject;
 begin
   var Entidade: TObject := nil;
   var Ctx := TRttiContext.Create;
   try
-    var Tipo := Ctx.GetType(pForm.ClassType);
+    var Tipo := Ctx.GetType(AForm.ClassType);
     if not Assigned(Tipo) then
       Exit(nil);
 
@@ -140,12 +165,12 @@ begin
   Result := Entidade;
 end;
 
-class function TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(pForm: TForm): TClass;
+class function TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(AForm: TForm): TClass;
 begin
   var Classe: TClass := nil;
   var Ctx := TRttiContext.Create;
   try
-    var Tipo := Ctx.GetType(pForm.ClassType);
+    var Tipo := Ctx.GetType(AForm.ClassType);
     if not Assigned(Tipo) then
       Exit(nil);
 

@@ -9,8 +9,8 @@ type
 
   iWrapperPropriedadeCadastro = interface
     ['{0BC5CF11-31D7-4B3A-B124-65C8A9225D2E}']
-    procedure PreencherObjetoDoForm(var pEntidade: TObject);
-    procedure PreencherFormComEntidade(pEntidade: TObject);
+    procedure PreencherEntidadeDeCadastroComDadosDoForm(var AEntidade: TObject);
+    procedure PreencherFormComEntidade(AEntidade: TObject);
     procedure InicializarCamposEditaveisDoForm;
   end;
 

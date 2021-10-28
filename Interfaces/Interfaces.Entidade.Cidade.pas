@@ -3,7 +3,7 @@ unit Interfaces.Entidade.Cidade;
 interface
 
 uses
-   System.Classes, Interfaces.Entidade.Estado;
+   System.Classes, Entidade.Estado;
 
 type
 
@@ -14,19 +14,19 @@ type
     procedure SetCodigoIBGE(const Value: Integer);
     procedure SetCodigoMunicipio(const Value: string);
     procedure SetCodigoDistrito(const Value: string);
-    procedure SetEstado(const Value: iEstado);
+    procedure SetEstado(const Value: TEstado);
     function GetId: Integer;
     function GetNome: string;
     function GetCodigoIBGE: Integer;
     function GetCodigoMunicipio: string;
     function GetCodigoDistrito: string;
-    function GetEstado: iEstado;
+    function GetEstado: TEstado;
     property Id: Integer read GetId write SetId;
     property Nome: string read GetNome write SetNome;
     property CodigoIBGE: Integer read GetCodigoIBGE write SetCodigoIBGE;
     property CodigoMunicipio: string read GetCodigoMunicipio write SetCodigoMunicipio;
     property CodigoDistrito: string read GetCodigoDistrito write SetCodigoDistrito;
-    property Estado: iEstado read GetEstado write SetEstado;
+    property Estado: TEstado read GetEstado write SetEstado;
   end;
 
 implementation

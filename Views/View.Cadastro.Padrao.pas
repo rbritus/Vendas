@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls,
-  Controller.Cadastro.Padrao, Attributes.Forms, Utils.Enumerators;
+  Controller.Cadastro.Padrao, Attributes.Forms, Utils.Enumerators,
+  System.ImageList, Vcl.ImgList;
 
 type
   TFrmCadastroPadrao = class(TFrmPadrao)
@@ -21,6 +22,7 @@ type
     procedure SpeedButton5MouseLeave(Sender: TObject);
     procedure SpeedButton6Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -29,6 +31,7 @@ type
     procedure InicializarID;
     procedure CarregarLayoutDinamico;
     procedure LimparCampos;
+    procedure PrepararComboBoxComEnumerators;
   protected
     [TCadastroVariavel('ID',ftINTEIRO,coNaoObrigatorio)]
     FID: Integer;
@@ -59,10 +62,17 @@ begin
   pnlBarraLateralBotao.Visible := False;
 end;
 
+procedure TFrmCadastroPadrao.PrepararComboBoxComEnumerators;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.CarregarComboBoxComEnumerators;
+end;
+
 procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
   FID := pId;
   LimparCampos;
+  PrepararComboBoxComEnumerators;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarEntidadeParaEdicao(pId);
 end;
@@ -71,6 +81,7 @@ procedure TFrmCadastroPadrao.CarregarFormParaCadastro;
 begin
   InicializarID;
   LimparCampos;
+  PrepararComboBoxComEnumerators;
 end;
 
 procedure TFrmCadastroPadrao.InicializarID;
@@ -88,6 +99,14 @@ procedure TFrmCadastroPadrao.CarregarLayoutDinamico;
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarLayoutDeCamposEditaveis;
+end;
+
+procedure TFrmCadastroPadrao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.DestruirEntidadesPosCadastro;
 end;
 
 procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);

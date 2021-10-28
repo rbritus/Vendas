@@ -3,7 +3,7 @@ unit Interfaces.Entidade.Estado;
 interface
 
 uses
-   System.Classes, Interfaces.Entidade.Pais;
+   System.Classes, Entidade.Pais;
 
 type
 
@@ -13,17 +13,17 @@ type
     procedure SetNome(const Value: string);
     procedure SetAbreviacao(const Value: string);
     procedure SetCodigoUF(const Value: Integer);
-    procedure SetPais(const Value: iPais);
+    procedure SetPais(const Value: TPais);
     function GetId: Integer;
     function GetNome: string;
     function GetAbreviacao: string;
     function GetCodigoUF: Integer;
-    function GetPais: iPais;
+    function GetPais: TPais;
     property Id: Integer read GetId write SetId;
     property Nome: string read GetNome write SetNome;
     property Abreviacao: string read GetAbreviacao write SetAbreviacao;
     property CodigoUF: Integer read GetCodigoUF write SetCodigoUF;
-    property Pais: iPais read GetPais write SetPais;
+    property Pais: TPais read GetPais write SetPais;
   end;
 
 implementation

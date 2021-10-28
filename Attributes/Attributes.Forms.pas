@@ -64,6 +64,11 @@ type
     constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
   end;
 
+  TCadastroComboBox = class(TPropriedadeCadastro)
+  public
+    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+  end;
+
 implementation
 
 { TNomeTabela }
@@ -122,6 +127,16 @@ end;
 constructor TClassePesquisa.Create(const ClassValue: TPersistentClass);
 begin
   FClasse := ClassValue;
+end;
+
+{ TCadastroComboBox }
+
+constructor TCadastroComboBox.Create(pNomePropriedade: string;
+  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+begin
+  FNomePropriedade := pNomePropriedade;
+  FTipoPropriedade := pTipoPropriedade;
+  FCampoObrigatorio := pCampoObrigatorio;
 end;
 
 end.

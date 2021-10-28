@@ -24,6 +24,8 @@ type
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
+    procedure DestruirEntidadesPosCadastro;
+    procedure CarregarComboBoxComEnumerators;
 
     class function New(pForm: TForm): iControllerCadastroPadrao;
   end;
@@ -38,6 +40,13 @@ uses
 procedure TControllerCadastroPadrao.PreencherFormComCamposDaEntidade;
 begin
   TUtilsForm.PreencherFormComCamposDaEntidade(FEntidade, FForm);
+end;
+
+procedure TControllerCadastroPadrao.CarregarComboBoxComEnumerators;
+begin
+  ObterObjeto;
+  TUtilsForm.CarregarComboBoxComEnumerators(FEntidade, FForm);
+  DestruirEntidade;
 end;
 
 procedure TControllerCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
@@ -55,7 +64,7 @@ end;
 
 procedure TControllerCadastroPadrao.CarregarLayoutDeCamposEditaveis;
 begin
-  for var Indice := 0 to FForm.ComponentCount do
+  for var Indice := 0 to Pred(FForm.ComponentCount) do
     if FForm.Components[Indice].ClassType = TEdit then
     begin
       ModificarLayoutEdit(FForm.Components[Indice] as TEdit);
@@ -76,6 +85,11 @@ end;
 procedure TControllerCadastroPadrao.DestruirEntidade;
 begin
   FEntidade.Free;
+end;
+
+procedure TControllerCadastroPadrao.DestruirEntidadesPosCadastro;
+begin
+  TUtilsForm.DestruirEntidadesEstrangeiras(FForm);
 end;
 
 procedure TControllerCadastroPadrao.GravarEntidade;

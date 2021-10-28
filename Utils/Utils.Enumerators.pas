@@ -4,7 +4,7 @@ interface
 
 uses
   Attributes.Enumerators, System.Rtti, System.Math, System.TypInfo, System.SysUtils,
-  System.Variants;
+  System.Variants, System.Classes, Vcl.StdCtrls;
 
 type
   TEnumerator<T:record> = class
@@ -20,10 +20,14 @@ type
     class function GetCaption(const Indice: Integer): string;
     class function GetCustomSelect(const FieldName: string): string;
     class function GetNameCustoField(const FieldName: string): string;
+    class procedure PopulateList(AList: TCustomCombo);
   end;
 
-  TEnumGenerics = record
-  end;
+//  TEnumGenerics = record
+//  end;
+
+  PEnumGenerics = ^TEnumGenerics;
+  TEnumGenerics = packed record end;
 
   [TEnumAttribute(0,'Inteiro',0)]
   [TEnumAttribute(1,'Texto',1)]
@@ -33,19 +37,18 @@ type
   [TEnumAttribute(5,'Listagem',5)]
   [TEnumAttribute(6,'Lógico',6)]
   [TEnumAttribute(7,'Blob',7)]
-  [TEnumAttribute(8,'Custom property',8)]
+  [TEnumAttribute(8,'Enumerator',8)]
   TTiposDeCampo = (ftINTEIRO, ftTEXTO, ftDECIMAL, ftDATA, ftESTRANGEIRO,
-    ftLISTAGEM, ftLOGICO, ftBLOBT, ftCUSTOMPROPERTY);
+    ftLISTAGEM, ftLOGICO, ftBLOBT, ftENUMERATOR);
 
   [TEnumAttribute(0,'Obrigatório','S')]
   [TEnumAttribute(1,'Não obrigatório','N')]
   TCampoObrigatorio = (coObrigatorio, coNaoObrigatorio);
 
-  [TEnumAttribute(0,'Principal',0)]
-  [TEnumAttribute(1,'Residêncial',1)]
-  [TEnumAttribute(2,'Comercial',2)]
-  [TEnumAttribute(3,'Entrega',3)]
-  TTipoEndereco = (tePrincipal, teResidencial, teComercial, teEntrega);
+  [TEnumAttribute(0,'Residêncial',0)]
+  [TEnumAttribute(1,'Comercial',1)]
+  [TEnumAttribute(2,'Entrega',2)]
+  TTipoEndereco = (teResidencial, teComercial, teEntrega);
 
   [TEnumAttribute(0,'Ativo','S')]
   [TEnumAttribute(1,'Inativo','N')]
@@ -178,6 +181,24 @@ begin
     tkChar, tkString, tkWChar, tkLString, tkWString, tkUString: Result := Value.AsString;
   else
     Result := Value.AsVariant;
+  end;
+end;
+
+class procedure TEnumerator<T>.PopulateList(AList: TCustomCombo);
+var
+  CustomAttribute: TCustomAttribute;
+begin
+  var ctx := TRttiContext.Create;
+  var rType := ctx.GetType(Self.EnumTypeInfo);
+
+  if not Assigned(rType) then
+    Exit;
+
+  AList.Items.Clear;
+  for CustomAttribute in rType.GetAttributes do
+  begin
+    if CustomAttribute is TEnumAttribute then
+      AList.Items.Add(TEnumAttribute(CustomAttribute).Caption);
   end;
 end;
 

@@ -67,8 +67,8 @@ implementation
 
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
-  Connection.Scripter.SqLite, Entidade.Pessoa, Entidade.Endereco,
-  FireDAC.Comp.Client, View.Cadastro.Pessoa;
+  Connection.Scripter.SqLite, FireDAC.Comp.Client, View.Cadastro.Endereco,
+  Utils.Entidade;
 
 procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
 begin
@@ -106,8 +106,15 @@ begin
 //  var ctext := qry.FieldByName('result_id').AsString;
 //
 //exit;
-//  ControllerView.ShowForm(TFrmCadastroPessoa);
+
+
+//  var Form : TForm := nil;
+//  ControllerView.AdicionarFormNalista(TFrmCadastroEndereco, Form);
+//  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[9]);
+//  ControllerView.ShowForm(TFrmCadastroEndereco);
+
   ControllerView.ShowForm(TFrmCadastroListaPessoa);
+
 //  var Pessoa := TPessoa.PesquisarPorId(37);
 //  try
 //    Pessoa.Enderecos;
@@ -121,7 +128,7 @@ begin
 //
 //  var Endereco := TEndereco.Create;
 //  Endereco.CEP := '87053268';
-//  Endereco.Endereco := 'Teste 02';
+//  Endereco.Logradouro := 'Teste 02';
 //  Endereco.Numero := 275;
 //  Endereco.Bairro := 'Zona2';
 //  Pessoa.Enderecos.Add(Endereco);

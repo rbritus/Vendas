@@ -8,13 +8,13 @@ uses
   Frame.Adicao.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Entidade.Endereco,
   Attributes.Forms, Vcl.Imaging.pngimage, Vcl.DBCGrids, System.ImageList,
   Vcl.ImgList, Vcl.StdCtrls, Vcl.DBCtrls, Componente.TObjectList, Data.DB,
-  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade;
+  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade, View.Cadastro.Endereco;
 
 type
+  [TFormularioCadastro(TFrmCadastroEndereco)]
   [TClasseCadastro(TEndereco)]
   TFrameAdicaoEndereco = class(TFrameAdicaoPadrao)
     edtTipoEndereco: TDBText;
-    edtLogradouro: TDBText;
     edtCEP: TDBText;
     edtEndereco: TDBText;
     edtNumero: TDBText;
@@ -52,7 +52,7 @@ begin
     TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj as TPersistent);
     TUtilsClientDataSet.CreateField(cdsDados,'ESTADO',ftString,2);
     TUtilsClientDataSet.CreateField(cdsDados,'CIDADE',ftString,200);
-    TUtilsClientDataSet.CreateField(cdsDados,'LOGRADOURO',ftString,20);
+//    TUtilsClientDataSet.CreateField(cdsDados,'LOGRADOURO',ftString,20);
     TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj as TPersistent);
   finally
     Obj.Free
@@ -73,11 +73,9 @@ function TFrameAdicaoEndereco.ObterSqlParaDatSet: string;
 begin
   var cSql := 'SELECT ' +
   'ENDERECO.*, '+
-  'LOGRADOURO.ABREVIACAO LOGRADOURO, '+
   'CIDADE.NOME CIDADE,	ESTADO.ABREVIACAO ESTADO, '+
   TCustomSelectTipoEndereco.getSelectCustom('TIPO_ENDERECO') +
   ' FROM ENDERECO '+
-  'INNER JOIN LOGRADOURO ON (LOGRADOURO.ID = ENDERECO.LOGRADOURO_FK) '+
   'INNER JOIN CIDADE ON (CIDADE.ID = ENDERECO.CIDADE_FK) '+
   'INNER JOIN ESTADO ON (ESTADO.ID = CIDADE.ESTADO_FK) ';
   Result := cSql + Self.ObterSqlDeTabelaRelacional;
@@ -95,7 +93,7 @@ begin
   TUtilsClientDataSet.PreencherDataSet(cdsDados,TPersistent(Endereco));
   cdsDados.FieldByName('ESTADO').AsString := Endereco.Cidade.Estado.Abreviacao;
   cdsDados.FieldByName('CIDADE').AsString := Endereco.Cidade.Nome;
-  cdsDados.FieldByName('LOGRADOURO').AsString := Endereco.Logradouro.Abreviacao;
+//  cdsDados.FieldByName('LOGRADOURO').AsString := Endereco.Logradouro.Abreviacao;
   cdsDados.Post;
 end;
 

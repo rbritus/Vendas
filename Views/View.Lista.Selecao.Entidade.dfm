@@ -1,19 +1,33 @@
-inherited FrmCadastroPadrao: TFrmCadastroPadrao
-  Caption = 'FrmCadastroPadrao'
+inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
+  Caption = 'FrmListaSelecaoEntidade'
+  ClientHeight = 400
+  Constraints.MaxHeight = 400
   Constraints.MaxWidth = 840
-  Constraints.MinWidth = 840
-  WindowState = wsNormal
+  Position = poDesigned
   OnClose = FormClose
-  OnCreate = FormCreate
+  ExplicitHeight = 400
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
+    Height = 400
+    ExplicitHeight = 407
     inherited pnlConteudo: TPanel
-      Top = 35
-      Height = 605
-      Margins.Top = 0
-      ExplicitTop = 35
-      ExplicitHeight = 605
+      Top = 38
+      Height = 362
+      ExplicitHeight = 404
+      object grdLista: TDBGrid
+        Left = 0
+        Top = 3
+        Width = 840
+        Height = 359
+        Align = alClient
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+      end
     end
     object pnlMenu: TPanel
       Left = 0
@@ -25,6 +39,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
+      ExplicitTop = 8
       object SpeedButton5: TSpeedButton
         AlignWithMargins = True
         Left = 40
@@ -48,8 +63,6 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         ParentFont = False
         Spacing = 10
         OnClick = SpeedButton5Click
-        OnMouseEnter = SpeedButton5MouseEnter
-        OnMouseLeave = SpeedButton5MouseLeave
       end
       object SpeedButton6: TSpeedButton
         AlignWithMargins = True
@@ -74,8 +87,6 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         ParentFont = False
         Spacing = 10
         OnClick = SpeedButton6Click
-        OnMouseEnter = SpeedButton6MouseEnter
-        OnMouseLeave = SpeedButton6MouseLeave
       end
       object pnlBarraLateralBotao: TPanel
         Left = 0

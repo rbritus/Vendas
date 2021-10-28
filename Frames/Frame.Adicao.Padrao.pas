@@ -68,15 +68,6 @@ begin
   finally
     Lista.Free;
   end;
-
-//  var cSql := ObterSqlParaDatSet;
-//  var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-//  var cds := ControllerFrame.CarregarDataSet(cSql);
-//  try
-//    cdsDados.Data := TClientDataSet(cds).Data;
-//  finally
-//    FreeAndNil(cds);
-//  end;
 end;
 
 procedure TFrameAdicaoPadrao.Image1Click(Sender: TObject);

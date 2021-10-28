@@ -30,15 +30,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           DataField = 'TIPO_ENDERECO_CUSTOM'
           DataSource = dscDados
         end
-        object edtLogradouro: TDBText [1]
-          Left = 16
-          Top = 24
-          Width = 30
-          Height = 17
-          DataField = 'LOGRADOURO'
-          DataSource = dscDados
-        end
-        object edtCEP: TDBText [2]
+        object edtCEP: TDBText [1]
           Left = 110
           Top = 6
           Width = 90
@@ -46,15 +38,15 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           DataField = 'CEP'
           DataSource = dscDados
         end
-        object edtEndereco: TDBText [3]
-          Left = 52
+        object edtEndereco: TDBText [2]
+          Left = 16
           Top = 24
-          Width = 301
+          Width = 337
           Height = 17
-          DataField = 'ENDERECO'
+          DataField = 'LOGRADOURO'
           DataSource = dscDados
         end
-        object edtNumero: TDBText [4]
+        object edtNumero: TDBText [3]
           Left = 381
           Top = 24
           Width = 30
@@ -62,14 +54,14 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           DataField = 'NUMERO'
           DataSource = dscDados
         end
-        object lblNumero: TLabel [5]
+        object lblNumero: TLabel [4]
           Left = 359
           Top = 24
           Width = 16
           Height = 13
           Caption = 'N'#186'.'
         end
-        object edtCidade: TDBText [6]
+        object edtCidade: TDBText [5]
           Left = 432
           Top = 24
           Width = 200
@@ -78,7 +70,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           DataField = 'CIDADE'
           DataSource = dscDados
         end
-        object edtEstado: TDBText [7]
+        object edtEstado: TDBText [6]
           Left = 649
           Top = 24
           Width = 30
@@ -86,7 +78,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           DataField = 'ESTADO'
           DataSource = dscDados
         end
-        object lblTraco: TLabel [8]
+        object lblTraco: TLabel [7]
           Left = 637
           Top = 24
           Width = 5

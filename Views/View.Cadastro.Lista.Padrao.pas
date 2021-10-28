@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
   View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
-  Interfaces.Padrao.Observer;
+  Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
@@ -28,7 +28,7 @@ type
     FDataSource: TDataSource;
     procedure ApresentarDadosNaGrid;
     procedure CriarDataSource;
-    procedure ExecutarConsulta;
+    procedure ObterDataSetPreenchido;
     procedure AjustarColunasDaGride;
     procedure UpdateItem(Value : TObject);
   public
@@ -54,10 +54,10 @@ begin
   grdLista.DataSource := FDataSource;
 end;
 
-procedure TFrmCadastroListaPadrao.ExecutarConsulta;
+procedure TFrmCadastroListaPadrao.ObterDataSetPreenchido;
 begin
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
-  FClientDataSet := ControllerListaView.ObterDataSetComDadosParaGride as TClientDataSet;
+  FClientDataSet := TClientDataSet(ControllerListaView.ObterDataSetComDadosParaGride);
 end;
 
 procedure TFrmCadastroListaPadrao.AjustarColunasDaGride;
@@ -67,7 +67,7 @@ end;
 
 procedure TFrmCadastroListaPadrao.ApresentarDadosNaGrid;
 begin
-  ExecutarConsulta;
+  ObterDataSetPreenchido;
   CriarDataSource;
 end;
 

@@ -8,7 +8,8 @@ uses
   View.Cadastro.Padrao, Vcl.Buttons, Interfaces.Entidade.Pessoa, Vcl.ExtCtrls,
   Entidade.Pessoa, Attributes.Forms, Vcl.StdCtrls, Vcl.WinXCtrls,
   Utils.Enumerators, Frame.Padrao, Frame.Adicao.Padrao, Frame.Adicao.Endereco,
-  Entidade.Endereco, Componente.TObjectList;
+  Entidade.Endereco, Componente.TObjectList, Frame.Pesquisa.Entidade.Padrao,
+  System.ImageList, Vcl.ImgList;
 
 type
   [TClasseCadastro(TPessoa)]

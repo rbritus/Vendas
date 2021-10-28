@@ -66,7 +66,7 @@ begin
   var FClientDataSet: TDataSet;
   var Entidade := TUtilsForm.ObterObjetoDeCadastroDoForm(FForm);
   try
-    FClientDataSet := TUtilsEntidade.ExecutarMetodoClasse(GetClass(Entidade.ClassName),'ListarTodosCDS',[]).AsType<TClientDataSet>;
+    FClientDataSet := TDataSet(TUtilsEntidade.ExecutarMetodoClasse(GetClass(Entidade.ClassName),'ListarTodosCDS',[]).AsObject);
   finally
     FreeAndNil(Entidade);
   end;

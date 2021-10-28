@@ -143,27 +143,11 @@ end;
 Function TConexao.EnviaConsulta(Consulta: String): TDataSet;
 Begin
   var MyDataSet := ObterQuery;
-  var dsp := TDataSetProvider.Create(Self.Owner);
-  var cds := TClientDataSet.Create(Self.Owner);
+  var cds := TFDMemTable.Create(Self.Owner);
   try
-    MyDataSet.SQL.Add(Consulta);
-    dsp.Name := 'dspTConexao';
-    dsp.DataSet := MyDataSet;
-    try
-      cds.SetProvider(dsp);
-      cds.Open;
-    except
-      on E: Exception do
-      begin
-        MyDataSet.Free;
-      end;
-    end;
-    MyDataSet.Close;
-    cds.SetProvider(nil);
-    cds.ProviderName := EmptyStr;
-    cds.LogChanges := False;
+    MyDataSet.Open(Consulta);
+    cds.CopyDataSet(MyDataSet.Fields.DataSet, [coStructure, coRestart, coAppend]);
   finally
-    FreeAndNil(dsp);
     FreeAndNil(MyDataSet);
   end;
   Result := cds;

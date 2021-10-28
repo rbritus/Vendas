@@ -5,7 +5,6 @@ interface
 uses
   Interfaces.Padrao.Observer, System.Generics.Collections, System.SysUtils,
   vcl.Forms;
-
 type
   TControllerPadraoObserver = class(TInterfacedObject, iObservavel)
     private
