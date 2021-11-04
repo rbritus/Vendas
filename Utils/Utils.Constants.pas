@@ -8,13 +8,15 @@ uses
 type
   TConstantsString = class
   public
-   Const REGISTROATIVO = 'S';
-   Const REGISTROINATIVO = 'N';
+   const REGISTROATIVO = 'S';
+   const REGISTROINATIVO = 'N';
   end;
 
   TConstantsInteger = class
   public
-   Const ZERO = 0;
+   const ZERO = 0;
+   const LARGURA_MENU_MAXIMIZADO = 200;
+   const LARGURA_MENU_MINIMIZADO = 58;
   end;
 
 implementation

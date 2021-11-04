@@ -59,7 +59,9 @@ end;
 
 class procedure TControllerScript.ExecutarAcoesNoBancoDeDados;
 begin
-  TUtilsMenssages.ShowWaitMessage('Atualizando o banco de dados...', ExecutarScripts);
+  TUtilsMenssages.ShowWaitMessage('Atualizando o banco de dados...');
+  ExecutarScripts;
+  TUtilsMenssages.CloseWaitMessage;
 end;
 
 class procedure TControllerScript.RegistrarEntidadesNoBanco;

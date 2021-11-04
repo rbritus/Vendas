@@ -6,33 +6,39 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids, Controller.Lista.Selecao.Entidade, Datasnap.DBClient;
+  Vcl.DBGrids, Controller.Lista.Selecao.Entidade, Datasnap.DBClient,
+  System.ImageList, Vcl.ImgList, Vcl.StdCtrls;
 
 type
   TFrmListaSelecaoEntidade = class(TFrmPadrao)
     grdLista: TDBGrid;
     pnlMenu: TPanel;
-    SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    btnConfirmar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
-    procedure SpeedButton6Click(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure SpeedButton5Click(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnConfirmarMouseEnter(Sender: TObject);
+    procedure btnConfirmarMouseLeave(Sender: TObject);
+    procedure btnCancelarMouseLeave(Sender: TObject);
+    procedure btnCancelarMouseEnter(Sender: TObject);
   private
     { Private declarations }
     FClasseEntidade: TClass;
-    FObject: TObject;
     FClientDataSet : TClientDataSet;
     FDataSource: TDataSource;
     procedure ApresentarDadosNaGrid;
     procedure ObterDataSetPreenchido;
     procedure CriarDataSource;
     procedure AjustarColunasDaGride;
+    procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
+    procedure OcultarBarraLateralDoBotao;
+    procedure InformarObservador(AObjeto: TObject);
   public
     { Public declarations }
-    function ObterObjeto: TObject;
     procedure InformarClasseDaEntidade(ClasseEntidade: TClass);
   end;
 
@@ -46,22 +52,51 @@ uses
 
 {$R *.dfm}
 
-function TFrmListaSelecaoEntidade.ObterObjeto: TObject;
-begin
-  Result := FObject;
-end;
-
-procedure TFrmListaSelecaoEntidade.SpeedButton5Click(Sender: TObject);
+procedure TFrmListaSelecaoEntidade.btnCancelarClick(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TFrmListaSelecaoEntidade.SpeedButton6Click(Sender: TObject);
+procedure TFrmListaSelecaoEntidade.btnCancelarMouseEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmListaSelecaoEntidade.btnCancelarMouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
+procedure TFrmListaSelecaoEntidade.InformarObservador(AObjeto: TObject);
+begin
+  if not Assigned(Self.FObservador) then
+    Exit;
+
+  Self.FObservador.UpdateItem(AObjeto);
+  Self.FObservador := nil;
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarClick(Sender: TObject);
 begin
   var Controller := TControllerListaSelecaoEntidade.New(FClasseEntidade);
   var ID := FClientDataSet.FieldByName('ID').AsInteger;
-  FObject := Controller.ObterObjetoSelecionado(ID);
+  var Obj := Controller.ObterObjetoSelecionado(ID);
+  InformarObservador(Obj);
   Close;
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarMouseEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarMouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmListaSelecaoEntidade.ApresentarDadosNaGrid;
@@ -116,6 +151,17 @@ end;
 procedure TFrmListaSelecaoEntidade.AjustarColunasDaGride;
 begin
   TUtilsDBGrid.DimensionarGrid(grdLista);
+end;
+
+procedure TFrmListaSelecaoEntidade.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
+begin
+  pnlBarraLateralBotao.Visible := True;
+  pnlBarraLateralBotao.left := Botao.left;
+end;
+
+procedure TFrmListaSelecaoEntidade.OcultarBarraLateralDoBotao;
+begin
+  pnlBarraLateralBotao.Visible := False;
 end;
 
 

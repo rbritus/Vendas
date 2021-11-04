@@ -8,7 +8,8 @@ uses
   Frame.Adicao.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Entidade.Endereco,
   Attributes.Forms, Vcl.Imaging.pngimage, Vcl.DBCGrids, System.ImageList,
   Vcl.ImgList, Vcl.StdCtrls, Vcl.DBCtrls, Componente.TObjectList, Data.DB,
-  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade, View.Cadastro.Endereco;
+  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade, View.Cadastro.Endereco,
+  dxGDIPlusClasses;
 
 type
   [TFormularioCadastro(TFrmCadastroEndereco)]
@@ -22,6 +23,7 @@ type
     edtCidade: TDBText;
     edtEstado: TDBText;
     lblTraco: TLabel;
+    lblCEP: TLabel;
   protected
     function ObterSqlParaDatSet: string; override;
     procedure CriarDataSet; override;
@@ -53,7 +55,6 @@ begin
     TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj as TPersistent);
     TUtilsClientDataSet.CreateField(cdsDados,'ESTADO',ftString,2);
     TUtilsClientDataSet.CreateField(cdsDados,'CIDADE',ftString,200);
-//    TUtilsClientDataSet.CreateField(cdsDados,'LOGRADOURO',ftString,20);
     TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj as TPersistent);
   finally
     Obj.Free
@@ -94,7 +95,6 @@ begin
   TUtilsClientDataSet.PreencherDataSet(cdsDados,TPersistent(Endereco));
   cdsDados.FieldByName('ESTADO').AsString := Endereco.Cidade.Estado.Abreviacao;
   cdsDados.FieldByName('CIDADE').AsString := Endereco.Cidade.Nome;
-//  cdsDados.FieldByName('LOGRADOURO').AsString := Endereco.Logradouro.Abreviacao;
   cdsDados.Post;
 end;
 

@@ -517,11 +517,15 @@ begin
 end;
 
 function TServico<T>.ObterSqlCustomizada: string;
-var
-  Objeto: T;
+//var
+//  Objeto: T;
+const
+  JOIN_SCRIPT = ' inner join %s on (%s.ID = %s) ';
 begin
   var Sql := EmptyStr;
+  var Join := EmptyStr;
   var Ctx := TRttiContext.Create;
+  var Tabela := TUtilsEntidade.ObterNomeDaTabela(FindClass(T.ClassName));
   try
     var Tipo := Ctx.GetType(TypeInfo(T));
     if not Assigned(Tipo) then
@@ -540,23 +544,31 @@ begin
         if not Sql.IsEmpty then
           Sql := Sql + ', ';
 
-        Sql := Sql + TAtributoBanco(Atrib).nome;
+        Sql := Sql + Tabela+'.'+TAtributoBanco(Atrib).nome;
 
-        if  Assigned(TAtributoBanco(Atrib).CustomSelect) then
+        if Atrib is TCampoEstrangeiro then
+        begin
+          var TabelaJoin := TCampoEstrangeiro(Atrib).caption;
+          var Relacao := Tabela + '.' + TAtributoBanco(Atrib).nome;
+
+          Sql := Sql + ', ';
+          Sql := Sql + TabelaJoin + '.' + TCampoEstrangeiro(Atrib).CampoDescricaoConsulta + ' as ' + TabelaJoin;
+
+          join := join + sLineBreak + Format(JOIN_SCRIPT,
+            [TabelaJoin,TabelaJoin,Relacao]);
+
+        end;
+
+        if Assigned(TAtributoBanco(Atrib).CustomSelect) then
         begin
           if not Sql.IsEmpty then
             Sql := Sql + ', ';
 
-          Sql := Sql +  TAtributoBanco(Atrib).CustomSelect.getSelectCustom(TAtributoBanco(Atrib).nome)//TUtilsEntidade.ExecutarMetodoClasse(TAtributoBanco(Atrib).CustomSelect, 'getSelectCustom',[TAtributoBanco(Atrib).nome,TAtributoBanco(Atrib).caption]).AsString;
+          Sql := Sql +  TAtributoBanco(Atrib).CustomSelect.getSelectCustom(TAtributoBanco(Atrib).nome);
         end;
       end;
     end;
-    Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
-    try
-      Sql := 'select ' + Sql + ' from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto);
-    finally
-      Objeto.Free;
-    end;
+    Sql := 'select ' + Sql + ' from ' + Tabela + join;
   finally
     Ctx.Free;
   end;
@@ -583,13 +595,7 @@ var
   Objeto: T;
 begin
   ListObj := TObjectListFuck<T>.Create;
-  Objeto := TUtilsEntidade.ObterObjetoGenerico<T>();
-
-  try
-    DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto));
-  finally
-    FreeAndNil(Objeto);
-  end;
+  DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(FindClass(T.ClassName)));
 
   DSet.First;
   while not DSet.Eof do
@@ -612,12 +618,7 @@ var
   ListObj: TObjectListFuck<T>;
 begin
   ListObj := TObjectListFuck<T>.Create;
-  var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
-  try
-    DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + cSql);
-  finally
-    Objeto.Free;
-  end;
+  DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(FindClass(T.ClassName)) + ' where ' + cSql);
 
   if DSet.IsEmpty then
   begin
@@ -630,7 +631,7 @@ begin
     DSet.First;
     while not DSet.Eof do
     begin
-      Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
+      var Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
       TUtilsEntidade.PreencheObjeto(TObject(Objeto), DSet);
       ListObj.Add(Objeto);

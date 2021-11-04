@@ -4,6 +4,16 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
+      object Label4: TLabel
+        Left = 40
+        Top = 173
+        Width = 752
+        Height = 13
+        AutoSize = False
+        Caption = 
+          '________________________________________________________________' +
+          '______________________________________________________________'
+      end
       object Label2: TLabel
         Left = 48
         Top = 60
@@ -49,6 +59,31 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentBiDiMode = False
         ParentFont = False
       end
+      object lblEndereco: TLabel
+        Left = 48
+        Top = 164
+        Width = 52
+        Height = 13
+        BiDiMode = bdLeftToRight
+        Caption = 'Endere'#231'o'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBiDiMode = False
+        ParentFont = False
+      end
+      object Label5: TLabel
+        Left = 40
+        Top = 349
+        Width = 752
+        Height = 13
+        AutoSize = False
+        Caption = 
+          '________________________________________________________________' +
+          '______________________________________________________________'
+      end
       object edtNome: TEdit
         Left = 48
         Top = 79
@@ -76,12 +111,12 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       inline FrameAdicaoEndereco: TFrameAdicaoEndereco
         Left = 40
-        Top = 166
+        Top = 186
         Width = 760
         Height = 165
         TabOrder = 3
         ExplicitLeft = 40
-        ExplicitTop = 166
+        ExplicitTop = 186
         inherited pnlFundo: TPanel
           inherited pnlConteudo: TPanel
             inherited DBCtrlGrid1: TDBCtrlGrid
@@ -90,6 +125,9 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
               ExplicitLeft = -8
               ExplicitTop = 6
             end
+          end
+          inherited pnlMenu: TPanel
+            ExplicitTop = 0
           end
         end
       end

@@ -1,5 +1,5 @@
 inherited FrmCadastroEndereco: TFrmCadastroEndereco
-  Caption = 'FrmCadastroEndereco'
+  Caption = 'Cadastrar Endere'#231'o'
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
@@ -123,7 +123,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Height = 21
         Anchors = [akTop, akRight]
         ImageIndex = 0
-        Images = imgListaBotoes
+        Images = imgListaBotoes16
         TabOrder = 1
         OnClick = btnConsultaCEPClick
       end
@@ -209,7 +209,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       end
     end
   end
-  inherited imgListaBotoes: TImageList
+  inherited imgListaBotoes16: TImageList
     Left = 104
   end
 end

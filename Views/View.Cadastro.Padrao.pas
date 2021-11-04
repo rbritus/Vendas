@@ -13,16 +13,15 @@ type
   TFrmCadastroPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
+    btnCadastrar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     procedure SpeedButton5Click(Sender: TObject);
-    procedure SpeedButton6MouseEnter(Sender: TObject);
-    procedure SpeedButton6MouseLeave(Sender: TObject);
+    procedure btnCadastrarMouseEnter(Sender: TObject);
+    procedure btnCadastrarMouseLeave(Sender: TObject);
     procedure SpeedButton5MouseEnter(Sender: TObject);
     procedure SpeedButton5MouseLeave(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
+    procedure btnCadastrarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -101,14 +100,6 @@ begin
   ControllerView.CarregarLayoutDeCamposEditaveis;
 end;
 
-procedure TFrmCadastroPadrao.FormClose(Sender: TObject;
-  var Action: TCloseAction);
-begin
-  inherited;
-//  var ControllerView := TControllerCadastroPadrao.New(Self);
-//  ControllerView.DestruirEntidadesPosCadastro;
-end;
-
 procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);
 begin
   inherited;
@@ -139,23 +130,23 @@ begin
   ControllerView.GravarEntidade;
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton6Click(Sender: TObject);
+procedure TFrmCadastroPadrao.btnCadastrarClick(Sender: TObject);
 begin
   inherited;
   GravarEntidade;
   Close;
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton6MouseEnter(Sender: TObject);
+procedure TFrmCadastroPadrao.btnCadastrarMouseEnter(Sender: TObject);
 begin
   inherited;
-   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton6MouseLeave(Sender: TObject);
+procedure TFrmCadastroPadrao.btnCadastrarMouseLeave(Sender: TObject);
 begin
   inherited;
-   OcultarBarraLateralDoBotao;
+  OcultarBarraLateralDoBotao;
 end;
 
 end.

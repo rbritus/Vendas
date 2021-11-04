@@ -15,10 +15,11 @@ type
     procedure ObterObjeto;
     procedure PreencherEntidadeComCamposDoForm;
     procedure Gravar;
-    constructor Create(pForm: TForm);
+    constructor Create(AForm: TForm);
     procedure DestruirEntidade;
     procedure PreencherFormComCamposDaEntidade;
     procedure ModificarLayoutEdit(edt: TEdit);
+    procedure InformarObservador;
   public
     procedure GravarEntidade;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
@@ -27,7 +28,7 @@ type
     procedure DestruirEntidadesPosCadastro;
     procedure CarregarComboBoxComEnumerators;
 
-    class function New(pForm: TForm): iControllerCadastroPadrao;
+    class function New(AForm: TForm): iControllerCadastroPadrao;
   end;
 
 implementation
@@ -72,9 +73,9 @@ begin
     end;
 end;
 
-constructor TControllerCadastroPadrao.Create(pForm: TForm);
+constructor TControllerCadastroPadrao.Create(AForm: TForm);
 begin
-  FForm := pForm;
+  FForm := AForm;
 end;
 
 procedure TControllerCadastroPadrao.Gravar;
@@ -92,11 +93,17 @@ begin
   TUtilsForm.DestruirEntidadesEstrangeiras(FForm);
 end;
 
+procedure TControllerCadastroPadrao.InformarObservador;
+begin
+  TUtilsEntidade.ExecutarMetodoObjeto(FForm,'NotificarObservador',[FEntidade]);
+end;
+
 procedure TControllerCadastroPadrao.GravarEntidade;
 begin
   ObterObjeto;
   PreencherEntidadeComCamposDoForm;
   Gravar;
+  InformarObservador;
   DestruirEntidade;
 end;
 
@@ -105,9 +112,9 @@ begin
   TUtilsForm.LimparCamposDoForm(FForm);
 end;
 
-class function TControllerCadastroPadrao.New(pForm: TForm): iControllerCadastroPadrao;
+class function TControllerCadastroPadrao.New(AForm: TForm): iControllerCadastroPadrao;
 begin
-  Result := Self.Create(pForm);
+  Result := Self.Create(AForm);
 end;
 
 procedure TControllerCadastroPadrao.ObterObjeto;

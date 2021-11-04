@@ -7,21 +7,25 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
   View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
-  Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList;
+  Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList, Vcl.StdCtrls;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
+    btnAdicionar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     grdLista: TDBGrid;
     procedure FormShow(Sender: TObject);
     procedure grdListaDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
+    procedure btnAdicionarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure btnAdicionarMouseEnter(Sender: TObject);
+    procedure btnAdicionarMouseLeave(Sender: TObject);
+    procedure SpeedButton5MouseEnter(Sender: TObject);
+    procedure SpeedButton5MouseLeave(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -32,6 +36,8 @@ type
     procedure AjustarColunasDaGride;
     procedure UpdateItem(Value : TObject);
     procedure ObservarEntidadeDeCadastro;
+    procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
+    procedure OcultarBarraLateralDoBotao;
   public
     { Public declarations }
   end;
@@ -105,11 +111,35 @@ begin
   inherited;
 end;
 
-procedure TFrmCadastroListaPadrao.SpeedButton6Click(Sender: TObject);
+procedure TFrmCadastroListaPadrao.SpeedButton5MouseEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroListaPadrao.SpeedButton5MouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
+procedure TFrmCadastroListaPadrao.btnAdicionarClick(Sender: TObject);
 begin
   inherited;
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   ControllerListaView.ApresentarFormParaCadastro;
+end;
+
+procedure TFrmCadastroListaPadrao.btnAdicionarMouseEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroListaPadrao.btnAdicionarMouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmCadastroListaPadrao.ObservarEntidadeDeCadastro;
@@ -129,6 +159,17 @@ begin
 
   TUtilsClientDataSet.PreencherDataSet(FClientDataSet,Value);
   FClientDataSet.Post;
+end;
+
+procedure TFrmCadastroListaPadrao.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
+begin
+  pnlBarraLateralBotao.Visible := True;
+  pnlBarraLateralBotao.left := Botao.left;
+end;
+
+procedure TFrmCadastroListaPadrao.OcultarBarraLateralDoBotao;
+begin
+  pnlBarraLateralBotao.Visible := False;
 end;
 
 end.

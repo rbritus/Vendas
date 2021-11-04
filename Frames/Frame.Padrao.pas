@@ -11,7 +11,8 @@ type
   TFramePadrao = class(TFrame)
     pnlFundo: TPanel;
     pnlConteudo: TPanel;
-    imgListaBotoes: TImageList;
+    imgListaBotoes16: TImageList;
+    imgListaBotoes32: TImageList;
   private
     { Private declarations }
   public

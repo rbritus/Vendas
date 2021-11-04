@@ -10,16 +10,15 @@ type
   TControllerFrameAdicaoPadrao = class(TInterfacedObject, iControllerFramePesquisaEntidadePadrao)
   strict private
     FFrame: TFrame;
-    FId: Integer;
   private
     function ObterClasseDePesquisaDoFrame: TClass;
     function ObterCampoExibicao: string;
+    function ObterCaptionDoCampoExibicao: string;
   protected
     constructor Create(pFrame: TFrame);
   public
     class function New(pFrame: TFrame): iControllerFramePesquisaEntidadePadrao;
     procedure ExibirListaDeRegistrosParaSelecao;
-    function ObterIdDaEntidadeDoRegistroSelecionado: Integer;
     function ObterValorDoCampoDeExibicao(ID: Integer): string;
     function ObterEntidade(ID: Integer): TObject;
   end;
@@ -27,43 +26,30 @@ type
 implementation
 
 uses
-  View.Lista.Selecao.Entidade, Controller.View, Utils.Entidade, Attributes.Forms;
+  View.Lista.Selecao.Entidade, Controller.View, Utils.Entidade, Attributes.Forms,
+  Attributes.Entidades, Interfaces.Padrao.Observer;
 
 { TControllerFrameAdicaoPadrao }
 
 constructor TControllerFrameAdicaoPadrao.Create(pFrame: TFrame);
 begin
-  FId := 0;
   FFrame := pFrame;
 end;
 
 procedure TControllerFrameAdicaoPadrao.ExibirListaDeRegistrosParaSelecao;
 begin
-  FId := 0;
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TFrmListaSelecaoEntidade, Form);
+  Form.Caption := 'Selecionar ' + ObterCaptionDoCampoExibicao;
   var ClassePesquisa := ObterClasseDePesquisaDoFrame;
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'SetObservador',TValue.From<TWinControl>(FFrame));
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'InformarClasseDaEntidade',[ClassePesquisa]);
-  var FrmForm := ControllerView.ShowFormModal(TFrmListaSelecaoEntidade);
-
-  var Obj := TUtilsEntidade.ExecutarMetodoObjeto(TObject(FrmForm),'ObterObjeto',[]).AsObject;
-  if not Assigned(Obj) then
-    Exit;
-  try
-    FId := TUtilsEntidade.ObterValorPropriedade(Obj,'ID').AsInteger;
-  finally
-    Obj.Free;
-  end;
+  ControllerView.ShowForm(TFrmListaSelecaoEntidade);
 end;
 
 class function TControllerFrameAdicaoPadrao.New(pFrame: TFrame): iControllerFramePesquisaEntidadePadrao;
 begin
   Result := Self.Create(pFrame);
-end;
-
-function TControllerFrameAdicaoPadrao.ObterIdDaEntidadeDoRegistroSelecionado: Integer;
-begin
-  Result := FId;
 end;
 
 function TControllerFrameAdicaoPadrao.ObterValorDoCampoDeExibicao(ID: Integer): string;
@@ -137,6 +123,32 @@ begin
       if Atrib is TCampoExibicao then
       begin
         Result := TCampoExibicao(Atrib).Campo;
+        Break;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
+function TControllerFrameAdicaoPadrao.ObterCaptionDoCampoExibicao: string;
+begin
+  Result := EmptyStr;
+  var Ctx := TRttiContext.Create;
+  try
+    var Campo := ObterCampoExibicao;
+    var Classe := ObterClasseDePesquisaDoFrame;
+
+    var Tipo := Ctx.GetType(Classe);
+    if not Assigned(Tipo) then
+      Exit(EmptyStr);
+
+    var FProp := Tipo.GetProperty(Campo);
+    for var Atrib in FProp.GetAttributes do
+    begin
+      if Atrib is TCampoTexto then
+      begin
+        Result := TCampoTexto(Atrib).caption;
         Break;
       end;
     end;

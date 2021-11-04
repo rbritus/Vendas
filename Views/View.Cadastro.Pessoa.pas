@@ -24,9 +24,11 @@ type
     [TCadastroEdit('CPF',ftTEXTO,coObrigatorio)]
     edtCPF: TEdit;
     Label1: TLabel;
+    lblEndereco: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     procedure FormShow(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnCadastrarClick(Sender: TObject);
   private
     [TCadastroVariavel('Enderecos',ftLISTAGEM,coNaoObrigatorio)]
     FEnderecos: TObjectListFuck<TEndereco>;
@@ -42,10 +44,9 @@ implementation
 
 {$R *.dfm}
 
-procedure TFrmCadastroPessoa.FormClose(Sender: TObject;
-  var Action: TCloseAction);
+procedure TFrmCadastroPessoa.btnCadastrarClick(Sender: TObject);
 begin
-  FrameAdicaoEndereco.FinalizarFrame;
+  FEnderecos := FrameAdicaoEndereco.ObterLista;
   inherited;
 end;
 
@@ -53,12 +54,6 @@ procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin
   inherited;
   FrameAdicaoEndereco.CarregarFrame(Self.FID);
-end;
-
-procedure TFrmCadastroPessoa.SpeedButton6Click(Sender: TObject);
-begin
-  FEnderecos := FrameAdicaoEndereco.ObterLista;
-  inherited;
 end;
 
 end.

@@ -38,7 +38,7 @@ var
 implementation
 
 uses
-  Vcl.Dialogs;
+  Vcl.Dialogs, Utils.Menssages;
 
 { TException }
 
@@ -82,7 +82,7 @@ class procedure TExceptionGenerica.MensagemExcecao(Sender: TObject; E: Exception
 begin
   var Mensagem := 'Exceção genérica:';
   Mensagem := Mensagem + SLineBreak + E.ClassName + SLineBreak + 'Erro: ' + E.Message;
-  ShowMessage(Mensagem);
+  TUtilsMenssages.ShowExceptionDialog(Mensagem);
 end;
 
 { TExceptionAccessViolation }
@@ -91,7 +91,7 @@ class procedure TExceptionAccessViolation.MensagemExcecao(Sender: TObject; E: EA
 begin
   var Mensagem := 'Acesso inválido à memória:';
   Mensagem := Mensagem + SLineBreak + E.ClassName + SLineBreak + 'Erro: ' + E.Message;
-  ShowMessage(Mensagem);
+  TUtilsMenssages.ShowExceptionDialog(Mensagem);
 end;
 
 { TExceptionConvercaoDeTipos }
@@ -100,7 +100,7 @@ class procedure TExceptionConvercaoDeTipos.MensagemExcecao(Sender: TObject; E: E
 begin
   var Mensagem := 'Erro de conversão de tipos:';
   Mensagem := Mensagem + SLineBreak + E.ClassName + SLineBreak + 'Erro: ' + E.Message;
-  ShowMessage(Mensagem);
+  TUtilsMenssages.ShowExceptionDialog(Mensagem);
 end;
 
 { TExceptionBancoDeDados }
@@ -114,7 +114,7 @@ begin
     Mensagem := 'Erro banco de dados:'
   end;
   Mensagem := Mensagem + SLineBreak + E.ClassName + SLineBreak + 'Erro: ' + E.Message;
-  ShowMessage(Mensagem);
+  TUtilsMenssages.ShowExceptionDialog(Mensagem);
 end;
 
 { TExceptionDataBase }
@@ -123,7 +123,7 @@ class procedure TExceptionDataBase.MensagemExcecao(Sender: TObject; E: EDatabase
 begin
   var Mensagem := 'Erro banco de dados:';
   Mensagem := Mensagem + SLineBreak + E.ClassName + SLineBreak + 'Erro: ' + E.Message;
-  ShowMessage(Mensagem);
+  TUtilsMenssages.ShowExceptionDialog(Mensagem);
 end;
 
 initialization

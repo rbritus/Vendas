@@ -5,7 +5,7 @@ interface
 uses
   Vcl.ExtCtrls, vcl.controls, System.classes, Vcl.StdCtrls, vcl.forms,
   System.UITypes, System.Generics.Collections, System.SysUtils, System.Types,
-  Winapi.Windows, Winapi.Messages;
+  Winapi.Windows, Winapi.Messages, Rtti, Utils.Constants, System.Math;
 
 type
   TControllerView = class(TObject)
@@ -14,8 +14,12 @@ type
     FMainForm: TForm;
     FParent: TPanel;
     FTitle: TPanel;
+    FMenuExpandido: Boolean;
     function CarregarForm(Value: TComponentClass): TForm;
     function CarregarFormModal(Value: TComponentClass): TForm;
+    procedure SetarCaptionOwner(AForm: TForm; Caption: string);
+    function GetCaptionOwner(AForm: TForm): string;
+    function GetLarguraMenu: Integer;
   public
     constructor Create;
     destructor Destroy; override;
@@ -24,18 +28,21 @@ type
     procedure DesablePanel(var aPanel: TPanel);
     procedure EnablePanel(var aPanel: TPanel; aColor: TColor);
     function CountForms: integer;
-    function ModuloForm(aForm: Tform): string;
+    function ModuloForm(AForm: Tform): string;
     procedure ArredondarCantos(componente: TWinControl);
-    procedure CaptionShow(aForm: Tform);
+    procedure ShowFormCaption(AForm: Tform);
+    procedure ShowOwnerCaption(AForm: Tform);
     procedure CriarSublinhadoParaCamposEditaveis(Componente: TWinControl);
+    procedure AtribuirUpperCaseParaCamponentesEditaveis(AForm: TForm);
 
-    procedure AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
+    procedure AdicionarFormNalista(Value: TComponentClass; var AForm: TForm);
     procedure ShowForm(Value: TComponentClass);
     function ShowFormModal(Value: TComponentClass): TForm;
 
     property MainForm: TForm read FMainForm write FMainForm;
     property Parent: TPanel read FParent write FParent;
     property Title: TPanel read FTitle write FTitle;
+    property MenuExpandido: Boolean read FMenuExpandido write FMenuExpandido;
   end;
 
 var
@@ -47,31 +54,17 @@ implementation
 
 function TControllerView.CarregarForm(Value: TComponentClass): TForm;
 var
-  aForm: TForm;
-  LabelCaminhoForm: Tlabel;
-  LabelAtual: Tlabel;
+  AForm: TForm;
 begin
-  AdicionarFormNalista(Value,aForm);
+  AdicionarFormNalista(Value,AForm);
   Parent.Visible := True;
   Title.Visible := True;
-  aForm.Parent := Parent;
-  aForm.Align := alClient;
-  aForm.BorderStyle := bsNone;
-  aForm.Visible := True;
-  aForm.FormStyle := fsNormal;
-  if Assigned(Title) then
-  begin
-    Title.Caption := aForm.Caption;
-    LabelCaminhoForm := MainForm.FindComponent('LabelCaminhoFormAtual') as TLabel;
-    if LabelCaminhoForm <> nil then
-      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
-    LabelAtual := MainForm.FindComponent('LabelFormAtual') as TLabel;
-    if LabelCaminhoForm <> nil then
-      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
-    if LabelAtual <> nil then
-      LabelAtual.Caption := aForm.Caption;
-  end;
-  Result := aForm;
+  AForm.Parent := Parent;
+  AForm.Align := alClient;
+  AForm.BorderStyle := bsNone;
+  AForm.Visible := True;
+  AForm.FormStyle := fsNormal;
+  Result := AForm;
 end;
 
 procedure TControllerView.ShowForm(Value: TComponentClass);
@@ -81,32 +74,22 @@ end;
 
 function TControllerView.CarregarFormModal(Value: TComponentClass): TForm;
 var
-  aForm: TForm;
-  LabelCaminhoForm: Tlabel;
-  LabelAtual: Tlabel;
+  AForm: TForm;
 begin
-  AdicionarFormNalista(Value,aForm);
-  Parent.Visible := True;
-  Title.Visible := True;
-  aForm.Align := alNone;
-  aForm.BorderStyle := bsNone;
-  aForm.Position := poDesigned;
-  aForm.FormStyle := fsNormal;
-  aForm.Top   := MainForm.Top + Parent.Top  + Trunc((Parent.Height - aForm.Height)/2);
-  aForm.Left  := MainForm.Left + Parent.Left + Trunc((Parent.Width - aForm.Width)/2);
-  if Assigned(Title) then
-  begin
-    Title.Caption := aForm.Caption;
-    LabelCaminhoForm := MainForm.FindComponent('LabelCaminhoFormAtual') as TLabel;
-    if LabelCaminhoForm <> nil then
-      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
-    LabelAtual := MainForm.FindComponent('LabelFormAtual') as TLabel;
-    if LabelCaminhoForm <> nil then
-      LabelCaminhoForm.Caption := 'Início>' + ModuloForm(aForm) + '>';
-    if LabelAtual <> nil then
-      LabelAtual.Caption := aForm.Caption;
-  end;
-  Result := aForm;
+  const DIFERENCA_BORDA = 3;
+  AdicionarFormNalista(Value,AForm);
+  AForm.Parent := nil;
+  AForm.Align := alNone;
+  AForm.BorderStyle := bsSingle;
+  AForm.BorderIcons := [];
+  AForm.Position := poDesigned;
+  AForm.FormStyle := fsNormal;
+  AForm.Top := MainForm.Top + Parent.Top  + Trunc((Parent.Height - AForm.Height)/2);
+  AForm.Left := (GetLarguraMenu + MainForm.Left + Parent.Left + Trunc((Parent.Width - AForm.Width)/2)) + DIFERENCA_BORDA;
+  AForm.Color := $004F4F4F;
+//  AForm.AlphaBlend := True;
+//  AForm.AlphaBlendValue := 235;
+  Result := AForm;
 end;
 
 function TControllerView.ShowFormModal(Value: TComponentClass): TForm;
@@ -116,12 +99,18 @@ begin
   Result := FormModal;
 end;
 
-procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var pForm: TForm);
+procedure TControllerView.ShowOwnerCaption(AForm: Tform);
 begin
-  if not ListaForm.TryGetValue(Value, pForm) then
+  if Assigned(Title) then
+    Title.Caption := GetCaptionOwner(AForm);
+end;
+
+procedure TControllerView.AdicionarFormNalista(Value: TComponentClass; var AForm: TForm);
+begin
+  if not ListaForm.TryGetValue(Value, AForm) then
   begin
-    Application.CreateForm(Value, pForm);
-    ListaForm.Add(Value, pForm);
+    Application.CreateForm(Value, AForm);
+    ListaForm.Add(Value, AForm);
   end;
 end;
 
@@ -148,10 +137,21 @@ begin
   componente.Invalidate;
 end;
 
-procedure TControllerView.CaptionShow(aForm: Tform);
+procedure TControllerView.AtribuirUpperCaseParaCamponentesEditaveis(
+  AForm: TForm);
+begin
+  for var Indice := 0 to Pred(AForm.ComponentCount) do
+    if AForm.Components[Indice].ClassType = TEdit then
+      TEdit(AForm.Components[Indice]).CharCase := TEditCharCase.ecUpperCase;
+end;
+
+procedure TControllerView.ShowFormCaption(AForm: Tform);
 begin
   if Assigned(Title) then
-    Title.Caption := aForm.Caption;
+  begin
+    SetarCaptionOwner(AForm, Title.Caption);
+    Title.Caption := AForm.Caption;
+  end;
 end;
 
 function TControllerView.CountForms: integer;
@@ -175,9 +175,9 @@ begin
     Lista.AddItem(Key.Caption, Key);
 end;
 
-function TControllerView.ModuloForm(aForm: Tform): string;
+function TControllerView.ModuloForm(AForm: Tform): string;
 begin
-  var Nome := copy(aForm.Name, length(aForm.Name));
+  var Nome := copy(AForm.Name, length(AForm.Name));
 
   if UpperCase(Nome)='C' then
     Result := 'Cadastros';
@@ -213,6 +213,36 @@ begin
   aPanel.Enabled := True;
   aPanel.Color := aColor;
   aPanel.Cursor := crHandPoint;
+end;
+
+procedure TControllerView.SetarCaptionOwner(AForm: TForm; Caption: string);
+begin
+  var ctx := TRttiContext.Create;
+  try
+    var lType := ctx.GetType(AForm.ClassType);
+    var prop := lType.GetProperty('OwnerCaption');
+    Prop.SetValue(AForm,Caption);
+  finally
+    ctx.Free;
+  end;
+end;
+
+function TControllerView.GetCaptionOwner(AForm: TForm): string;
+begin
+  var ctx := TRttiContext.Create;
+  try
+    var lType := ctx.GetType(AForm.ClassType);
+    var prop := lType.GetProperty('OwnerCaption');
+    Result := Prop.GetValue(AForm).AsString;
+  finally
+    ctx.Free;
+  end;
+end;
+
+function TControllerView.GetLarguraMenu: Integer;
+begin
+  Result := ifthen(FMenuExpandido,TConstantsInteger.LARGURA_MENU_MAXIMIZADO,
+    TConstantsInteger.LARGURA_MENU_MINIMIZADO);
 end;
 
 initialization

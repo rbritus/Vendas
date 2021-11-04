@@ -49,7 +49,6 @@ object FrmMenu: TFrmMenu
       Align = alTop
       Alignment = taLeftJustify
       BevelOuter = bvNone
-      Caption = 'PanelTitulo'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowFrame
       Font.Height = -21
@@ -93,7 +92,7 @@ object FrmMenu: TFrmMenu
       Left = 0
       Top = 1
       Width = 3
-      Height = 44
+      Height = 43
       BevelOuter = bvNone
       Color = 16744448
       ParentBackground = False
@@ -102,11 +101,10 @@ object FrmMenu: TFrmMenu
     end
     object pnlDockCadastro: TPanel
       AlignWithMargins = True
-      Left = 5
+      Left = 3
       Top = 0
-      Width = 195
+      Width = 197
       Height = 90
-      Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
       Margins.Bottom = 0
@@ -123,7 +121,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 0
         Top = 0
-        Width = 195
+        Width = 197
         Height = 45
         Margins.Left = 0
         Margins.Top = 0
@@ -146,12 +144,13 @@ object FrmMenu: TFrmMenu
         OnMouseEnter = actMouseEnterExecute
         OnMouseLeave = actMouseLeaveExecute
         ExplicitTop = 3
+        ExplicitWidth = 195
       end
       object pnlCadastros: TPanel
         AlignWithMargins = True
         Left = 5
         Top = 45
-        Width = 190
+        Width = 192
         Height = 45
         Margins.Left = 5
         Margins.Top = 0
@@ -170,7 +169,7 @@ object FrmMenu: TFrmMenu
           AlignWithMargins = True
           Left = 0
           Top = 0
-          Width = 190
+          Width = 192
           Height = 45
           Margins.Left = 0
           Margins.Top = 0
@@ -201,11 +200,10 @@ object FrmMenu: TFrmMenu
     end
     object pnlDockProcessos: TPanel
       AlignWithMargins = True
-      Left = 5
+      Left = 3
       Top = 90
-      Width = 195
+      Width = 197
       Height = 90
-      Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
       Margins.Bottom = 0
@@ -222,7 +220,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 0
         Top = 0
-        Width = 195
+        Width = 197
         Height = 45
         Margins.Left = 0
         Margins.Top = 0
@@ -245,12 +243,13 @@ object FrmMenu: TFrmMenu
         OnMouseEnter = actMouseEnterExecute
         OnMouseLeave = actMouseLeaveExecute
         ExplicitTop = -11
+        ExplicitWidth = 195
       end
       object pnlProcessos: TPanel
         AlignWithMargins = True
         Left = 5
         Top = 45
-        Width = 190
+        Width = 192
         Height = 45
         Margins.Left = 5
         Margins.Top = 0
@@ -269,7 +268,7 @@ object FrmMenu: TFrmMenu
           AlignWithMargins = True
           Left = 0
           Top = 0
-          Width = 190
+          Width = 192
           Height = 45
           Margins.Left = 0
           Margins.Top = 0
@@ -300,11 +299,10 @@ object FrmMenu: TFrmMenu
     end
     object pnlDockRelatorios: TPanel
       AlignWithMargins = True
-      Left = 5
+      Left = 3
       Top = 180
-      Width = 195
+      Width = 197
       Height = 90
-      Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
       Margins.Bottom = 0
@@ -321,7 +319,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 0
         Top = 0
-        Width = 195
+        Width = 197
         Height = 45
         Margins.Left = 0
         Margins.Top = 0
@@ -351,7 +349,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 5
         Top = 45
-        Width = 190
+        Width = 192
         Height = 45
         Margins.Left = 5
         Margins.Top = 0
@@ -370,7 +368,7 @@ object FrmMenu: TFrmMenu
           AlignWithMargins = True
           Left = 0
           Top = 0
-          Width = 190
+          Width = 192
           Height = 45
           Margins.Left = 0
           Margins.Top = 0
@@ -401,11 +399,10 @@ object FrmMenu: TFrmMenu
     end
     object pnlDockConfiguracoes: TPanel
       AlignWithMargins = True
-      Left = 5
+      Left = 3
       Top = 270
-      Width = 195
+      Width = 197
       Height = 90
-      Margins.Left = 5
       Margins.Top = 0
       Margins.Right = 0
       Margins.Bottom = 0
@@ -425,7 +422,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 0
         Top = 0
-        Width = 195
+        Width = 197
         Height = 45
         Margins.Left = 0
         Margins.Top = 0
@@ -455,7 +452,7 @@ object FrmMenu: TFrmMenu
         AlignWithMargins = True
         Left = 5
         Top = 45
-        Width = 190
+        Width = 192
         Height = 45
         Margins.Left = 5
         Margins.Top = 0
@@ -474,7 +471,7 @@ object FrmMenu: TFrmMenu
           AlignWithMargins = True
           Left = 0
           Top = 0
-          Width = 190
+          Width = 192
           Height = 45
           Margins.Left = 0
           Margins.Top = 0
@@ -515,10 +512,15 @@ object FrmMenu: TFrmMenu
     ParentBackground = False
     TabOrder = 2
     object btnMenu: TSpeedButton
-      Left = 0
+      AlignWithMargins = True
+      Left = 5
       Top = 0
-      Width = 200
+      Width = 194
       Height = 57
+      Margins.Left = 5
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
       Align = alLeft
       Caption = 'Menu'
       ImageIndex = 0

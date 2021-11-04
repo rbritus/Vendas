@@ -212,6 +212,17 @@ begin
           cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
           cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
 
+          if Atrib is TCampoEstrangeiro then
+          begin
+            var NomeCampoDescricao := TCampoEstrangeiro(Atrib).caption;
+            if cds.FindField(NomeCampoDescricao) = nil then
+              Continue;
+
+            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
+            cds.FieldByName(NomeCampoDescricao).Visible := TAtributoBanco(Atrib).Visivel;
+            Continue;
+          end;
+
           if not TAtributoBanco(Atrib).Visivel then
             Continue;
 

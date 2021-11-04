@@ -7,13 +7,13 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Frame.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Vcl.StdCtrls, System.ImageList,
   Vcl.ImgList, Vcl.Imaging.pngimage, Vcl.DBCGrids, Data.DB, Datasnap.DBClient,
-  Componente.TObjectList, Interfaces.Padrao.Observer;
+  Componente.TObjectList, Interfaces.Padrao.Observer, dxGDIPlusClasses;
 
 type
   TFrameAdicaoPadrao = class(TFramePadrao, iObservador)
     pnlMenu: TPanel;
     SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
+    btnAdicionar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     DBCtrlGrid1: TDBCtrlGrid;
     Panel3: TPanel;
@@ -23,14 +23,18 @@ type
     cdsDados: TClientDataSet;
     dscDados: TDataSource;
     procedure imgBtnExcluirClick(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
+    procedure btnAdicionarClick(Sender: TObject);
     procedure imgBtnAlterarClick(Sender: TObject);
+    procedure btnAdicionarMouseEnter(Sender: TObject);
+    procedure btnAdicionarMouseLeave(Sender: TObject);
+    procedure SpeedButton5MouseLeave(Sender: TObject);
+    procedure SpeedButton5MouseEnter(Sender: TObject);
   private
     { Private declarations }
     FIdObjRelacional: Integer;
     procedure CarregarDataSet;
-    procedure ObservarEntidadeDeCadastro;
-    procedure PararDeObservarEntidadeDeCadastro;
+    procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
+    procedure OcultarBarraLateralDoBotao;
   protected
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
     function ObterSqlParaDatSet: string; virtual; Abstract;
@@ -38,11 +42,10 @@ type
     function ObterObjetoDoFrame: TObject;
     procedure CriarDataSet; virtual; Abstract;
     procedure PreencherDataSet(Obj: TObject); virtual; Abstract;
-    procedure UpdateItem(Value : TObject); virtual;
+    procedure UpdateItem(Value : TObject); virtual; Abstract;
   public
     { Public declarations }
     procedure CarregarFrame(IdEntidade: Integer);
-    procedure FinalizarFrame;
   end;
 
 var
@@ -90,7 +93,6 @@ begin
   if cdsDados.IsEmpty then
     Exit;
 
-  ObservarEntidadeDeCadastro;
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
   ControllerFrame.ApresentarFormParaEdicao(cdsDados.FieldByName('id').AsInteger);
 end;
@@ -113,17 +115,35 @@ begin
   Result := ControllerFrame.ObterSqlDeTabelaRelacional(FIdObjRelacional);
 end;
 
-procedure TFrameAdicaoPadrao.SpeedButton6Click(Sender: TObject);
+procedure TFrameAdicaoPadrao.SpeedButton5MouseEnter(Sender: TObject);
 begin
   inherited;
-  ObservarEntidadeDeCadastro;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrameAdicaoPadrao.SpeedButton5MouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
+procedure TFrameAdicaoPadrao.btnAdicionarClick(Sender: TObject);
+begin
+  inherited;
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
   ControllerFrame.ApresentarFormParaCadastro;
 end;
 
-procedure TFrameAdicaoPadrao.UpdateItem(Value: TObject);
+procedure TFrameAdicaoPadrao.btnAdicionarMouseEnter(Sender: TObject);
 begin
-  PararDeObservarEntidadeDeCadastro;
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrameAdicaoPadrao.btnAdicionarMouseLeave(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrameAdicaoPadrao.CarregarFrame(IdEntidade: Integer);
@@ -132,23 +152,15 @@ begin
   CarregarDataSet;
 end;
 
-procedure TFrameAdicaoPadrao.FinalizarFrame;
+procedure TFrameAdicaoPadrao.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
-  PararDeObservarEntidadeDeCadastro;
+  pnlBarraLateralBotao.Visible := True;
+  pnlBarraLateralBotao.left := Botao.left;
 end;
 
-procedure TFrameAdicaoPadrao.ObservarEntidadeDeCadastro;
+procedure TFrameAdicaoPadrao.OcultarBarraLateralDoBotao;
 begin
-  var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  var ClasseEntidade := ControllerFrame.ObterClasseDaEntidadeDeCadastro;
-  ControllerObserverEntidade.ObservarEntidade(Self,ClasseEntidade);
-end;
-
-procedure TFrameAdicaoPadrao.PararDeObservarEntidadeDeCadastro;
-begin
-  var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  var ClasseEntidade := ControllerFrame.ObterClasseDaEntidadeDeCadastro;
-  ControllerObserverEntidade.PararDeObservarEntidade(Self,ClasseEntidade);
+  pnlBarraLateralBotao.Visible := False;
 end;
 
 end.

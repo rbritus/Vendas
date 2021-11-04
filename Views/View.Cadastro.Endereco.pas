@@ -40,9 +40,9 @@ type
     cmbTipoEndereco: TComboBox;
     Label7: TLabel;
     procedure FormShow(Sender: TObject);
-    procedure SpeedButton6Click(Sender: TObject);
     procedure btnConsultaCEPClick(Sender: TObject);
     procedure FramePesquisaCidadeEdit1Change(Sender: TObject);
+    procedure btnCadastrarClick(Sender: TObject);
   private
     { Private declarations }
     [TCadastroVariavel('Cidade',ftESTRANGEIRO,coObrigatorio)]
@@ -89,6 +89,9 @@ end;
 
 procedure TFrmCadastroEndereco.PreencherDadosDaTela(ConsultaCEP: iConsultaCEP);
 begin
+  if not Assigned(ConsultaCEP) then
+    Exit;
+
   edtLogradouro.Text := ConsultaCEP.Logradouro;
   edtComplemento.Text := ConsultaCEP.Complemento;
   edtBairro.Text := ConsultaCEP.Bairro;
@@ -100,6 +103,12 @@ begin
   var ControllerConsultaCEP := TControllerObjetoConsultaCEP.New;
   var ConsultaCEP := ControllerConsultaCEP.Get(edtCEP.Text);
   PreencherDadosDaTela(ConsultaCEP);
+end;
+
+procedure TFrmCadastroEndereco.btnCadastrarClick(Sender: TObject);
+begin
+  FCidade := TCidade(FramePesquisaCidade.ObterEntidade);
+  inherited;
 end;
 
 procedure TFrmCadastroEndereco.btnConsultaCEPClick(Sender: TObject);
@@ -130,12 +139,6 @@ begin
   finally
     Cidade.Free;
   end;
-end;
-
-procedure TFrmCadastroEndereco.SpeedButton6Click(Sender: TObject);
-begin
-  FCidade := TCidade(FramePesquisaCidade.ObterEntidade);
-  inherited;
 end;
 
 end.

@@ -2,23 +2,24 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
   Caption = 'FrmCadastroListaPadrao'
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
-  OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      Top = 38
-      Height = 602
-      ExplicitTop = 38
-      ExplicitHeight = 602
+      Top = 47
+      Height = 593
+      ExplicitTop = 47
+      ExplicitHeight = 593
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 599
+        Height = 590
         Align = alClient
+        Ctl3D = True
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        ParentCtl3D = False
         ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
@@ -33,7 +34,7 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
       Left = 0
       Top = 0
       Width = 840
-      Height = 35
+      Height = 44
       Align = alTop
       BevelOuter = bvNone
       Color = clWhite
@@ -41,10 +42,10 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
       TabOrder = 1
       object SpeedButton5: TSpeedButton
         AlignWithMargins = True
-        Left = 40
+        Left = 49
         Top = 5
-        Width = 25
-        Height = 25
+        Width = 34
+        Height = 34
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
@@ -61,21 +62,24 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
+        Visible = False
+        OnMouseEnter = SpeedButton5MouseEnter
+        OnMouseLeave = SpeedButton5MouseLeave
       end
-      object SpeedButton6: TSpeedButton
+      object btnAdicionar: TSpeedButton
         AlignWithMargins = True
         Left = 5
         Top = 5
-        Width = 25
-        Height = 25
+        Width = 34
+        Height = 34
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
         GroupIndex = 1
-        Caption = 'OK'
-        ImageIndex = 0
+        ImageIndex = 1
+        Images = imgListaBotoes32
         Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
@@ -84,12 +88,14 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
-        OnClick = SpeedButton6Click
+        OnClick = btnAdicionarClick
+        OnMouseEnter = btnAdicionarMouseEnter
+        OnMouseLeave = btnAdicionarMouseLeave
       end
       object pnlBarraLateralBotao: TPanel
-        Left = 0
-        Top = 30
-        Width = 25
+        Left = 5
+        Top = 38
+        Width = 34
         Height = 5
         BevelOuter = bvNone
         Color = 16744448

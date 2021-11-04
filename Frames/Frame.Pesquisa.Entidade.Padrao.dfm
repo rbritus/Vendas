@@ -61,7 +61,7 @@ inherited FramePesquisaEntidadePadrao: TFramePesquisaEntidadePadrao
       end
     end
   end
-  inherited imgListaBotoes: TImageList
+  inherited imgListaBotoes16: TImageList
     Left = 160
     Top = 65528
   end

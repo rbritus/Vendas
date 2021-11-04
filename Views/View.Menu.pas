@@ -55,7 +55,6 @@ type
     procedure SpeedButton7Click(Sender: TObject);
   private
     { Private declarations }
-    FMenuExpandido: Boolean;
     procedure ExpansaoDoMenu;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
@@ -74,7 +73,7 @@ implementation
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
   Connection.Scripter.SqLite, FireDAC.Comp.Client, View.Cadastro.Endereco,
-  Utils.Entidade, Utils.Menssages;
+  Utils.Entidade, Utils.Menssages, Utils.Constants, Controller.Scripter;
 
 procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
 begin
@@ -83,9 +82,10 @@ end;
 
 procedure TFrmMenu.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
+  const DIFERENCA_TOPO = 1;
   pnlBarraLateralBotao.Parent := Botao.Parent;
   pnlBarraLateralBotao.Visible := True;
-  pnlBarraLateralBotao.Top := Botao.Top;
+  pnlBarraLateralBotao.Top := Botao.Top + DIFERENCA_TOPO;
 end;
 
 procedure TFrmMenu.OcultarBarraLateralDoBotao;
@@ -95,12 +95,18 @@ end;
 
 procedure TFrmMenu.ExpansaoDoMenu;
 begin
-  if FMenuExpandido then
-    pnlMenuLateral.Width := 50
+  const DIFERENCAO_DE_MARGEM_MENU = 6;
+  if ControllerView.MenuExpandido then
+  begin
+    pnlMenuLateral.Width := TConstantsInteger.LARGURA_MENU_MINIMIZADO;
+    btnMenu.Width := pnlMenuLateral.Width - DIFERENCAO_DE_MARGEM_MENU;
+  end
   else
-    pnlMenuLateral.Width := 200;
-  btnMenu.Width := pnlMenuLateral.Width;
-  FMenuExpandido := not FMenuExpandido;
+  begin
+    pnlMenuLateral.Width := TConstantsInteger.LARGURA_MENU_MAXIMIZADO;
+    btnMenu.Width := pnlMenuLateral.Width - DIFERENCAO_DE_MARGEM_MENU;
+  end;
+  ControllerView.MenuExpandido := not ControllerView.MenuExpandido;
 end;
 
 procedure TFrmMenu.btnCadastroPessoasClick(Sender: TObject);
@@ -158,12 +164,15 @@ end;
 
 procedure TFrmMenu.FormCreate(Sender: TObject);
 begin
-  ReportMemoryLeaksOnShutdown := True;
+  {$IFDEF  DEBUG}
+    ReportMemoryLeaksOnShutdown := True;
+  {$ENDIF}
 end;
 
 procedure TFrmMenu.FormShow(Sender: TObject);
 begin
-  FMenuExpandido := True;
+  TControllerScript.RegistrarEntidadesNoBanco;
+  ControllerView.MenuExpandido := True;
   ControllerView.MainForm := Self;
   ControllerView.Parent := pnlMainForm;
   ControllerView.Title := PanelTitulo;

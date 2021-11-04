@@ -23,11 +23,8 @@ type
     class procedure PopulateList(AList: TCustomCombo);
   end;
 
-//  TEnumGenerics = record
-//  end;
-
-  PEnumGenerics = ^TEnumGenerics;
-  TEnumGenerics = packed record end;
+  TEnumGenerics = record
+  end;
 
   [TEnumAttribute(0,'Inteiro',0)]
   [TEnumAttribute(1,'Texto',1)]
@@ -45,13 +42,12 @@ type
   [TEnumAttribute(1,'Não obrigatório','N')]
   TCampoObrigatorio = (coObrigatorio, coNaoObrigatorio);
 
-  [TEnumAttribute(0,'Residêncial',0)]
-  [TEnumAttribute(1,'Comercial',1)]
-  [TEnumAttribute(2,'Entrega',2)]
+  [TEnumAttribute(0,'RESIDÊNCIAL',0)]
+  [TEnumAttribute(1,'COMERCIAL',1)]
   TTipoEndereco = (teResidencial, teComercial, teEntrega);
 
-  [TEnumAttribute(0,'Ativo','S')]
-  [TEnumAttribute(1,'Inativo','N')]
+  [TEnumAttribute(0,'ATIVO','S')]
+  [TEnumAttribute(1,'INATIVO','N')]
   TRegistroAtivo = (raAtivo, raInativo);
 
 implementation

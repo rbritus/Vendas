@@ -1,26 +1,20 @@
 inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
-  Caption = 'FrmListaSelecaoEntidade'
-  ClientHeight = 400
-  Constraints.MaxHeight = 400
-  Constraints.MaxWidth = 840
-  Position = poDesigned
-  OnClose = FormClose
-  ExplicitHeight = 400
+  Caption = 'Selecionar'
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    Height = 400
-    ExplicitHeight = 407
     inherited pnlConteudo: TPanel
-      Top = 38
-      Height = 362
-      ExplicitHeight = 404
+      Top = 47
+      Height = 593
+      ExplicitTop = 47
+      ExplicitHeight = 593
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 359
+        Height = 590
         Align = alClient
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -33,27 +27,26 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
       Left = 0
       Top = 0
       Width = 840
-      Height = 35
+      Height = 44
       Align = alTop
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
-      ExplicitTop = 8
-      object SpeedButton5: TSpeedButton
+      object btnCancelar: TSpeedButton
         AlignWithMargins = True
-        Left = 40
+        Left = 49
         Top = 5
-        Width = 25
-        Height = 25
+        Width = 34
+        Height = 34
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
         GroupIndex = 1
-        Caption = 'X'
-        ImageIndex = 0
+        ImageIndex = 2
+        Images = imgListaBotoes32
         Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
@@ -62,22 +55,26 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
-        OnClick = SpeedButton5Click
+        OnClick = btnCancelarClick
+        OnMouseEnter = btnCancelarMouseEnter
+        OnMouseLeave = btnCancelarMouseLeave
+        ExplicitLeft = 47
       end
-      object SpeedButton6: TSpeedButton
+      object btnConfirmar: TSpeedButton
         AlignWithMargins = True
         Left = 5
         Top = 5
-        Width = 25
-        Height = 25
+        Width = 34
+        Height = 34
+        Hint = 'Utilizar registro selecionado.'
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
         GroupIndex = 1
-        Caption = 'OK'
         ImageIndex = 0
+        Images = imgListaBotoes32
         Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
@@ -85,13 +82,17 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         Spacing = 10
-        OnClick = SpeedButton6Click
+        OnClick = btnConfirmarClick
+        OnMouseEnter = btnConfirmarMouseEnter
+        OnMouseLeave = btnConfirmarMouseLeave
       end
       object pnlBarraLateralBotao: TPanel
-        Left = 0
-        Top = 30
-        Width = 25
+        Left = 7
+        Top = 38
+        Width = 34
         Height = 5
         BevelOuter = bvNone
         Color = 16744448
@@ -100,5 +101,9 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
         Visible = False
       end
     end
+  end
+  inherited imgListaBotoes16: TImageList
+    Left = 120
+    Top = 0
   end
 end

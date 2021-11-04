@@ -74,6 +74,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmMenu, FrmMenu);
-  TControllerScript.RegistrarEntidadesNoBanco;
   Application.Run;
 end.

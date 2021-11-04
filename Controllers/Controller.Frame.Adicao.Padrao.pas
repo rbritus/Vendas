@@ -356,6 +356,7 @@ begin
   var ClasseForm := TUtilsFrame.ObterClasseDoFormularioCadastro(FFrame);
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'SetObservador',TValue.From<TWinControl>(FFrame));
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarFormParaCadastro',[]);
   ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
@@ -365,6 +366,7 @@ begin
   var ClasseForm := TUtilsFrame.ObterClasseDoFormularioCadastro(FFrame);
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'SetObservador',TValue.From<TWinControl>(FFrame));
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
   ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
