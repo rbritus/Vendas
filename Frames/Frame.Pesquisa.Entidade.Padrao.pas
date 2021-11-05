@@ -27,6 +27,7 @@ type
     { Public declarations }
     function ObterEntidade: TObject;
     procedure CarregarEntidade(AID: Integer);
+    procedure LimparEdit;
   end;
 
 var
@@ -48,7 +49,7 @@ end;
 procedure TFramePesquisaEntidadePadrao.btnExcluirClick(Sender: TObject);
 begin
   inherited;
-  Edit1.Clear;
+  LimparEdit;
 end;
 
 procedure TFramePesquisaEntidadePadrao.btnInserirClick(Sender: TObject);
@@ -65,6 +66,11 @@ begin
 
   FIdObjeto := AID;
   AplicarDescricaoDoObjetoNoEdit;
+end;
+
+procedure TFramePesquisaEntidadePadrao.LimparEdit;
+begin
+  Edit1.Clear;
 end;
 
 function TFramePesquisaEntidadePadrao.ObterEntidade: TObject;

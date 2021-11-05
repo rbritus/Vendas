@@ -51,6 +51,10 @@ type
       class procedure Inicializar(AComponente: TComponent);
   end;
 
+  TTratarFrameClassPesquisa = class
+      class procedure Inicializar(AComponente: TComponent);
+  end;
+
 implementation
 
 uses
@@ -75,6 +79,13 @@ begin
     begin
       for var Atrib in FField.GetAttributes do
       begin
+        if Atrib is TClassePesquisa then
+        begin
+          var AComponente := FForm.FindComponent(FField.Name);
+          TTratarFrameClassPesquisa.Inicializar(AComponente);
+          Continue;
+        end;
+
         if Atrib is TPropriedadeCadastro then
         begin
           if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
@@ -290,12 +301,13 @@ end;
 class procedure TTratarVariavel.Inicializar(AField: TRttiField; AForm: TForm);
 begin
   case AField.FieldType.TypeKind of
-//    tkClass:
-//      begin
-//        var Obj := Field.GetValue(pForm).AsObject;
+    tkClass:
+      begin
+        AField.SetValue(AForm, nil);
+//        var Obj := AField.GetValue(AForm).AsObject;
 //        if Assigned(Obj) then
 //          Obj.Free;
-//      end;
+      end;
     tkInteger, tkFloat:
       AField.SetValue(AForm, 0);
     tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
@@ -348,7 +360,8 @@ end;
 
 class procedure TTratarTComboBox.Inicializar(AComponente: TComponent);
 begin
-  TComboBox(AComponente).Items.Clear;
+  TComboBox(AComponente).ItemIndex := -1;
+  TComboBox(AComponente).Text := String.Empty;
 end;
 
 class function TTratarTComboBox.ObterValorDoComponenteDoForm(const AEntidade: TObject;
@@ -430,6 +443,13 @@ begin
   finally
     Ctx.Free;
   end;
+end;
+
+{ TTratarFrameClassPesquisa }
+
+class procedure TTratarFrameClassPesquisa.Inicializar(AComponente: TComponent);
+begin
+  TUtilsEntidade.ExecutarMetodoObjeto(AComponente,'LimparEdit',[]);
 end;
 
 end.

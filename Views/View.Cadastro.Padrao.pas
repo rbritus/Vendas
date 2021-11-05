@@ -70,8 +70,8 @@ end;
 procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
 begin
   FID := pId;
-  LimparCampos;
   PrepararComboBoxComEnumerators;
+  LimparCampos;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarEntidadeParaEdicao(pId);
 end;
@@ -79,8 +79,8 @@ end;
 procedure TFrmCadastroPadrao.CarregarFormParaCadastro;
 begin
   InicializarID;
-  LimparCampos;
   PrepararComboBoxComEnumerators;
+  LimparCampos;
 end;
 
 procedure TFrmCadastroPadrao.InicializarID;

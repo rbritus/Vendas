@@ -122,6 +122,7 @@ procedure TFrmCadastroEndereco.FormShow(Sender: TObject);
 begin
   inherited;
   PreencherFrameCidade(FCidade);
+  edtCEP.SetFocus;
 end;
 
 procedure TFrmCadastroEndereco.FramePesquisaCidadeEdit1Change(Sender: TObject);

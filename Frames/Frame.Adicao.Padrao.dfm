@@ -18,7 +18,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         PanelWidth = 783
         TabOrder = 0
         RowCount = 4
-        ExplicitTop = 5
+        Visible = False
         object Panel3: TPanel
           Left = 696
           Top = 0

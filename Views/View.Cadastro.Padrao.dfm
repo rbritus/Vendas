@@ -10,6 +10,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
       Top = 44
       Height = 596
       Margins.Top = 0
+      TabOrder = 1
       ExplicitTop = 44
       ExplicitHeight = 596
     end
@@ -22,7 +23,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
-      TabOrder = 1
+      TabOrder = 0
       object SpeedButton5: TSpeedButton
         AlignWithMargins = True
         Left = 49

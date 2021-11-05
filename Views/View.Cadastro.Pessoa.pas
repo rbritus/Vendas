@@ -54,6 +54,7 @@ procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin
   inherited;
   FrameAdicaoEndereco.CarregarFrame(Self.FID);
+  edtCPF.SetFocus;
 end;
 
 end.

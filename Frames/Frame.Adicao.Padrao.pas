@@ -35,6 +35,8 @@ type
     procedure CarregarDataSet;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
+    procedure AtribuirVisibilidadeAGride;
+    function DataSetGridEstaVazio: Boolean;
   protected
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
     function ObterSqlParaDatSet: string; virtual; Abstract;
@@ -42,7 +44,7 @@ type
     function ObterObjetoDoFrame: TObject;
     procedure CriarDataSet; virtual; Abstract;
     procedure PreencherDataSet(Obj: TObject); virtual; Abstract;
-    procedure UpdateItem(Value : TObject); virtual; Abstract;
+    procedure UpdateItem(Value : TObject); virtual;
   public
     { Public declarations }
     procedure CarregarFrame(IdEntidade: Integer);
@@ -69,7 +71,10 @@ begin
   var Lista := ControllerFrame.CarregarListaDeObjetosParaFrame(FIdObjRelacional);
 
   if not Assigned(Lista) then
+  begin
+    AtribuirVisibilidadeAGride;
     Exit;
+  end;
 
   try
     for Obj in Lista do
@@ -77,6 +82,7 @@ begin
   finally
     Lista.Free;
   end;
+  AtribuirVisibilidadeAGride;
 end;
 
 procedure TFrameAdicaoPadrao.imgBtnExcluirClick(Sender: TObject);
@@ -90,7 +96,7 @@ end;
 
 procedure TFrameAdicaoPadrao.imgBtnAlterarClick(Sender: TObject);
 begin
-  if cdsDados.IsEmpty then
+  if DataSetGridEstaVazio then
     Exit;
 
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
@@ -125,6 +131,21 @@ procedure TFrameAdicaoPadrao.SpeedButton5MouseLeave(Sender: TObject);
 begin
   inherited;
   OcultarBarraLateralDoBotao;
+end;
+
+procedure TFrameAdicaoPadrao.UpdateItem(Value: TObject);
+begin
+  AtribuirVisibilidadeAGride;
+end;
+
+function TFrameAdicaoPadrao.DataSetGridEstaVazio: Boolean;
+begin
+  Result := cdsDados.IsEmpty;
+end;
+
+procedure TFrameAdicaoPadrao.AtribuirVisibilidadeAGride;
+begin
+  DBCtrlGrid1.Visible := not DataSetGridEstaVazio;
 end;
 
 procedure TFrameAdicaoPadrao.btnAdicionarClick(Sender: TObject);

@@ -11,6 +11,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
     inherited pnlConteudo: TPanel
       Width = 760
       Height = 121
+      TabOrder = 1
       ExplicitWidth = 760
       ExplicitHeight = 121
       inherited DBCtrlGrid1: TDBCtrlGrid
@@ -123,7 +124,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
     end
     inherited pnlMenu: TPanel
       Width = 760
-      ExplicitTop = -1
+      TabOrder = 0
       ExplicitWidth = 760
     end
   end

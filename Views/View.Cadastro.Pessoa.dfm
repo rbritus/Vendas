@@ -126,9 +126,6 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
               ExplicitTop = 6
             end
           end
-          inherited pnlMenu: TPanel
-            ExplicitTop = 0
-          end
         end
       end
       object edtCPF: TEdit

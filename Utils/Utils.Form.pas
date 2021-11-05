@@ -67,6 +67,7 @@ begin
                 if prop.PropertyType.TypeKind = tkEnumeration then
                 begin
                   var AComponente := AForm.FindComponent(FieldForm.Name);
+                  TComboBox(AComponente).Items.Clear;
                   for CustomAttribute in Prop.PropertyType.GetAttributes do
                   begin
                     if CustomAttribute is TEnumAttribute then
