@@ -22,6 +22,9 @@ type
     Panel4: TPanel;
     cdsDados: TClientDataSet;
     dscDados: TDataSource;
+    pnlTitulo: TPanel;
+    lblTitulo: TLabel;
+    Label4: TLabel;
     procedure imgBtnExcluirClick(Sender: TObject);
     procedure btnAdicionarClick(Sender: TObject);
     procedure imgBtnAlterarClick(Sender: TObject);
@@ -37,6 +40,7 @@ type
     procedure OcultarBarraLateralDoBotao;
     procedure AtribuirVisibilidadeAGride;
     function DataSetGridEstaVazio: Boolean;
+    function ObterQuantidadeDeRegistrosDoDataSetGrid: Integer;
   protected
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
     function ObterSqlParaDatSet: string; virtual; Abstract;
@@ -115,6 +119,11 @@ begin
   Result := ControllerFrame.ObterObjetoDoFrame;
 end;
 
+function TFrameAdicaoPadrao.ObterQuantidadeDeRegistrosDoDataSetGrid: Integer;
+begin
+  Result := cdsDados.RecordCount;
+end;
+
 function TFrameAdicaoPadrao.ObterSqlDeTabelaRelacional: string;
 begin
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
@@ -146,6 +155,7 @@ end;
 procedure TFrameAdicaoPadrao.AtribuirVisibilidadeAGride;
 begin
   DBCtrlGrid1.Visible := not DataSetGridEstaVazio;
+  DBCtrlGrid1.RowCount := ObterQuantidadeDeRegistrosDoDataSetGrid;
 end;
 
 procedure TFrameAdicaoPadrao.btnAdicionarClick(Sender: TObject);

@@ -24,9 +24,6 @@ type
     [TCadastroEdit('CPF',ftTEXTO,coObrigatorio)]
     edtCPF: TEdit;
     Label1: TLabel;
-    lblEndereco: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
   private

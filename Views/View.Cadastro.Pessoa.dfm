@@ -4,16 +4,6 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      object Label4: TLabel
-        Left = 40
-        Top = 173
-        Width = 752
-        Height = 13
-        AutoSize = False
-        Caption = 
-          '________________________________________________________________' +
-          '______________________________________________________________'
-      end
       object Label2: TLabel
         Left = 48
         Top = 60
@@ -59,31 +49,6 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentBiDiMode = False
         ParentFont = False
       end
-      object lblEndereco: TLabel
-        Left = 48
-        Top = 164
-        Width = 52
-        Height = 13
-        BiDiMode = bdLeftToRight
-        Caption = 'Endere'#231'o'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBiDiMode = False
-        ParentFont = False
-      end
-      object Label5: TLabel
-        Left = 40
-        Top = 349
-        Width = 752
-        Height = 13
-        AutoSize = False
-        Caption = 
-          '________________________________________________________________' +
-          '______________________________________________________________'
-      end
       object edtNome: TEdit
         Left = 48
         Top = 79
@@ -111,14 +76,17 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       inline FrameAdicaoEndereco: TFrameAdicaoEndereco
         Left = 40
-        Top = 186
+        Top = 151
         Width = 760
-        Height = 165
+        Height = 180
         TabOrder = 3
         ExplicitLeft = 40
-        ExplicitTop = 186
+        ExplicitTop = 151
+        ExplicitHeight = 180
         inherited pnlFundo: TPanel
+          Height = 180
           inherited pnlConteudo: TPanel
+            Height = 98
             inherited DBCtrlGrid1: TDBCtrlGrid
               Left = -8
               Top = 6

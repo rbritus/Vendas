@@ -1,7 +1,10 @@
 inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
+  Height = 279
+  ExplicitHeight = 279
   inherited pnlFundo: TPanel
+    Height = 279
     inherited pnlConteudo: TPanel
-      Top = 44
+      Top = 82
       Height = 197
       ExplicitTop = 44
       ExplicitHeight = 197
@@ -138,7 +141,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     end
     object pnlMenu: TPanel
       Left = 0
-      Top = 0
+      Top = 38
       Width = 800
       Height = 44
       Align = alTop
@@ -146,6 +149,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
+      ExplicitTop = 0
       object SpeedButton5: TSpeedButton
         AlignWithMargins = True
         Left = 49
@@ -209,6 +213,45 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         ParentBackground = False
         TabOrder = 0
         Visible = False
+      end
+    end
+    object pnlTitulo: TPanel
+      Left = 0
+      Top = 0
+      Width = 800
+      Height = 38
+      Align = alTop
+      BevelOuter = bvNone
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 2
+      object lblTitulo: TLabel
+        Left = 5
+        Top = 12
+        Width = 32
+        Height = 13
+        BiDiMode = bdLeftToRight
+        Caption = 'T'#237'tulo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBiDiMode = False
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 0
+        Top = 25
+        Width = 800
+        Height = 13
+        Align = alBottom
+        AutoSize = False
+        Caption = 
+          '________________________________________________________________' +
+          '________________________________________________________________' +
+          '________'
+        ExplicitWidth = 752
       end
     end
   end
