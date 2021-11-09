@@ -36,7 +36,7 @@ type
     function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
+    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
     property Id: Integer read GetId write SetId;
     [TCampoTexto('CEP', 10, [], 'CEP')]
     property CEP: string read GetCEP write SetCEP;

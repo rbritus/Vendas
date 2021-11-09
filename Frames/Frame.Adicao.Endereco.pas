@@ -8,8 +8,7 @@ uses
   Frame.Adicao.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Entidade.Endereco,
   Attributes.Forms, Vcl.Imaging.pngimage, Vcl.DBCGrids, System.ImageList,
   Vcl.ImgList, Vcl.StdCtrls, Vcl.DBCtrls, Componente.TObjectList, Data.DB,
-  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade, View.Cadastro.Endereco,
-  dxGDIPlusClasses;
+  Datasnap.DBClient, Objeto.CustomSelect, Utils.Entidade, View.Cadastro.Endereco;
 
 type
   [TFormularioCadastro(TFrmCadastroEndereco)]

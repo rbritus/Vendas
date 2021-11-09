@@ -32,7 +32,7 @@ type
     procedure SetCodigoSubdistrito(const Value: string);
     function GetCodigoSubdistrito: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
+    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
     property Id: Integer read GetId write SetId;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Cidade')]
     property Nome: string read GetNome write SetNome;

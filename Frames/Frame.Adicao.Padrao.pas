@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Frame.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Vcl.StdCtrls, System.ImageList,
   Vcl.ImgList, Vcl.Imaging.pngimage, Vcl.DBCGrids, Data.DB, Datasnap.DBClient,
-  Componente.TObjectList, Interfaces.Padrao.Observer, dxGDIPlusClasses;
+  Componente.TObjectList, Interfaces.Padrao.Observer;
 
 type
   TFrameAdicaoPadrao = class(TFramePadrao, iObservador)
@@ -96,6 +96,7 @@ begin
     Exit;
 
   cdsDados.Delete;
+  AtribuirVisibilidadeAGride;
 end;
 
 procedure TFrameAdicaoPadrao.imgBtnAlterarClick(Sender: TObject);

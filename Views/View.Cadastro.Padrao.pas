@@ -12,16 +12,17 @@ uses
 type
   TFrmCadastroPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
-    SpeedButton5: TSpeedButton;
+    btnCancelar: TSpeedButton;
     btnCadastrar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
-    procedure SpeedButton5Click(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
     procedure btnCadastrarMouseEnter(Sender: TObject);
     procedure btnCadastrarMouseLeave(Sender: TObject);
-    procedure SpeedButton5MouseEnter(Sender: TObject);
-    procedure SpeedButton5MouseLeave(Sender: TObject);
+    procedure btnCancelarMouseEnter(Sender: TObject);
+    procedure btnCancelarMouseLeave(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -30,7 +31,10 @@ type
     procedure InicializarID;
     procedure CarregarLayoutDinamico;
     procedure LimparCampos;
+    procedure LimparEntidades;
     procedure PrepararComboBoxComEnumerators;
+    function CamposObrigatoriosEstaoPreenchidos: Boolean;
+    procedure CarregarMascaraNosCampos;
   protected
     [TCadastroVariavel('ID',ftINTEIRO,coNaoObrigatorio)]
     FID: Integer;
@@ -94,10 +98,22 @@ begin
   ControllerView.LimparCamposEditaveis;
 end;
 
+procedure TFrmCadastroPadrao.LimparEntidades;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.LimparEntidades;
+end;
+
 procedure TFrmCadastroPadrao.CarregarLayoutDinamico;
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarLayoutDeCamposEditaveis;
+end;
+
+procedure TFrmCadastroPadrao.CarregarMascaraNosCampos;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.CarregarMascarasNosCampos;
 end;
 
 procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);
@@ -106,19 +122,25 @@ begin
   CarregarLayoutDinamico;
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton5Click(Sender: TObject);
+procedure TFrmCadastroPadrao.FormShow(Sender: TObject);
+begin
+  inherited;
+  CarregarMascaraNosCampos;
+end;
+
+procedure TFrmCadastroPadrao.btnCancelarClick(Sender: TObject);
 begin
   inherited;
   Close;
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton5MouseEnter(Sender: TObject);
+procedure TFrmCadastroPadrao.btnCancelarMouseEnter(Sender: TObject);
 begin
   inherited;
   AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
 end;
 
-procedure TFrmCadastroPadrao.SpeedButton5MouseLeave(Sender: TObject);
+procedure TFrmCadastroPadrao.btnCancelarMouseLeave(Sender: TObject);
 begin
   inherited;
   OcultarBarraLateralDoBotao;
@@ -130,9 +152,21 @@ begin
   ControllerView.GravarEntidade;
 end;
 
+function TFrmCadastroPadrao.CamposObrigatoriosEstaoPreenchidos: Boolean;
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  Result := ControllerView.CamposObrigatoriosEstaoPreenchidos;
+end;
+
 procedure TFrmCadastroPadrao.btnCadastrarClick(Sender: TObject);
 begin
   inherited;
+  if not CamposObrigatoriosEstaoPreenchidos then
+  begin
+    LimparEntidades;
+    Exit;
+  end;
+
   GravarEntidade;
   Close;
 end;

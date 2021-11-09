@@ -24,7 +24,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
       Color = clWhite
       ParentBackground = False
       TabOrder = 0
-      object SpeedButton5: TSpeedButton
+      object btnCancelar: TSpeedButton
         AlignWithMargins = True
         Left = 49
         Top = 5
@@ -46,9 +46,9 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
         Font.Style = [fsBold]
         ParentFont = False
         Spacing = 10
-        OnClick = SpeedButton5Click
-        OnMouseEnter = SpeedButton5MouseEnter
-        OnMouseLeave = SpeedButton5MouseLeave
+        OnClick = btnCancelarClick
+        OnMouseEnter = btnCancelarMouseEnter
+        OnMouseLeave = btnCancelarMouseLeave
         ExplicitLeft = 47
       end
       object btnCadastrar: TSpeedButton

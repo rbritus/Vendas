@@ -13,8 +13,11 @@ type
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
+    procedure LimparEntidades;
     procedure DestruirEntidadesPosCadastro;
     procedure CarregarComboBoxComEnumerators;
+    procedure CarregarMascarasNosCampos;
+    function CamposObrigatoriosEstaoPreenchidos: Boolean;
   end;
 
 implementation

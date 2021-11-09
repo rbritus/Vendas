@@ -3,7 +3,7 @@ unit Attributes.Forms;
 interface
 
 Uses
-   System.SysUtils, System.Classes, Utils.Enumerators;
+   System.SysUtils, System.Classes, Utils.Enumerators, Vcl.Controls;
 
 type
   TClasseCadastro = class(TCustomAttribute)
@@ -27,7 +27,7 @@ type
     FCampo: string;
   public
     property Campo: string read FCampo write FCampo;
-    constructor Create(const Campo: string);
+    constructor Create(const ACampo: string);
   end;
 
   TFormularioCadastro = class(TCustomAttribute)
@@ -36,6 +36,14 @@ type
   public
     property FormClasse: TComponentClass read FFormClasse write FFormClasse;
     constructor Create(const ClassValue: TComponentClass);
+  end;
+
+  TMascaraCampo = class(TCustomAttribute)
+  private
+    FMascara: string;
+  public
+    property Mascara: string read FMascara write FMascara;
+    constructor Create(const AMascara: string);
   end;
 
   TPropriedadeCadastro = class(TCustomAttribute)
@@ -50,8 +58,13 @@ type
   end;
 
   TCadastroVariavel = class(TPropriedadeCadastro)
+  private
+    FNomeComponenteValidacao: string;
   public
-    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+    constructor Create(pNomePropriedade: string; pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio;
+      ANomeComponenteValidacao: string = string.Empty);
+
+    property NomeComponenteValicadao: string read FNomeComponenteValidacao write FNomeComponenteValidacao;
   end;
 
   TCadastroEdit = class(TPropriedadeCadastro)
@@ -108,18 +121,19 @@ end;
 { TCadastroVariavel }
 
 constructor TCadastroVariavel.Create(pNomePropriedade: string;
-  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio);
+  pTipoPropriedade: TTiposDeCampo; pCampoObrigatorio: TCampoObrigatorio; ANomeComponenteValidacao: string);
 begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;
   FCampoObrigatorio := pCampoObrigatorio;
+  FNomeComponenteValidacao := ANomeComponenteValidacao;
 end;
 
 { TCampoExibicao }
 
-constructor TCampoExibicao.Create(const Campo: string);
+constructor TCampoExibicao.Create(const ACampo: string);
 begin
-  FCampo := Campo;
+  FCampo := ACampo;
 end;
 
 { TClassePesquisa }
@@ -137,6 +151,13 @@ begin
   FNomePropriedade := pNomePropriedade;
   FTipoPropriedade := pTipoPropriedade;
   FCampoObrigatorio := pCampoObrigatorio;
+end;
+
+{ TMascaraCampo }
+
+constructor TMascaraCampo.Create(const AMascara: string);
+begin
+  FMascara := AMascara;
 end;
 
 end.

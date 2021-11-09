@@ -82,11 +82,8 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         TabOrder = 3
         ExplicitLeft = 40
         ExplicitTop = 151
-        ExplicitHeight = 180
         inherited pnlFundo: TPanel
-          Height = 180
           inherited pnlConteudo: TPanel
-            Height = 98
             inherited DBCtrlGrid1: TDBCtrlGrid
               Left = -8
               Top = 6
@@ -96,12 +93,14 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
           end
         end
       end
-      object edtCPF: TEdit
+      object edtCPF: TMaskEdit
         Left = 48
         Top = 33
         Width = 169
         Height = 21
         TabOrder = 0
+        Text = ''
+        OnKeyPress = edtCPFKeyPress
       end
     end
   end

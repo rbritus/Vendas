@@ -65,7 +65,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object Label5: TLabel
-        Left = 424
+        Left = 429
         Top = 156
         Width = 34
         Height = 13
@@ -109,12 +109,13 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentBiDiMode = False
         ParentFont = False
       end
-      object edtCEP: TEdit
+      object edtCEP: TMaskEdit
         Left = 48
         Top = 33
         Width = 120
         Height = 21
         TabOrder = 0
+        Text = ''
       end
       object btnConsultaCEP: TBitBtn
         Left = 171
@@ -130,7 +131,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       object edtLogradouro: TEdit
         Left = 48
         Top = 127
-        Width = 505
+        Width = 497
         Height = 21
         TabOrder = 3
       end
@@ -144,14 +145,14 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       object edtComplemento: TEdit
         Left = 48
         Top = 175
-        Width = 353
+        Width = 351
         Height = 21
         TabOrder = 5
       end
       object edtBairro: TEdit
-        Left = 424
+        Left = 429
         Top = 175
-        Width = 238
+        Width = 233
         Height = 21
         TabOrder = 6
       end

@@ -72,7 +72,7 @@ implementation
 
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
-  Connection.Scripter.SqLite, FireDAC.Comp.Client, View.Cadastro.Endereco,
+  Connection.Scripter.SqLite, FireDAC.Comp.Client,
   Utils.Entidade, Utils.Menssages, Utils.Constants, Controller.Scripter;
 
 procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
@@ -111,45 +111,7 @@ end;
 
 procedure TFrmMenu.btnCadastroPessoasClick(Sender: TObject);
 begin
-//  var qry: TFdquery := TConexao.GetInstance.ObterQuery;
-//  qry.SQL.add('insert into pessoa (nome, ativo) values (''Teste multi2'',''S'');');
-//  qry.SQL.add('SELECT last_insert_rowid() result_id;');
-//  qry.OpenOrExecute;
-//  var ctext := qry.FieldByName('result_id').AsString;
-//
-//exit;
-
-
-//  var Form : TForm := nil;
-//  ControllerView.AdicionarFormNalista(TFrmCadastroEndereco, Form);
-//  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[9]);
-//  ControllerView.ShowForm(TFrmCadastroEndereco);
-
   ControllerView.ShowForm(TFrmCadastroListaPessoa);
-
-//  var Pessoa := TPessoa.PesquisarPorId(37);
-//  try
-//    Pessoa.Enderecos;
-//  finally
-//    Pessoa.Free;
-//  end;
-//  ShowMessage(Pessoa.Nome);
-//  Pessoa.Free;
-//  var Pessoa := TPessoa.Create;
-//  Pessoa.Nome := 'Teste gravacao 14/09 2';
-//
-//  var Endereco := TEndereco.Create;
-//  Endereco.CEP := '87053268';
-//  Endereco.Logradouro := 'Teste 02';
-//  Endereco.Numero := 275;
-//  Endereco.Bairro := 'Zona2';
-//  Pessoa.Enderecos.Add(Endereco);
-//
-//  Pessoa.Gravar;
-//  FreeAndNil(Pessoa);
-////
-//  Pessoa.Enderecos.Add(Endereco);
-//  Pessoa.Gravar;
 end;
 
 procedure TFrmMenu.btnMenuClick(Sender: TObject);

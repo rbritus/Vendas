@@ -15,17 +15,27 @@ type
     class procedure PreencherEntidadeComCamposDoForm(var AEntidade: TObject;AForm: TForm);
     class procedure PreencherFormComCamposDaEntidade(var AEntidade: TObject;AForm: TForm);
     class procedure LimparCamposDoForm(AForm: TForm);
+    class procedure LimparEntidadesDoForm(AForm: TForm);
     class procedure DestruirEntidadesEstrangeiras(AForm: TForm);
     class procedure CarregarComboBoxComEnumerators(var AEntidade: TObject;AForm: TForm);
+    class function CamposObrigatoriosEstaoPreenchidos(AForm: TForm): Boolean;
+    class procedure CarregarMascarasEmTMaskEdits(AForm: TForm);
   end;
 
 implementation
 
 uses
   Interfaces.Wrapper.PropriedadeCadastro, Wrapper.PropriedadeCadastro,
-  Utils.Entidade, Utils.Enumerators;
+  Utils.Entidade, Utils.Enumerators, Vcl.Mask;
 
 { TUtilsForm }
+
+class function TUtilsForm.CamposObrigatoriosEstaoPreenchidos(AForm: TForm): Boolean;
+begin
+  var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
+  Wrapper.DestruirAlertasTImagemValidacao;
+  Result := Wrapper.ValidarSeCamposObrigatoriosEstaoPreenchidos;
+end;
 
 class procedure TUtilsForm.PreencherEntidadeComCamposDoForm(var AEntidade: TObject;
   AForm: TForm);
@@ -86,6 +96,30 @@ begin
   end;
 end;
 
+class procedure TUtilsForm.CarregarMascarasEmTMaskEdits(AForm: TForm);
+begin
+  var CtxForm := TRttiContext.Create;
+  try
+    var Tipo := CtxForm.GetType(AForm.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    for var FieldForm in Tipo.GetDeclaredFields do
+    begin
+      for var AtribForm in FieldForm.GetAttributes do
+      begin
+        if AtribForm is TMascaraCampo then
+        begin
+          var AComponente := AForm.FindComponent(FieldForm.Name) as TMaskEdit;
+          AComponente.EditMask := TMascaraCampo(AtribForm).Mascara;
+        end;
+      end;
+    end;
+  finally
+    CtxForm.Free;
+  end;
+end;
+
 class procedure TUtilsForm.DestruirEntidadesEstrangeiras(AForm: TForm);
 begin
   var Ctx := TRttiContext.Create;
@@ -117,7 +151,14 @@ end;
 class procedure TUtilsForm.LimparCamposDoForm(AForm: TForm);
 begin
   var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
+  Wrapper.DestruirAlertasTImagemValidacao;
   Wrapper.InicializarCamposEditaveisDoForm;
+end;
+
+class procedure TUtilsForm.LimparEntidadesDoForm(AForm: TForm);
+begin
+  var Wrapper := TWrapperPropriedadeCadastro.New(AForm);
+  Wrapper.InicializarVariaveisDeEntidadesDoForm;
 end;
 
 class function TUtilsForm.ObterClasseDoFormularioCadastro(AForm: TForm): TFormClass;

@@ -10,14 +10,15 @@ uses
   Utils.Enumerators, Vcl.BaseImageCollection, Vcl.ImageCollection,
   System.ImageList, Vcl.ImgList, Vcl.VirtualImageList,
   Interfaces.Controller.Objeto.ConsultaCEP, Interfaces.Objeto.ConsultaCEP,
-  Entidade.Cidade;
+  Entidade.Cidade, Vcl.Mask, Utils.Constants;
 
 type
   [TClasseCadastro(TEndereco)]
   TFrmCadastroEndereco = class(TFrmCadastroPadrao)
     Label1: TLabel;
+    [TMascaraCampo(TConstantsMasks.CEP)]
     [TCadastroEdit('CEP',ftTEXTO,coObrigatorio)]
-    edtCEP: TEdit;
+    edtCEP: TMaskEdit;
     btnConsultaCEP: TBitBtn;
     Label2: TLabel;
     [TCadastroEdit('Logradouro',ftTEXTO,coObrigatorio)]
@@ -45,12 +46,13 @@ type
     procedure btnCadastrarClick(Sender: TObject);
   private
     { Private declarations }
-    [TCadastroVariavel('Cidade',ftESTRANGEIRO,coObrigatorio)]
+    [TCadastroVariavel('Cidade',ftESTRANGEIRO,coObrigatorio,'FramePesquisaCidade')]
     FCidade: TCidade;
     procedure ConsultarCEP;
     procedure PreencherDadosDaTela(ConsultaCEP: iConsultaCEP);
     procedure PreencherFrameCidade(ACidade: TCidade);
     procedure PreencherCidadePeloCodigoIBGE(IBGE: string);
+    function ObterCEPSemMascara: string;
   public
     { Public declarations }
   end;
@@ -101,7 +103,7 @@ end;
 procedure TFrmCadastroEndereco.ConsultarCEP;
 begin
   var ControllerConsultaCEP := TControllerObjetoConsultaCEP.New;
-  var ConsultaCEP := ControllerConsultaCEP.Get(edtCEP.Text);
+  var ConsultaCEP := ControllerConsultaCEP.Get(ObterCEPSemMascara);
   PreencherDadosDaTela(ConsultaCEP);
 end;
 
@@ -140,6 +142,13 @@ begin
   finally
     Cidade.Free;
   end;
+end;
+
+function TFrmCadastroEndereco.ObterCEPSemMascara: string;
+begin
+  edtCEP.EditMask := String.Empty;
+  Result := edtCEP.Text;
+  edtCEP.EditMask := TConstantsMasks.CPF;
 end;
 
 end.

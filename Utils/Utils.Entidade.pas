@@ -6,7 +6,7 @@ uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades, System.SysUtils, Data.DB,
   Connection.Controller.SqLite, Utils.Enumerators, Componente.TObjectList,
   Attributes.Enumerators, System.TypInfo, Data.DBXJSON, Data.DBXJSONReflect,
-  System.JSON;
+  System.JSON, Vcl.StdCtrls;
 
 type
   TUtilsEntidade = class
@@ -14,7 +14,7 @@ type
     class function GetEnumerator(Prop: TRttiProperty; Obj: TObject; Valor: Variant): TValue; overload; static;
     class function GetEnumerator(Field: TRttiField; Obj: TObject; Valor: Variant): TValue; overload; static;
     class function GetValueEnumerator(Prop: TRttiProperty; Obj: TObject): TValue; overload; static;
-//    class function GetValueEnumerator(Field: TRttiField; Obj: TObject): TValue; overload; static;
+    class function GetValueEnumerator(Field: TRttiField; Obj: TObject): TValue; overload; static;
   public
     class function ObterCloneObjeto(ObjetoClone: TObject): TObject;
     class function ObterObjetoGenerico<T>: T;
@@ -30,6 +30,7 @@ type
     class procedure SetarValorParaField(Objeto: TObject; NomePropriedade: string; Valor: TValue);
     class procedure SetarValorParaPropriedade(Objeto: TObject; NomePropriedade: string; Valor: TValue);
     class function ObterValorPropriedade(Obj: TObject; cNomePropriedade: string): TValue;
+    class function ObterValorField(Obj: TObject; cNomePropriedade: string): TValue;
     class function ObterObjetoChaveEstrangeira(ObjPai: TObject; ClasseObjEstrangeiro: TPersistentClass): TObject;
     class function ObterListaComTabelaRelacional<T: class>(ID: Integer; CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
          ClasseDestino: TPersistentClass): TObjectListFuck<T>;
@@ -350,29 +351,29 @@ begin
   end;
 end;
 
-//class function TUtilsEntidade.GetValueEnumerator(Field: TRttiField;
-//  Obj: TObject): TValue;
-//var
-//  Ctx: TRttiContext;
-//  CustomAttribute: TCustomAttribute;
-//begin
-//  Result := TValue.From(0);
-//  Ctx := TRttiContext.Create;
-//  try
-//    var Enum := Field.GetValue(Obj);
-//    for CustomAttribute in Field.FieldType.GetAttributes do
-//    begin
-//      if CustomAttribute is TEnumAttribute then
-//        if TEnumAttribute(CustomAttribute).Indice = Enum.AsOrdinal then
-//        begin
-//          Result := TValue.From(TEnumAttribute(CustomAttribute).Value);
-//          Break;
-//        end;
-//    end;
-//  finally
-//    Ctx.Free;
-//  end;
-//end;
+class function TUtilsEntidade.GetValueEnumerator(Field: TRttiField;
+  Obj: TObject): TValue;
+var
+  Ctx: TRttiContext;
+  CustomAttribute: TCustomAttribute;
+begin
+  Result := TValue.From(0);
+  Ctx := TRttiContext.Create;
+  try
+    var Enum := Field.GetValue(Obj);
+    for CustomAttribute in Field.FieldType.GetAttributes do
+    begin
+      if CustomAttribute is TEnumAttribute then
+        if TEnumAttribute(CustomAttribute).Indice = Enum.AsOrdinal then
+        begin
+          Result := TValue.From(TEnumAttribute(CustomAttribute).Value);
+          Break;
+        end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
 
 class function TUtilsEntidade.GetValueEnumerator(Prop: TRttiProperty; Obj: TObject): TValue;
 var
@@ -410,6 +411,47 @@ begin
   end;
 end;
 
+class function TUtilsEntidade.ObterValorField(Obj: TObject;
+  cNomePropriedade: string): TValue;
+var
+  Ctx: TRttiContext;
+  Tipo: TRTTIType;
+begin
+  Result := EmptyStr;
+  Ctx := TRttiContext.Create;
+  try
+    Tipo := Ctx.GetType(Obj.ClassType);
+    if not Assigned(Tipo) then
+      Exit;
+
+    var field := Tipo.GetField(cNomePropriedade);
+
+    for var Atrib in field.GetAttributes do
+    begin
+      if Atrib is TCampoListagem then
+        Exit(TValue.From(TObjectListFuck<TObject>(field.GetValue(Obj).AsObject)))
+    end;
+
+    if field.FieldType.TypeKind = tkEnumeration then
+    begin
+      var Value := GetValueEnumerator(field, Obj);
+      Exit(Value);
+    end;
+
+    case field.FieldType.TypeKind of
+      tkInteger:
+        Exit(TValue.FromVariant(field.GetValue(Obj).AsInteger));
+      tkFloat:
+        Exit(TValue.FromVariant(field.GetValue(Obj).AsCurrency));
+      tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
+        Exit(TValue.FromVariant(field.GetValue(Obj).AsString));
+    end;
+    Result := field.GetValue(Obj);
+  finally
+    Ctx.Free;
+  end;
+end;
+
 class function TUtilsEntidade.ObterValorPropriedade(Obj: TObject; cNomePropriedade: String): TValue;
 var
   Ctx: TRttiContext;
@@ -418,7 +460,7 @@ begin
   Result := EmptyStr;
   Ctx := TRttiContext.Create;
   try
-    Tipo := Ctx.GetType(FindClass(Obj.ClassName));
+    Tipo := Ctx.GetType(Obj.ClassType);
     if not Assigned(Tipo) then
       Exit;
 

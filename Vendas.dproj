@@ -231,6 +231,7 @@
         <DCCReference Include="Interfaces\Interfaces.Objeto.ConsultaCEP.pas"/>
         <DCCReference Include="Utils\Utils.Frame.pas"/>
         <DCCReference Include="Utils\Utils.Menssages.pas"/>
+        <DCCReference Include="Utils\Utils.Edit.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

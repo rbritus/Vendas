@@ -8,14 +8,14 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
     Height = 180
     AutoSize = True
     ExplicitWidth = 760
-    ExplicitHeight = 165
+    ExplicitHeight = 180
     inherited pnlConteudo: TPanel
       Width = 760
       Height = 98
       AutoSize = True
       TabOrder = 1
       ExplicitWidth = 760
-      ExplicitHeight = 121
+      ExplicitHeight = 98
       inherited DBCtrlGrid1: TDBCtrlGrid
         Width = 760
         Height = 42
@@ -42,7 +42,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
         object edtCEP: TDBText [1]
           Left = 164
           Top = 6
-          Width = 90
+          Width = 77
           Height = 17
           DataField = 'CEP'
           DataSource = dscDados
@@ -138,6 +138,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
       end
       inherited Label4: TLabel
         Width = 760
+        ExplicitWidth = 760
       end
     end
   end

@@ -4,7 +4,7 @@ interface
 
 uses
   Vcl.Forms, System.Classes, Interfaces.Controller.Cadastro.Padrao, Vcl.ExtCtrls,
-  Vcl.Controls, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.StdCtrls, Vcl.Mask;
 
 type
   TControllerCadastroPadrao = class(TInterfacedObject, iControllerCadastroPadrao)
@@ -20,13 +20,18 @@ type
     procedure PreencherFormComCamposDaEntidade;
     procedure ModificarLayoutEdit(edt: TEdit);
     procedure InformarObservador;
+    function isComponenteTEdit(AComponente: TComponent): Boolean;
+    function isComponenteTMaskEdit(AComponente: TComponent): Boolean;
   public
     procedure GravarEntidade;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
+    procedure LimparEntidades;
     procedure DestruirEntidadesPosCadastro;
     procedure CarregarComboBoxComEnumerators;
+    procedure CarregarMascarasNosCampos;
+    function CamposObrigatoriosEstaoPreenchidos: Boolean;
 
     class function New(AForm: TForm): iControllerCadastroPadrao;
   end;
@@ -66,11 +71,16 @@ end;
 procedure TControllerCadastroPadrao.CarregarLayoutDeCamposEditaveis;
 begin
   for var Indice := 0 to Pred(FForm.ComponentCount) do
-    if FForm.Components[Indice].ClassType = TEdit then
+    if isComponenteTEdit(FForm.Components[Indice]) or isComponenteTMaskEdit(FForm.Components[Indice])  then
     begin
-      ModificarLayoutEdit(FForm.Components[Indice] as TEdit);
+      ModificarLayoutEdit(TEdit(FForm.Components[Indice]));
       ControllerView.CriarSublinhadoParaCamposEditaveis(FForm.Components[Indice] as TWinControl);
     end;
+end;
+
+procedure TControllerCadastroPadrao.CarregarMascarasNosCampos;
+begin
+  TUtilsForm.CarregarMascarasEmTMaskEdits(FForm);
 end;
 
 constructor TControllerCadastroPadrao.Create(AForm: TForm);
@@ -93,9 +103,26 @@ begin
   TUtilsForm.DestruirEntidadesEstrangeiras(FForm);
 end;
 
+function TControllerCadastroPadrao.CamposObrigatoriosEstaoPreenchidos: Boolean;
+begin
+  Result := TUtilsForm.CamposObrigatoriosEstaoPreenchidos(FForm);
+end;
+
 procedure TControllerCadastroPadrao.InformarObservador;
 begin
   TUtilsEntidade.ExecutarMetodoObjeto(FForm,'NotificarObservador',[FEntidade]);
+end;
+
+function TControllerCadastroPadrao.isComponenteTEdit(
+  AComponente: TComponent): Boolean;
+begin
+  Result := AComponente.ClassType = TEdit;
+end;
+
+function TControllerCadastroPadrao.isComponenteTMaskEdit(
+  AComponente: TComponent): Boolean;
+begin
+  Result := AComponente.ClassType = TMaskEdit;
 end;
 
 procedure TControllerCadastroPadrao.GravarEntidade;
@@ -110,6 +137,11 @@ end;
 procedure TControllerCadastroPadrao.LimparCamposEditaveis;
 begin
   TUtilsForm.LimparCamposDoForm(FForm);
+end;
+
+procedure TControllerCadastroPadrao.LimparEntidades;
+begin
+  TUtilsForm.LimparEntidadesDoForm(FForm);
 end;
 
 class function TControllerCadastroPadrao.New(AForm: TForm): iControllerCadastroPadrao;

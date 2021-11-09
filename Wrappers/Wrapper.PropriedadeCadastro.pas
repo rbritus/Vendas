@@ -6,18 +6,24 @@ uses
   Utils.Enumerators, Interfaces.Wrapper.PropriedadeCadastro, Attributes.Forms,
   System.Rtti, System.TypInfo, Vcl.StdCtrls, Vcl.WinXCtrls, System.StrUtils,
   System.Math, System.Classes, Componente.TObjectList, Vcl.Dialogs, Vcl.Forms,
-  Utils.Entidade, Attributes.Enumerators;
+  Utils.Entidade, Attributes.Enumerators, Vcl.Mask, Vcl.ExtCtrls, Vcl.Controls;
 
 type
+  TImagemValidacao = class(TImage);
+
   TWrapperPropriedadeCadastro = class(TInterfacedObject, iWrapperPropriedadeCadastro)
   protected
     FForm: TForm;
     procedure SetarValorParaComponenteForm(AValor: TValue; Propriedade: TPropriedadeCadastro; AField: TRttiField);
+    procedure IndicarComponenteComoNaoPreenchido(AForm: TForm; AComponente: TComponent);
   public
     class function New(AForm: TForm): iWrapperPropriedadeCadastro;
     procedure PreencherEntidadeDeCadastroComDadosDoForm(var AEntidade: TObject);
     procedure PreencherFormComEntidade(AEntidade: TObject);
+    procedure InicializarVariaveisDeEntidadesDoForm;
     procedure InicializarCamposEditaveisDoForm;
+    procedure DestruirAlertasTImagemValidacao;
+    function ValidarSeCamposObrigatoriosEstaoPreenchidos: Boolean;
     constructor Create(AForm: TForm);
   end;
 
@@ -26,13 +32,21 @@ type
       class function ObterValorDaEntidadeParaForm(AValor: TValue; ATipo: TTiposDeCampo): TValue;
       class procedure SetarValorParaComponenteForm(AForm: TForm; AField: TRttiField; AValor: TValue);
       class procedure Inicializar(AField: TRttiField; AForm: TForm);
+      class function CampoPreenchido(AForm: TForm; AField: TRttiField; CadastroVariavel: TCadastroVariavel): Boolean;
+      class procedure DestruirVariaveis(AField: TRttiField; AForm: TForm);
   end;
 
   TTratarTEdit = class
-      class function ObterValorDoComponenteDoForm(AValor: TValue; ATipo: TTiposDeCampo): TValue;
-      class function ObterValorDaEntidadeParaForm(AValor: TValue; ATipo: TTiposDeCampo): TValue;
-      class procedure SetarValorParaComponenteForm(AComponente: TComponent; AValor: TValue);
-      class procedure Inicializar(AComponente: TComponent);
+  private
+    class function ComponenteTipoTMaskEdit(AComponente: TComponent): Boolean;
+    class function ObterValorSemMascara(AComponente: TComponent): string;
+    class function ObterValorDoComponente(AComponente: TComponent): string;
+  public
+    class function ObterValorDoComponenteDoForm(AComponente: TComponent; ATipo: TTiposDeCampo): TValue;
+    class function ObterValorDaEntidadeParaForm(AValor: TValue; ATipo: TTiposDeCampo): TValue;
+    class procedure SetarValorParaComponenteForm(AComponente: TComponent; AValor: TValue);
+    class procedure Inicializar(AComponente: TComponent);
+    class function CampoPreenchido(AComponente: TComponent): Boolean;
   end;
 
   TTratarTToggleSwitch = class
@@ -49,6 +63,7 @@ type
         AValor: TValue; APropriedadeCadastro: TPropriedadeCadastro): TValue;
       class procedure SetarValorParaComponenteForm(AComponente: TComponent; AValor: TValue);
       class procedure Inicializar(AComponente: TComponent);
+      class function CampoPreenchido(AComponente: TComponent): Boolean;
   end;
 
   TTratarFrameClassPesquisa = class
@@ -58,13 +73,47 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, View.Padrao, Utils.Constants;
 
 { TWrapperPropriedadeCadastro }
 
 constructor TWrapperPropriedadeCadastro.Create(AForm: TForm);
 begin
   FForm := AForm;
+end;
+
+procedure TWrapperPropriedadeCadastro.DestruirAlertasTImagemValidacao;
+begin
+  var Indice := 0;
+  while Indice <= Pred(FForm.ComponentCount) do
+  begin
+    if FForm.Components[Indice].ClassType = TImagemValidacao then
+    begin
+      TImagemValidacao(FForm.Components[Indice]).Free;
+      Continue;
+    end;
+    inc(Indice);
+  end;
+end;
+
+procedure TWrapperPropriedadeCadastro.IndicarComponenteComoNaoPreenchido(AForm: TForm;
+  AComponente: TComponent);
+const
+  LARGURA = 28;
+  ALTURA = 24;
+  RECUO_TOPO = -5;
+  RECUO_ESQUERDA = -32;
+  IMAGEM_ALERTA = 3;
+begin
+  var Imagem := TImagemValidacao.Create(AForm);
+  Imagem.Parent := TWinControl(AComponente).Parent;
+  Imagem.Height := ALTURA;
+  Imagem.Width := LARGURA;
+  Imagem.Top := TWinControl(AComponente).Top + RECUO_TOPO;
+  Imagem.Left := TWinControl(AComponente).Left + RECUO_ESQUERDA;
+  Imagem.Hint := 'Campo com preenchimento obrigatório.';
+  Imagem.ShowHint := True;
+  TFrmPadrao(AForm).imgListaBotoes32.GetBitmap(IMAGEM_ALERTA,Imagem.Picture.Bitmap);
 end;
 
 procedure TWrapperPropriedadeCadastro.InicializarCamposEditaveisDoForm;
@@ -108,6 +157,30 @@ begin
   end;
 end;
 
+procedure TWrapperPropriedadeCadastro.InicializarVariaveisDeEntidadesDoForm;
+begin
+  var Ctx := TRttiContext.Create;
+  try
+    var ATipo := Ctx.GetType(FForm.ClassType);
+    if not Assigned(ATipo) then
+      Exit;
+
+    for var FField in ATipo.GetFields do
+    begin
+      for var Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
+            TTratarVariavel.DestruirVariaveis(FField, FForm);
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+end;
+
 class function TWrapperPropriedadeCadastro.New(AForm: TForm): iWrapperPropriedadeCadastro;
 begin
   Result := Self.Create(AForm);
@@ -127,12 +200,13 @@ begin
       begin
         if Atrib is TPropriedadeCadastro then
         begin
+          var AComponente := FForm.FindComponent(FField.Name);
           var AValor: TValue;
           if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
             AValor := TTratarVariavel.ObterValorDoComponenteDoForm(FForm, FField, TPropriedadeCadastro(Atrib).TipoPropriedade);
 
           if TPropriedadeCadastro(Atrib) is TCadastroEdit then
-            AValor := TTratarTEdit.ObterValorDoComponenteDoForm(FField.GetValue(FForm), TPropriedadeCadastro(Atrib).TipoPropriedade);
+            AValor := TTratarTEdit.ObterValorDoComponenteDoForm(AComponente, TPropriedadeCadastro(Atrib).TipoPropriedade);
 
           if TPropriedadeCadastro(Atrib) is TCadastroToggleSwitch then
             AValor := TTratarTToggleSwitch.ObterValorDoComponenteDoForm(FField.GetValue(FForm), TPropriedadeCadastro(Atrib).TipoPropriedade);
@@ -215,21 +289,116 @@ begin
   end;
 end;
 
+function TWrapperPropriedadeCadastro.ValidarSeCamposObrigatoriosEstaoPreenchidos: Boolean;
+begin
+  var CamposObrigatoriosPreenchidos := True;
+  var Ctx := TRttiContext.Create;
+  try
+    var ATipo := Ctx.GetType(FForm.ClassType);
+    if not Assigned(ATipo) then
+      Exit(CamposObrigatoriosPreenchidos);
+
+    for var FField in ATipo.GetFields do
+    begin
+      for var Atrib in FField.GetAttributes do
+      begin
+        if Atrib is TPropriedadeCadastro then
+        begin
+          if TPropriedadeCadastro(Atrib).CampoObrigatorio = coNaoObrigatorio then
+            Continue;
+
+          if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
+          begin
+            if TTratarVariavel.CampoPreenchido(FForm, FField, TCadastroVariavel(Atrib)) then
+              Continue;
+
+            var AComponente := FForm.FindComponent(TCadastroVariavel(Atrib).NomeComponenteValicadao);
+            IndicarComponenteComoNaoPreenchido(FForm, AComponente);
+            CamposObrigatoriosPreenchidos := False;
+          end;
+
+          var AComponente := FForm.FindComponent(FField.Name);
+          if TPropriedadeCadastro(Atrib) is TCadastroEdit then
+          begin
+            if TTratarTEdit.CampoPreenchido(AComponente) then
+              Continue;
+
+            IndicarComponenteComoNaoPreenchido(FForm, AComponente);
+            CamposObrigatoriosPreenchidos := False;
+          end;
+
+          if TPropriedadeCadastro(Atrib) is TCadastroComboBox then
+          begin
+            if TTratarTComboBox.CampoPreenchido(AComponente) then
+              Continue;
+
+            IndicarComponenteComoNaoPreenchido(FForm, AComponente);
+            CamposObrigatoriosPreenchidos := False;
+          end;
+        end;
+      end;
+    end;
+  finally
+    Ctx.Free;
+  end;
+  Result := CamposObrigatoriosPreenchidos;
+end;
+
 { TTratarEdit }
+
+class function TTratarTEdit.CampoPreenchido(AComponente: TComponent): Boolean;
+begin
+  if TTratarTEdit.ComponenteTipoTMaskEdit(AComponente) then
+    Result := TTratarTEdit.ObterValorSemMascara(AComponente).Trim <> string.Empty
+  else
+    Result := Trim(Tedit(AComponente).Text) <> string.Empty;
+end;
+
+class function TTratarTEdit.ComponenteTipoTMaskEdit(AComponente: TComponent): Boolean;
+begin
+  Result := AComponente.ClassType = TMaskEdit;
+end;
 
 class procedure TTratarTEdit.Inicializar(AComponente: TComponent);
 begin
   Tedit(AComponente).Clear;
+  if TTratarTEdit.ComponenteTipoTMaskEdit(AComponente) then
+    TMaskEdit(AComponente).EditMask := string.Empty;
 end;
 
-class function TTratarTEdit.ObterValorDoComponenteDoForm(AValor: TValue; ATipo: TTiposDeCampo): TValue;
+class function TTratarTEdit.ObterValorDoComponente(
+  AComponente: TComponent): string;
 begin
-  case ATipo of
-    ftINTEIRO, ftDECIMAL : Result := TValue.FromVariant(StrToIntDef(AValor.AsType<TEdit>.Text,0));
-    ftDATA : Result := TValue.FromVariant(StrToDateTime(AValor.AsType<TEdit>.Text));
-  else
-    Result := TValue.FromVariant(AValor.AsType<TEdit>.Text);
+  var Ctx := TRttiContext.Create;
+  try
+    var Prop := Ctx.GetType(AComponente.ClassType).GetProperty('Text');
+    Result := Prop.GetValue(AComponente).AsString;
+  finally
+    Ctx.Free;
   end;
+end;
+
+class function TTratarTEdit.ObterValorDoComponenteDoForm(AComponente: TComponent;
+  ATipo: TTiposDeCampo): TValue;
+begin
+  var Valor := TTratarTEdit.ObterValorDoComponente(AComponente);
+  if ComponenteTipoTMaskEdit(AComponente) then
+     Valor := ObterValorSemMascara(AComponente);
+
+  case ATipo of
+    ftINTEIRO, ftDECIMAL : Result := TValue.FromVariant(StrToIntDef(Valor,0));
+    ftDATA : Result := TValue.FromVariant(StrToDateTime(Valor));
+  else
+    Result := TValue.FromVariant(Valor);
+  end;
+end;
+
+class function TTratarTEdit.ObterValorSemMascara(AComponente: TComponent): string;
+begin
+  var Mascara := TMaskEdit(AComponente).EditMask;
+  TMaskEdit(AComponente).EditMask := string.Empty;
+  Result := TMaskEdit(AComponente).Text;
+  TMaskEdit(AComponente).EditMask := Mascara;
 end;
 
 class function TTratarTEdit.ObterValorDaEntidadeParaForm(AValor: TValue;
@@ -298,25 +467,67 @@ end;
 
 { TTratarVariavel }
 
-class procedure TTratarVariavel.Inicializar(AField: TRttiField; AForm: TForm);
+class function TTratarVariavel.CampoPreenchido(AForm: TForm;
+  AField: TRttiField; CadastroVariavel: TCadastroVariavel): Boolean;
+begin
+  Result := True;
+  case AField.FieldType.TypeKind of
+    tkClass:
+      begin
+        var Obj := AField.GetValue(AForm).AsObject;
+        Result := Assigned(Obj);
+        if CadastroVariavel.TipoPropriedade = ftLISTAGEM then
+          Exit(TList(Obj).Count > TConstantsInteger.ZERO);
+
+        if CadastroVariavel.TipoPropriedade = ftESTRANGEIRO then
+        begin
+          var EstaPreenchido := not TUtilsEntidade.ExecutarMetodoObjeto(Obj,'EstaVazia',[]).AsBoolean;
+          Exit(EstaPreenchido);
+        end;
+      end;
+    tkInteger:
+      Result := AField.GetValue(AForm).AsInteger <> TConstantsInteger.ZERO;
+    tkFloat:
+      Result := AField.GetValue(AForm).AsExtended <> TConstantsInteger.ZERO;
+    tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
+      Result := AField.GetValue(AForm).AsString <> string.Empty;
+    tkVariant:
+      AField.SetValue(AForm, EmptyStr);
+    tkEnumeration:
+      begin
+        var Value := TValue.FromOrdinal(AField.GetValue(AForm).TypeInfo, TConstantsInteger.ZERO);
+        Result := Value.AsInteger > -1;
+      end;
+  end;
+end;
+
+class procedure TTratarVariavel.DestruirVariaveis(AField: TRttiField;
+  AForm: TForm);
 begin
   case AField.FieldType.TypeKind of
     tkClass:
       begin
-        AField.SetValue(AForm, nil);
-//        var Obj := AField.GetValue(AForm).AsObject;
-//        if Assigned(Obj) then
-//          Obj.Free;
+        var Obj := AField.GetValue(AForm).AsObject;
+        if Assigned(Obj) then
+          Obj.Free;
       end;
+  end;
+end;
+
+class procedure TTratarVariavel.Inicializar(AField: TRttiField; AForm: TForm);
+begin
+  case AField.FieldType.TypeKind of
+    tkClass:
+        AField.SetValue(AForm, nil);
     tkInteger, tkFloat:
-      AField.SetValue(AForm, 0);
+      AField.SetValue(AForm, TConstantsInteger.ZERO);
     tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
       AField.SetValue(AForm, EmptyStr);
     tkVariant:
       AField.SetValue(AForm, EmptyStr);
     tkEnumeration:
       begin
-        var Value := TValue.FromOrdinal(AField.GetValue(AForm).TypeInfo, 0);
+        var Value := TValue.FromOrdinal(AField.GetValue(AForm).TypeInfo, TConstantsInteger.ZERO);
         AField.SetValue(AForm, Value);
       end;
   end;
@@ -358,9 +569,15 @@ end;
 
 { TTratarTComboBox }
 
+class function TTratarTComboBox.CampoPreenchido(
+  AComponente: TComponent): Boolean;
+begin
+  Result := TComboBox(AComponente).ItemIndex > TConstantsInteger.MENOS_UM;
+end;
+
 class procedure TTratarTComboBox.Inicializar(AComponente: TComponent);
 begin
-  TComboBox(AComponente).ItemIndex := -1;
+  TComboBox(AComponente).ItemIndex := TConstantsInteger.MENOS_UM;
   TComboBox(AComponente).Text := String.Empty;
 end;
 

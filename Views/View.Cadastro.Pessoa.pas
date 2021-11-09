@@ -9,7 +9,7 @@ uses
   Entidade.Pessoa, Attributes.Forms, Vcl.StdCtrls, Vcl.WinXCtrls,
   Utils.Enumerators, Frame.Padrao, Frame.Adicao.Padrao, Frame.Adicao.Endereco,
   Entidade.Endereco, Componente.TObjectList, Frame.Pesquisa.Entidade.Padrao,
-  System.ImageList, Vcl.ImgList;
+  System.ImageList, Vcl.ImgList, Vcl.Mask, Utils.Constants;
 
 type
   [TClasseCadastro(TPessoa)]
@@ -21,13 +21,15 @@ type
     ToggleSwitch1: TToggleSwitch;
     Label3: TLabel;
     FrameAdicaoEndereco: TFrameAdicaoEndereco;
+    [TMascaraCampo(TConstantsMasks.CPF)]
     [TCadastroEdit('CPF',ftTEXTO,coObrigatorio)]
-    edtCPF: TEdit;
+    edtCPF: TMaskEdit;
     Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
+    procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
   private
-    [TCadastroVariavel('Enderecos',ftLISTAGEM,coNaoObrigatorio)]
+    [TCadastroVariavel('Enderecos',ftLISTAGEM,coObrigatorio,'FrameAdicaoEndereco')]
     FEnderecos: TObjectListFuck<TEndereco>;
     { Private declarations }
   public
@@ -39,12 +41,22 @@ var
 
 implementation
 
+uses
+  Utils.Edit;
+
 {$R *.dfm}
 
 procedure TFrmCadastroPessoa.btnCadastrarClick(Sender: TObject);
 begin
   FEnderecos := FrameAdicaoEndereco.ObterLista;
   inherited;
+end;
+
+procedure TFrmCadastroPessoa.edtCPFKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if not TUtilsEdit.SomenteNumeros(key,['0'..'9']) then
+    key := TConstantsString.CHAR_RESULT;
 end;
 
 procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
