@@ -43,7 +43,6 @@ type
     function ObterQuantidadeDeRegistrosDoDataSetGrid: Integer;
   protected
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
-    function ObterSqlParaDatSet: string; virtual; Abstract;
     function ObterSqlDeTabelaRelacional: string;
     function ObterObjetoDoFrame: TObject;
     procedure CriarDataSet; virtual; Abstract;
@@ -52,6 +51,7 @@ type
   public
     { Public declarations }
     procedure CarregarFrame(IdEntidade: Integer);
+    procedure LimparDataSet;
   end;
 
 var
@@ -76,6 +76,7 @@ begin
 
   if not Assigned(Lista) then
   begin
+    LimparDataSet;
     AtribuirVisibilidadeAGride;
     Exit;
   end;
@@ -92,11 +93,20 @@ end;
 procedure TFrameAdicaoPadrao.imgBtnExcluirClick(Sender: TObject);
 begin
   inherited;
-  if cdsDados.IsEmpty then
+  if DataSetGridEstaVazio then
     Exit;
 
   cdsDados.Delete;
   AtribuirVisibilidadeAGride;
+end;
+
+procedure TFrameAdicaoPadrao.LimparDataSet;
+begin
+  if not DataSetGridEstaVazio then
+  begin
+    cdsDados.EmptyDataSet;
+    AtribuirVisibilidadeAGride;
+  end;
 end;
 
 procedure TFrameAdicaoPadrao.imgBtnAlterarClick(Sender: TObject);

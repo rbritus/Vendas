@@ -16,7 +16,6 @@ type
     imgListaBotoes32: TImageList;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -31,6 +30,7 @@ type
     property OwnerCaption: string read FOwnerCaption write FOwnerCaption;
     procedure SetObservador(Value: TWinControl);
     procedure NotificarObservador(Value: TObject);
+    procedure Show;
   end;
 
 var
@@ -59,6 +59,11 @@ begin
   FObservador := Value as iObservador;
 end;
 
+procedure TFrmPadrao.Show;
+begin
+  ControllerView.ShowFormCaption(Self);
+end;
+
 procedure TFrmPadrao.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   ControllerView.ShowOwnerCaption(Self);
@@ -80,11 +85,6 @@ procedure TFrmPadrao.FormResize(Sender: TObject);
 begin
 //  ControllerView.ArredondarCantos(pnlConteudo);
 //  ControllerView.ArredondarCantos(pnlFundo);
-end;
-
-procedure TFrmPadrao.FormShow(Sender: TObject);
-begin
-  ControllerView.ShowFormCaption(Self);
 end;
 
 procedure TFrmPadrao.LimparCampos();

@@ -50,6 +50,9 @@ var
 
 implementation
 
+uses
+  Utils.Entidade;
+
 { TControllerView }
 
 function TControllerView.CarregarForm(Value: TComponentClass): TForm;
@@ -62,14 +65,15 @@ begin
   AForm.Parent := Parent;
   AForm.Align := alClient;
   AForm.BorderStyle := bsNone;
-  AForm.Visible := True;
   AForm.FormStyle := fsNormal;
   Result := AForm;
 end;
 
 procedure TControllerView.ShowForm(Value: TComponentClass);
 begin
-  CarregarForm(Value).Show;
+  var Form := CarregarForm(Value);
+  Form.Show;
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'Show',[]);
 end;
 
 function TControllerView.CarregarFormModal(Value: TComponentClass): TForm;

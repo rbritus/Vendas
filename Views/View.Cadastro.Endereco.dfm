@@ -202,7 +202,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         TabOrder = 8
       end
       object cmbTipoEndereco: TComboBox
-        Left = 48
+        Left = 49
         Top = 79
         Width = 144
         Height = 21

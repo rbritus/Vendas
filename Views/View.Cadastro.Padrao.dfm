@@ -3,6 +3,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
   WindowState = wsNormal
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel

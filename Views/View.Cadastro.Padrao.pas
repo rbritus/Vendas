@@ -21,7 +21,6 @@ type
     procedure btnCancelarMouseEnter(Sender: TObject);
     procedure btnCancelarMouseLeave(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }
@@ -76,6 +75,7 @@ begin
   FID := pId;
   PrepararComboBoxComEnumerators;
   LimparCampos;
+  LimparEntidades;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarEntidadeParaEdicao(pId);
 end;
@@ -85,6 +85,7 @@ begin
   InicializarID;
   PrepararComboBoxComEnumerators;
   LimparCampos;
+  LimparEntidades;
 end;
 
 procedure TFrmCadastroPadrao.InicializarID;
@@ -116,15 +117,10 @@ begin
   ControllerView.CarregarMascarasNosCampos;
 end;
 
-procedure TFrmCadastroPadrao.FormCreate(Sender: TObject);
-begin
-  inherited;
-  CarregarLayoutDinamico;
-end;
-
 procedure TFrmCadastroPadrao.FormShow(Sender: TObject);
 begin
   inherited;
+  CarregarLayoutDinamico;
   CarregarMascaraNosCampos;
 end;
 

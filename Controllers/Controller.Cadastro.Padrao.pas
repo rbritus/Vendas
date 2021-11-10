@@ -22,6 +22,8 @@ type
     procedure InformarObservador;
     function isComponenteTEdit(AComponente: TComponent): Boolean;
     function isComponenteTMaskEdit(AComponente: TComponent): Boolean;
+    procedure LimpaFramesAdicao;
+    function isComponenteTFrameAdicao(AComponente: TComponent): Boolean;
   public
     procedure GravarEntidade;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
@@ -39,7 +41,7 @@ type
 implementation
 
 uses
-  Utils.Entidade, Utils.Form, Controller.View;
+  Utils.Entidade, Utils.Form, Controller.View, Frame.Adicao.Padrao;
 
 { TControllerCadastroPadrao }
 
@@ -119,6 +121,12 @@ begin
   Result := AComponente.ClassType = TEdit;
 end;
 
+function TControllerCadastroPadrao.isComponenteTFrameAdicao(
+  AComponente: TComponent): Boolean;
+begin
+  Result := AComponente is TFrameAdicaoPadrao;
+end;
+
 function TControllerCadastroPadrao.isComponenteTMaskEdit(
   AComponente: TComponent): Boolean;
 begin
@@ -134,9 +142,17 @@ begin
   DestruirEntidade;
 end;
 
+procedure TControllerCadastroPadrao.LimpaFramesAdicao;
+begin
+  for var Indice := 0 to Pred(FForm.ComponentCount) do
+    if isComponenteTFrameAdicao(FForm.Components[Indice]) then
+      TFrameAdicaoPadrao(FForm.Components[Indice]).LimparDataSet;
+end;
+
 procedure TControllerCadastroPadrao.LimparCamposEditaveis;
 begin
   TUtilsForm.LimparCamposDoForm(FForm);
+  LimpaFramesAdicao;
 end;
 
 procedure TControllerCadastroPadrao.LimparEntidades;

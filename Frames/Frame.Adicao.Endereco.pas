@@ -24,7 +24,6 @@ type
     lblTraco: TLabel;
     lblCEP: TLabel;
   protected
-    function ObterSqlParaDatSet: string; override;
     procedure CriarDataSet; override;
     procedure PreencherDataSet(Obj: TObject); override;
     procedure UpdateItem(Value : TObject); override;
@@ -68,18 +67,6 @@ begin
   finally
     Result := Lista;
   end;
-end;
-
-function TFrameAdicaoEndereco.ObterSqlParaDatSet: string;
-begin
-  var cSql := 'SELECT ' +
-  'ENDERECO.*, '+
-  'CIDADE.NOME CIDADE,	ESTADO.ABREVIACAO ESTADO, '+
-  TCustomSelectTipoEndereco.getSelectCustom('TIPO_ENDERECO') +
-  ' FROM ENDERECO '+
-  'INNER JOIN CIDADE ON (CIDADE.ID = ENDERECO.CIDADE_FK) '+
-  'INNER JOIN ESTADO ON (ESTADO.ID = CIDADE.ESTADO_FK) ';
-  Result := cSql + Self.ObterSqlDeTabelaRelacional;
 end;
 
 procedure TFrameAdicaoEndereco.PreencherDataSet(Obj: TObject);

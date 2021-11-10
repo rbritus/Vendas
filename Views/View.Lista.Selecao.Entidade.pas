@@ -17,7 +17,6 @@ type
     btnConfirmar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     procedure btnConfirmarClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -25,6 +24,7 @@ type
     procedure btnConfirmarMouseLeave(Sender: TObject);
     procedure btnCancelarMouseLeave(Sender: TObject);
     procedure btnCancelarMouseEnter(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     FClasseEntidade: TClass;
@@ -101,21 +101,21 @@ end;
 
 procedure TFrmListaSelecaoEntidade.ApresentarDadosNaGrid;
 begin
-  ObterDataSetPreenchido;
   CriarDataSource;
+  ObterDataSetPreenchido;
 end;
 
 procedure TFrmListaSelecaoEntidade.ObterDataSetPreenchido;
 begin
   var Controller := TControllerListaSelecaoEntidade.New(FClasseEntidade);
   FClientDataSet := TClientDataSet(Controller.ObterDataSetPreenchido);
+  FDataSource.DataSet := FClientDataSet;
 end;
 
 procedure TFrmListaSelecaoEntidade.CriarDataSource;
 begin
   if not Assigned(FDataSource) then
     FDataSource := TDataSource.Create(Self);
-  FDataSource.DataSet := FClientDataSet;
   grdLista.DataSource := FDataSource;
 end;
 
@@ -163,6 +163,5 @@ procedure TFrmListaSelecaoEntidade.OcultarBarraLateralDoBotao;
 begin
   pnlBarraLateralBotao.Visible := False;
 end;
-
 
 end.

@@ -25,9 +25,9 @@ type
     [TCadastroEdit('CPF',ftTEXTO,coObrigatorio)]
     edtCPF: TMaskEdit;
     Label1: TLabel;
-    procedure FormShow(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
     procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
   private
     [TCadastroVariavel('Enderecos',ftLISTAGEM,coObrigatorio,'FrameAdicaoEndereco')]
     FEnderecos: TObjectListFuck<TEndereco>;

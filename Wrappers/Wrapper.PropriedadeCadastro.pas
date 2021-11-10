@@ -137,10 +137,10 @@ begin
 
         if Atrib is TPropriedadeCadastro then
         begin
+          var AComponente := FForm.FindComponent(FField.Name);
           if TPropriedadeCadastro(Atrib) is TCadastroVariavel then
             TTratarVariavel.Inicializar(FField, FForm);
 
-          var AComponente := FForm.FindComponent(FField.Name);
           if TPropriedadeCadastro(Atrib) is TCadastroEdit then
             TTratarTEdit.Inicializar(AComponente);
 

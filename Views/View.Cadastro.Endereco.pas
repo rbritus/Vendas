@@ -40,10 +40,10 @@ type
     [TCadastroComboBox('TipoEndereco',ftENUMERATOR,coObrigatorio)]
     cmbTipoEndereco: TComboBox;
     Label7: TLabel;
-    procedure FormShow(Sender: TObject);
     procedure btnConsultaCEPClick(Sender: TObject);
     procedure FramePesquisaCidadeEdit1Change(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     [TCadastroVariavel('Cidade',ftESTRANGEIRO,coObrigatorio,'FramePesquisaCidade')]
@@ -148,7 +148,7 @@ function TFrmCadastroEndereco.ObterCEPSemMascara: string;
 begin
   edtCEP.EditMask := String.Empty;
   Result := edtCEP.Text;
-  edtCEP.EditMask := TConstantsMasks.CPF;
+  edtCEP.EditMask := TConstantsMasks.CEP;
 end;
 
 end.

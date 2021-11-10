@@ -1,10 +1,8 @@
 unit Objeto.ConsultaCEP;
 
 interface
-
 uses
   REST.Json.Types, Interfaces.Objeto.ConsultaCEP;
-
 type
   TConsultaCEP = class(TInterfacedObject, iConsultaCEP)
   private
@@ -53,10 +51,10 @@ type
     function ToJSONString: string;
     class function FromJSONString(const AJSONString: string): iConsultaCEP;
   end;
-
 implementation
 
-uses REST.Json;
+uses
+  REST.Json;
 
 { TViaCEPClass }
 

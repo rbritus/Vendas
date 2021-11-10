@@ -26,4 +26,6 @@ implementation
 
 {$R *.dfm}
 
+{ TFrmCadastroListaPessoa }
+
 end.

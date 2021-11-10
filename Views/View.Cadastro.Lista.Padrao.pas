@@ -16,7 +16,6 @@ type
     btnAdicionar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     grdLista: TDBGrid;
-    procedure FormShow(Sender: TObject);
     procedure grdListaDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -26,6 +25,7 @@ type
     procedure btnAdicionarMouseLeave(Sender: TObject);
     procedure SpeedButton5MouseEnter(Sender: TObject);
     procedure SpeedButton5MouseLeave(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -56,8 +56,8 @@ uses
 
 procedure TFrmCadastroListaPadrao.CriarDataSource;
 begin
-  FDataSource := TDataSource.Create(Self);
-  FDataSource.DataSet := FClientDataSet;
+  if not Assigned(FDataSource) then
+    FDataSource := TDataSource.Create(Self);
   grdLista.DataSource := FDataSource;
 end;
 
@@ -65,6 +65,7 @@ procedure TFrmCadastroListaPadrao.ObterDataSetPreenchido;
 begin
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   FClientDataSet := TClientDataSet(ControllerListaView.ObterDataSetComDadosParaGride);
+  FDataSource.DataSet := FClientDataSet;
 end;
 
 procedure TFrmCadastroListaPadrao.AjustarColunasDaGride;
@@ -74,8 +75,8 @@ end;
 
 procedure TFrmCadastroListaPadrao.ApresentarDadosNaGrid;
 begin
-  ObterDataSetPreenchido;
   CriarDataSource;
+  ObterDataSetPreenchido;
 end;
 
 procedure TFrmCadastroListaPadrao.FormCreate(Sender: TObject);
