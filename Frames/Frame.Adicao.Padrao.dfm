@@ -410,13 +410,13 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     Left = 176
     Top = 88
   end
-  object cdsDados: TClientDataSet
+  object cdsDados: TClientDataSet [3]
     Aggregates = <>
     Params = <>
     Left = 8
     Top = 89
   end
-  object dscDados: TDataSource
+  object dscDados: TDataSource [4]
     DataSet = cdsDados
     Left = 48
     Top = 89

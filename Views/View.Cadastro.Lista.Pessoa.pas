@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Cadastro.Lista.Padrao, Data.DB, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids,
   Vcl.ExtCtrls, View.Cadastro.Pessoa, Attributes.Forms, Entidade.Pessoa,
-  Vcl.StdCtrls, System.ImageList, Vcl.ImgList;
+  Vcl.StdCtrls, System.ImageList, Vcl.ImgList, Frame.Padrao,
+  Frame.Filtro.Pesquisa;
 
 type
   [TFormularioCadastro(TFrmCadastroPessoa)]

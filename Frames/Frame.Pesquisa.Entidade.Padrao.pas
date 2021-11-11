@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Frame.Padrao, System.ImageList,
   Vcl.ImgList, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.DBCtrls, Data.DB,
-  Datasnap.DBClient, Vcl.Buttons, Interfaces.Padrao.Observer;
+  Datasnap.DBClient, Vcl.Buttons, Interfaces.Padrao.Observer,
+  Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 type
   TFramePesquisaEntidadePadrao = class(TFramePadrao, iObservador)

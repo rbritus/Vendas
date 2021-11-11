@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
   View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
-  Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList, Vcl.StdCtrls;
+  Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList, Vcl.StdCtrls,
+  Frame.Padrao, Frame.Filtro.Pesquisa;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
@@ -16,6 +17,7 @@ type
     btnAdicionar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
     grdLista: TDBGrid;
+    FrameFiltroPesquisa1: TFrameFiltroPesquisa;
     procedure grdListaDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -26,6 +28,8 @@ type
     procedure SpeedButton5MouseEnter(Sender: TObject);
     procedure SpeedButton5MouseLeave(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
+    procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -38,6 +42,7 @@ type
     procedure ObservarEntidadeDeCadastro;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
+    procedure InformarGrideParaPesquisa;
   public
     { Public declarations }
   end;
@@ -79,10 +84,16 @@ begin
   ObterDataSetPreenchido;
 end;
 
+procedure TFrmCadastroListaPadrao.InformarGrideParaPesquisa;
+begin
+  FrameFiltroPesquisa1.SetDbGrid(grdLista);
+end;
+
 procedure TFrmCadastroListaPadrao.FormCreate(Sender: TObject);
 begin
   inherited;
   ObservarEntidadeDeCadastro;
+  InformarGrideParaPesquisa;
 end;
 
 procedure TFrmCadastroListaPadrao.FormDestroy(Sender: TObject);
@@ -103,6 +114,21 @@ begin
   inherited;
   ApresentarDadosNaGrid;
   AjustarColunasDaGride;
+  FrameFiltroPesquisa1.edtPesquisa.SetFocus;
+end;
+
+procedure TFrmCadastroListaPadrao.FrameFiltroPesquisa1edtPesquisaEnter(
+  Sender: TObject);
+begin
+  inherited;
+  KeyPreview := False;
+end;
+
+procedure TFrmCadastroListaPadrao.FrameFiltroPesquisa1edtPesquisaExit(
+  Sender: TObject);
+begin
+  inherited;
+  KeyPreview := True;
 end;
 
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);

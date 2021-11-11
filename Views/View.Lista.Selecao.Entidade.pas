@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Controller.Lista.Selecao.Entidade, Datasnap.DBClient,
-  System.ImageList, Vcl.ImgList, Vcl.StdCtrls;
+  System.ImageList, Vcl.ImgList, Vcl.StdCtrls, Frame.Padrao,
+  Frame.Filtro.Pesquisa;
 
 type
   TFrmListaSelecaoEntidade = class(TFrmPadrao)
@@ -16,6 +17,7 @@ type
     btnCancelar: TSpeedButton;
     btnConfirmar: TSpeedButton;
     pnlBarraLateralBotao: TPanel;
+    FrameFiltroPesquisa1: TFrameFiltroPesquisa;
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -25,6 +27,9 @@ type
     procedure btnCancelarMouseLeave(Sender: TObject);
     procedure btnCancelarMouseEnter(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
+    procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
   private
     { Private declarations }
     FClasseEntidade: TClass;
@@ -37,6 +42,7 @@ type
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
     procedure InformarObservador(AObjeto: TObject);
+    procedure InformarGrideParaPesquisa;
   public
     { Public declarations }
     procedure InformarClasseDaEntidade(ClasseEntidade: TClass);
@@ -129,6 +135,17 @@ begin
     FreeAndNil(FDataSource);
 end;
 
+procedure TFrmListaSelecaoEntidade.InformarGrideParaPesquisa;
+begin
+  FrameFiltroPesquisa1.SetDbGrid(grdLista);
+end;
+
+procedure TFrmListaSelecaoEntidade.FormCreate(Sender: TObject);
+begin
+  inherited;
+  InformarGrideParaPesquisa;
+end;
+
 procedure TFrmListaSelecaoEntidade.FormResize(Sender: TObject);
 begin
   inherited;
@@ -140,6 +157,21 @@ begin
   inherited;
   ApresentarDadosNaGrid;
   AjustarColunasDaGride;
+  FrameFiltroPesquisa1.edtPesquisa.SetFocus;
+end;
+
+procedure TFrmListaSelecaoEntidade.FrameFiltroPesquisa1edtPesquisaEnter(
+  Sender: TObject);
+begin
+  inherited;
+  KeyPreview := False;
+end;
+
+procedure TFrmListaSelecaoEntidade.FrameFiltroPesquisa1edtPesquisaExit(
+  Sender: TObject);
+begin
+  inherited;
+  KeyPreview := False;
 end;
 
 procedure TFrmListaSelecaoEntidade.InformarClasseDaEntidade(

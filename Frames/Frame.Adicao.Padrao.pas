@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Frame.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Vcl.StdCtrls, System.ImageList,
   Vcl.ImgList, Vcl.Imaging.pngimage, Vcl.DBCGrids, Data.DB, Datasnap.DBClient,
-  Componente.TObjectList, Interfaces.Padrao.Observer;
+  Componente.TObjectList, Interfaces.Padrao.Observer, Vcl.BaseImageCollection,
+  Vcl.ImageCollection;
 
 type
   TFrameAdicaoPadrao = class(TFramePadrao, iObservador)

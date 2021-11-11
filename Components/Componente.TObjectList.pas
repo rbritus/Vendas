@@ -13,7 +13,7 @@ type
     procedure CopyTo(Lista: TObjectListFuck<T>);
   end;
 
-  TListFuck<T: class> = class(TList<T>);
+  TListFuck<T> = class(TList<T>);
 
 implementation
 

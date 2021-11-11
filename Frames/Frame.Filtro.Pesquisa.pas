@@ -1,0 +1,73 @@
+unit Frame.Filtro.Pesquisa;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Frame.Padrao, Vcl.StdCtrls, Vcl.BaseImageCollection, Vcl.ImageCollection,
+  System.ImageList, Vcl.ImgList, Vcl.ExtCtrls, Controller.Frame.FiltroGride,
+  Interfaces.Controller.Frame.FiltroGride, Vcl.DBGrids;
+
+type
+  TFrameFiltroPesquisa = class(TFramePadrao)
+    pnlFiltros: TPanel;
+    pnlPesquisa: TPanel;
+    edtPesquisa: TEdit;
+    procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edtPesquisaChange(Sender: TObject);
+  private
+    { Private declarations }
+    FControllerFrameAdicaoPadrao: iControllerFrameFiltroGride;
+    procedure CriarCard(Filtro: string);
+  public
+    { Public declarations }
+    procedure SetDbGrid(ADbGrid: TDbGrid);
+  end;
+
+var
+  FrameFiltroPesquisa: TFrameFiltroPesquisa;
+
+implementation
+
+{$R *.dfm}
+
+{ TFrameFiltroPesquisa }
+
+procedure TFrameFiltroPesquisa.CriarCard(Filtro: string);
+begin
+  FControllerFrameAdicaoPadrao.CriarPanelFiltro(Filtro);
+end;
+
+procedure TFrameFiltroPesquisa.edtPesquisaChange(Sender: TObject);
+begin
+  inherited;
+  FControllerFrameAdicaoPadrao.Filtrar(Trim(edtPesquisa.Text));
+end;
+
+procedure TFrameFiltroPesquisa.edtPesquisaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if Key = VK_RETURN then
+  begin
+    if Trim(edtPesquisa.Text).IsEmpty then
+    begin
+      Perform(Wm_NextDlgCtl,0,0);
+      Exit;
+    end;
+
+    CriarCard(edtPesquisa.Text);
+    edtPesquisa.Clear;
+    edtPesquisa.SetFocus;
+  end;
+end;
+
+procedure TFrameFiltroPesquisa.SetDbGrid(ADbGrid: TDbGrid);
+begin
+  FControllerFrameAdicaoPadrao := TControllerFrameAdicaoPadrao.New(Self);
+  FControllerFrameAdicaoPadrao.InformarDbGrid(ADbGrid);
+end;
+
+end.

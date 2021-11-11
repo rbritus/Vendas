@@ -65,13 +65,13 @@ inherited FramePesquisaEntidadePadrao: TFramePesquisaEntidadePadrao
     Left = 160
     Top = 65528
   end
-  object cds: TClientDataSet
+  object cds: TClientDataSet [3]
     Aggregates = <>
     Params = <>
     Left = 128
     Top = 65528
   end
-  object dsc: TDataSource
+  object dsc: TDataSource [4]
     DataSet = cds
     Left = 192
     Top = 65528

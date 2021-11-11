@@ -5,17 +5,18 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      Top = 47
-      Height = 593
-      ExplicitTop = 47
-      ExplicitHeight = 593
+      Top = 147
+      Height = 493
+      ExplicitTop = 264
+      ExplicitHeight = 379
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 590
+        Height = 490
         Align = alClient
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        DrawingStyle = gdsClassic
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -100,6 +101,28 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
         ParentBackground = False
         TabOrder = 0
         Visible = False
+      end
+    end
+    inline FrameFiltroPesquisa1: TFrameFiltroPesquisa
+      Left = 0
+      Top = 44
+      Width = 840
+      Height = 100
+      Align = alTop
+      TabOrder = 2
+      ExplicitTop = 44
+      inherited pnlFundo: TPanel
+        inherited pnlConteudo: TPanel
+          inherited pnlFiltros: TPanel
+            ExplicitHeight = 50
+          end
+        end
+        inherited pnlPesquisa: TPanel
+          inherited edtPesquisa: TEdit
+            OnEnter = FrameFiltroPesquisa1edtPesquisaEnter
+            OnExit = FrameFiltroPesquisa1edtPesquisaExit
+          end
+        end
       end
     end
   end

@@ -67,7 +67,10 @@ uses
   Interfaces.Objeto.ConsultaCEP in 'Interfaces\Interfaces.Objeto.ConsultaCEP.pas',
   Utils.Frame in 'Utils\Utils.Frame.pas',
   Utils.Menssages in 'Utils\Utils.Menssages.pas',
-  Utils.Edit in 'Utils\Utils.Edit.pas';
+  Utils.Edit in 'Utils\Utils.Edit.pas',
+  Interfaces.Controller.Frame.FiltroGride in 'Interfaces\Interfaces.Controller.Frame.FiltroGride.pas',
+  Controller.Frame.FiltroGride in 'Controllers\Controller.Frame.FiltroGride.pas',
+  Frame.Filtro.Pesquisa in 'Frames\Frame.Filtro.Pesquisa.pas' {FrameFiltroPesquisa: TFrame};
 
 {$R *.res}
 
