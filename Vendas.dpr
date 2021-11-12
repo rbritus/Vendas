@@ -67,10 +67,14 @@ uses
   Interfaces.Objeto.ConsultaCEP in 'Interfaces\Interfaces.Objeto.ConsultaCEP.pas',
   Utils.Frame in 'Utils\Utils.Frame.pas',
   Utils.Menssages in 'Utils\Utils.Menssages.pas',
-  Utils.Edit in 'Utils\Utils.Edit.pas',
+  Utils.Validacoes in 'Utils\Utils.Validacoes.pas',
   Interfaces.Controller.Frame.FiltroGride in 'Interfaces\Interfaces.Controller.Frame.FiltroGride.pas',
   Controller.Frame.FiltroGride in 'Controllers\Controller.Frame.FiltroGride.pas',
-  Frame.Filtro.Pesquisa in 'Frames\Frame.Filtro.Pesquisa.pas' {FrameFiltroPesquisa: TFrame};
+  Frame.Filtro.Pesquisa in 'Frames\Frame.Filtro.Pesquisa.pas' {FrameFiltroPesquisa: TFrame},
+  Entidade.Telefone in 'Entitys\Entidade.Telefone.pas',
+  Interfaces.Entidade.Telefone in 'Interfaces\Interfaces.Entidade.Telefone.pas',
+  Frame.Adicao.Telefone in 'Frames\Frame.Adicao.Telefone.pas' {FrameAdicaoTelefone: TFrame},
+  View.Cadastro.Telefone in 'Views\View.Cadastro.Telefone.pas' {FrmCadastroTelefone};
 
 {$R *.res}
 

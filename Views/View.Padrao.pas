@@ -14,6 +14,7 @@ type
     pnlConteudo: TPanel;
     imgListaBotoes16: TImageList;
     imgListaBotoes32: TImageList;
+    actLista: TActionList;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);

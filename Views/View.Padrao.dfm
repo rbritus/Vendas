@@ -1339,4 +1339,8 @@ object FrmPadrao: TFrmPadrao
       FFF8007FFFFE001FFFFFFFFFFF00000000000000000000000000000000000000
       000000000000}
   end
+  object actLista: TActionList
+    Left = 608
+    Top = 11
+  end
 end

@@ -1,33 +1,41 @@
 inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
-  Height = 279
-  ExplicitHeight = 279
+  Width = 760
+  Height = 180
+  ExplicitWidth = 760
+  ExplicitHeight = 180
   inherited pnlFundo: TPanel
-    Height = 279
-    ExplicitHeight = 279
+    Width = 760
+    Height = 180
+    AutoSize = True
+    ExplicitWidth = 760
+    ExplicitHeight = 180
     inherited pnlConteudo: TPanel
       Top = 82
-      Height = 197
+      Width = 760
+      Height = 98
+      AutoSize = True
       ExplicitTop = 82
-      ExplicitHeight = 197
+      ExplicitWidth = 760
+      ExplicitHeight = 98
       object DBCtrlGrid1: TDBCtrlGrid
         Left = 0
         Top = 3
-        Width = 800
-        Height = 194
-        Align = alClient
+        Width = 760
+        Height = 42
+        Align = alCustom
         AllowDelete = False
         AllowInsert = False
         DataSource = dscDados
-        PanelHeight = 48
-        PanelWidth = 783
+        PanelHeight = 42
+        PanelWidth = 743
         TabOrder = 0
-        RowCount = 4
+        RowCount = 1
         Visible = False
         object Panel3: TPanel
-          Left = 696
+          Left = 656
           Top = 0
           Width = 87
-          Height = 48
+          Height = 42
           Align = alRight
           BevelOuter = bvNone
           Caption = 'Panel2'
@@ -37,7 +45,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
           StyleElements = [seFont, seClient]
           object imgBtnExcluir: TImage
             Left = 45
-            Top = 8
+            Top = 7
             Width = 32
             Height = 32
             Cursor = crHandPoint
@@ -91,7 +99,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
           end
           object imgBtnAlterar: TImage
             Left = 7
-            Top = 8
+            Top = 7
             Width = 32
             Height = 32
             Cursor = crHandPoint
@@ -152,7 +160,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     object pnlMenu: TPanel
       Left = 0
       Top = 38
-      Width = 800
+      Width = 760
       Height = 44
       Align = alTop
       BevelOuter = bvNone
@@ -227,7 +235,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     object pnlTitulo: TPanel
       Left = 0
       Top = 0
-      Width = 800
+      Width = 760
       Height = 38
       Align = alTop
       BevelOuter = bvNone
@@ -252,7 +260,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       object Label4: TLabel
         Left = 0
         Top = 25
-        Width = 800
+        Width = 760
         Height = 13
         Align = alBottom
         AutoSize = False
@@ -265,8 +273,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     end
   end
   inherited imgListaBotoes16: TImageList
-    Left = 104
-    Top = 88
+    Top = 0
     Bitmap = {
       494C010100000800040010001000FFFFFFFF2100FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
@@ -407,18 +414,18 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       00000000000000000000000000000000}
   end
   inherited imgListaBotoes32: TImageList
-    Left = 176
-    Top = 88
+    Left = 432
+    Top = 0
   end
-  object cdsDados: TClientDataSet [3]
+  object cdsDados: TClientDataSet
     Aggregates = <>
     Params = <>
-    Left = 8
-    Top = 89
+    Left = 264
+    Top = 1
   end
-  object dscDados: TDataSource [4]
+  object dscDados: TDataSource
     DataSet = cdsDados
-    Left = 48
-    Top = 89
+    Left = 304
+    Top = 1
   end
 end

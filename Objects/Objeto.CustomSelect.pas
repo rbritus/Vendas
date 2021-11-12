@@ -21,6 +21,10 @@ type
     class function getSelectCustom(FieldName: string): string; override;
   end;
 
+  TCustomSelectTipoTelefone = class(TCustomSelect)
+    class function getSelectCustom(FieldName: string): string; override;
+  end;
+
 implementation
 
 { TCustomSelectAtivo }
@@ -34,7 +38,7 @@ end;
 
 class function TCustomSelectTipoEndereco.getSelectCustom(FieldName: string): string;
 begin
-    Result := TEnumerator<TTipoEndereco>.GetCustomSelect(FieldName);
+  Result := TEnumerator<TTipoEndereco>.GetCustomSelect(FieldName);
 end;
 
 { TCustomSelect }
@@ -42,6 +46,14 @@ end;
 class function TCustomSelect.getFieldNameCustom(FieldName: string): string;
 begin
   Result := TEnumerator<TEnumGenerics>.GetNameCustoField(FieldName);
+end;
+
+{ TCustomSelectTipoTelefone }
+
+class function TCustomSelectTipoTelefone.getSelectCustom(
+  FieldName: string): string;
+begin
+  Result := TEnumerator<TTipoTelefone>.GetCustomSelect(FieldName);
 end;
 
 end.

@@ -20,7 +20,8 @@ implementation
 uses
   Connection.Scripter.SqLite, Entidade.Endereco, Entidade.Pessoa, Entidade.Pais,
   Entidade.Estado, Entidade.Cidade, System.Threading, System.SysUtils,
-  System.Classes, Scripts.Versao00, Objeto.ScriptDML, Utils.Menssages;
+  System.Classes, Scripts.Versao00, Objeto.ScriptDML, Utils.Menssages,
+  Entidade.Telefone;
 
 
 { TScriptSQL }
@@ -43,7 +44,10 @@ end;
 
 class procedure TControllerScript.ExecutarScriptDeCriacaoDeTabelas;
 begin
+  //Verificar sempre a sequência de criação da entidade, para que uma entidade
+  //que dependa de outra não seja criada antes e sim depois.
   TScriptSQL.RegistrarEntidadeNoBanco(TScriptDML);
+  TScriptSQL.RegistrarEntidadeNoBanco(TTelefone);
   TScriptSQL.RegistrarEntidadeNoBanco(TPais);
   TScriptSQL.RegistrarEntidadeNoBanco(TEstado);
   TScriptSQL.RegistrarEntidadeNoBanco(TCidade);

@@ -14,6 +14,14 @@ type
     constructor Create(const AValue: string);
   end;
 
+  TAtributoMascara = class(TCustomAttribute)
+  private
+    FMascara: string;
+  public
+    property Mascara: string read FMascara write FMascara;
+    constructor Create(const AMascara: string);
+  end;
+
   TTipoAssociacaoEntreTabelas = (taOneToOne, taOneToMany, taManyToOne, taManyToMany);
 
   TTipoCascata = (ctNoAction, ctCascade, ctSetNull, ctRestrict);
@@ -356,6 +364,13 @@ begin
     cRetorno := cRetorno + ' not null';
 
   Result := cRetorno;
+end;
+
+{ TMascaraField }
+
+constructor TAtributoMascara.Create(const AMascara: string);
+begin
+  FMascara := AMascara;
 end;
 
 end.

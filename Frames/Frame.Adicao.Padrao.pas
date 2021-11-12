@@ -39,15 +39,15 @@ type
     procedure CarregarDataSet;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
-    procedure AtribuirVisibilidadeAGride;
     function DataSetGridEstaVazio: Boolean;
     function ObterQuantidadeDeRegistrosDoDataSetGrid: Integer;
   protected
+    procedure AtribuirVisibilidadeAGride;
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
     function ObterSqlDeTabelaRelacional: string;
     function ObterObjetoDoFrame: TObject;
-    procedure CriarDataSet; virtual; Abstract;
-    procedure PreencherDataSet(Obj: TObject); virtual; Abstract;
+    procedure CriarDataSet; virtual;
+    procedure PreencherDataSet(Obj: TObject); virtual;
     procedure UpdateItem(Value : TObject); virtual;
   public
     { Public declarations }
@@ -61,7 +61,8 @@ var
 implementation
 
 uses
-  Controller.Frame.Adicao.Padrao, Controller.Padrao.Observer;
+  Controller.Frame.Adicao.Padrao, Controller.Padrao.Observer,
+  Utils.ClientDataSet, Utils.Entidade;
 
 {$R *.dfm}
 
@@ -156,6 +157,7 @@ end;
 
 procedure TFrameAdicaoPadrao.UpdateItem(Value: TObject);
 begin
+  PreencherDataSet(Value);
   AtribuirVisibilidadeAGride;
 end;
 
@@ -195,6 +197,18 @@ begin
   CarregarDataSet;
 end;
 
+procedure TFrameAdicaoPadrao.CriarDataSet;
+begin
+  var Obj := ObterObjetoDoFrame;
+  try
+    TUtilsClientDataSet.PrepararClientDataSet(cdsDados);
+    TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj);
+    TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj)
+  finally
+    Obj.Free
+  end;
+end;
+
 procedure TFrameAdicaoPadrao.AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
 begin
   pnlBarraLateralBotao.Visible := True;
@@ -204,6 +218,17 @@ end;
 procedure TFrameAdicaoPadrao.OcultarBarraLateralDoBotao;
 begin
   pnlBarraLateralBotao.Visible := False;
+end;
+
+procedure TFrameAdicaoPadrao.PreencherDataSet(Obj: TObject);
+begin
+  var ID := TUtilsEntidade.ObterValorPropriedade(Obj,'ID').AsInteger;
+  if cdsDados.Locate('ID',ID,[]) then
+    cdsDados.Delete;
+
+  cdsDados.Append;
+  TUtilsClientDataSet.PreencherDataSet(cdsDados,Obj);
+  cdsDados.Post;
 end;
 
 end.

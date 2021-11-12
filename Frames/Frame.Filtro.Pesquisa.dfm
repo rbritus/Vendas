@@ -1,27 +1,27 @@
 inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
   Width = 840
-  Height = 100
+  Height = 86
   ExplicitWidth = 840
-  ExplicitHeight = 100
+  ExplicitHeight = 86
   inherited pnlFundo: TPanel
     Width = 840
-    Height = 100
+    Height = 86
     ExplicitWidth = 840
-    ExplicitHeight = 117
+    ExplicitHeight = 100
     inherited pnlConteudo: TPanel
       Top = 57
       Width = 840
-      Height = 43
+      Height = 29
       TabOrder = 1
       ExplicitTop = 57
       ExplicitWidth = 840
-      ExplicitHeight = 60
+      ExplicitHeight = 43
       object pnlFiltros: TPanel
         AlignWithMargins = True
         Left = 0
         Top = 0
         Width = 840
-        Height = 43
+        Height = 29
         Margins.Left = 0
         Margins.Top = 0
         Margins.Right = 0
@@ -33,7 +33,7 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
         Padding.Top = 3
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 60
+        ExplicitHeight = 43
       end
     end
     object pnlPesquisa: TPanel
@@ -52,8 +52,6 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
       Padding.Top = 3
       ParentBackground = False
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitWidth = 840
       object edtPesquisa: TEdit
         Left = 33
         Top = 18

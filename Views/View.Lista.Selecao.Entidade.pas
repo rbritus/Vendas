@@ -8,7 +8,7 @@ uses
   View.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Controller.Lista.Selecao.Entidade, Datasnap.DBClient,
   System.ImageList, Vcl.ImgList, Vcl.StdCtrls, Frame.Padrao,
-  Frame.Filtro.Pesquisa;
+  Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList;
 
 type
   TFrmListaSelecaoEntidade = class(TFrmPadrao)
@@ -30,6 +30,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
+    procedure grdListaKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FClasseEntidade: TClass;
@@ -172,6 +173,13 @@ procedure TFrmListaSelecaoEntidade.FrameFiltroPesquisa1edtPesquisaExit(
 begin
   inherited;
   KeyPreview := False;
+end;
+
+procedure TFrmListaSelecaoEntidade.grdListaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  FrameFiltroPesquisa1.SetFocusOnKeyDown(Key);
 end;
 
 procedure TFrmListaSelecaoEntidade.InformarClasseDaEntidade(

@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, Entidade.Padrao, Interfaces.Entidade.Pessoa,
   Attributes.Entidades, System.SysUtils, Objeto.CustomSelect,
-  Entidade.Endereco, Componente.TObjectList, Utils.Enumerators;
+  Entidade.Endereco, Componente.TObjectList, Utils.Enumerators,
+  Entidade.Telefone, Utils.Constants;
 
 type
   [TNomeTabela('PESSOA')]
@@ -17,6 +18,7 @@ type
     FCPF: string;
     FEmail: string;
     FEnderecos: TObjectListFuck<TEndereco>;
+    FTelefones: TObjectListFuck<TTelefone>;
     procedure SetId(const Value: integer);
     procedure SetNome(const Value: string);
     procedure SetAtivo(const Value: TRegistroAtivo);
@@ -29,11 +31,14 @@ type
     function GetCPF: string;
     function GetEmail: string;
     function GetEnderecos: TObjectListFuck<TEndereco>;
+    procedure SetTelefones(const Value: TObjectListFuck<TTelefone>);
+    function GetTelefones: TObjectListFuck<TTelefone>;
   public
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID',False)]
     property Id: Integer read GetId write SetId;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
+    [TAtributoMascara(TConstantsMasks.CPF)]
     [TCampoTexto('CPF', 11, [], 'CPF')]
     property CPF: string read GetCPF write SetCPF;
     [TCampoTexto('EMAIL', 200, [], 'E-mail', False)]
@@ -42,6 +47,8 @@ type
     property Ativo: TRegistroAtivo read GetAtivo write SetAtivo default raAtivo;
     [TCampoListagem(taManyToMany, ctCascade, 'PESSOA_FK', 'ENDERECO_FK', 'ENDERECO_PESSOA')]
     Property Enderecos: TObjectListFuck<TEndereco> read GetEnderecos write SetEnderecos;
+    [TCampoListagem(taManyToMany, ctCascade, 'PESSOA_FK', 'TELEFONE_FK', 'TELEFONE_PESSOA')]
+    Property Telefones: TObjectListFuck<TTelefone> read GetTelefones write SetTelefones;
 
     class function New : iPessoa;
     function EstaVazia: Boolean; override;
@@ -50,7 +57,7 @@ type
 implementation
 
 uses
-  Utils.Constants, Utils.Entidade;
+  Utils.Entidade;
 
 { TPessoa }
 
@@ -62,6 +69,15 @@ end;
 function TPessoa.GetNome: string;
 begin
   Result := FNome;
+end;
+
+function TPessoa.GetTelefones: TObjectListFuck<TTelefone>;
+begin
+   If not Assigned(FTelefones) Then
+      FTelefones := TUtilsEntidade.ObterListaComTabelaRelacional<TTelefone>(Self.id,
+        'PESSOA_FK', 'TELEFONE_FK', 'TELEFONE_PESSOA', TTelefone);
+
+   Result := FTelefones;
 end;
 
 function TPessoa.GetAtivo: TRegistroAtivo;
@@ -98,6 +114,11 @@ begin
   FNome := Value;
 end;
 
+procedure TPessoa.SetTelefones(const Value: TObjectListFuck<TTelefone>);
+begin
+  FTelefones := Value;
+end;
+
 procedure TPessoa.SetAtivo(const Value: TRegistroAtivo);
 begin
   FAtivo := Value;
@@ -125,7 +146,7 @@ end;
 
 function TPessoa.EstaVazia: Boolean;
 begin
-  Result := (FId = 0) and (FNome = EmptyStr);
+  Result := (FNome = EmptyStr);
 end;
 
 initialization

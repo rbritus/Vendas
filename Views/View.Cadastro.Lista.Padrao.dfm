@@ -8,19 +8,19 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      Top = 147
-      Height = 493
-      ExplicitTop = 184
-      ExplicitHeight = 462
+      Top = 133
+      Height = 507
+      ExplicitTop = 133
+      ExplicitHeight = 507
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 490
+        Height = 504
         Align = alClient
         Ctl3D = True
         DrawingStyle = gdsClassic
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        Options = [dgTitles, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
         ParentCtl3D = False
         ReadOnly = True
         TabOrder = 0
@@ -30,6 +30,7 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
         OnDblClick = grdListaDblClick
+        OnKeyPress = grdListaKeyPress
       end
     end
     object pnlMenu: TPanel
@@ -110,14 +111,16 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
       Left = 0
       Top = 44
       Width = 840
-      Height = 100
+      Height = 86
       Align = alTop
       TabOrder = 2
       ExplicitTop = 44
       inherited pnlFundo: TPanel
+        ExplicitHeight = 86
         inherited pnlConteudo: TPanel
+          ExplicitHeight = 29
           inherited pnlFiltros: TPanel
-            ExplicitHeight = 50
+            ExplicitHeight = 29
           end
         end
         inherited pnlPesquisa: TPanel

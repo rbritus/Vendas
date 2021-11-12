@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
   Interfaces.Entidade.Endereco, Entidade.Cidade, Utils.Enumerators,
-  Objeto.CustomSelect;
+  Objeto.CustomSelect, Utils.Constants;
 
 type
   [TNomeTabela('ENDERECO')]
@@ -38,6 +38,7 @@ type
   public
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
     property Id: Integer read GetId write SetId;
+    [TAtributoMascara(TConstantsMasks.CEP)]
     [TCampoTexto('CEP', 10, [], 'CEP')]
     property CEP: string read GetCEP write SetCEP;
     [TCampoTexto('LOGRADOURO', 200, [], 'Endereço')]

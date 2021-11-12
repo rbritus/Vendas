@@ -42,13 +42,17 @@ type
   [TEnumAttribute(1,'Não obrigatório','N')]
   TCampoObrigatorio = (coObrigatorio, coNaoObrigatorio);
 
-  [TEnumAttribute(0,'RESIDÊNCIAL',0)]
+  [TEnumAttribute(0,'RESIDENCIAL',0)]
   [TEnumAttribute(1,'COMERCIAL',1)]
   TTipoEndereco = (teResidencial, teComercial);
 
   [TEnumAttribute(0,'ATIVO','S')]
   [TEnumAttribute(1,'INATIVO','N')]
   TRegistroAtivo = (raAtivo, raInativo);
+
+  [TEnumAttribute(0,'TELEFONE',0)]
+  [TEnumAttribute(1,'CELULAR',1)]
+  TTipoTelefone = (ttTelefone, ttCelular);
 
 implementation
 

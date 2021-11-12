@@ -8,7 +8,7 @@ uses
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
   View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
   Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList, Vcl.StdCtrls,
-  Frame.Padrao, Frame.Filtro.Pesquisa;
+  Frame.Padrao, Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
@@ -30,6 +30,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
+    procedure grdListaKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -136,6 +137,13 @@ begin
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   ControllerListaView.ApresentarFormParaEdicao(grdLista.DataSource.DataSet.FieldByName('id').AsInteger);
   inherited;
+end;
+
+procedure TFrmCadastroListaPadrao.grdListaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  FrameFiltroPesquisa1.SetFocusOnKeyDown(Key);
 end;
 
 procedure TFrmCadastroListaPadrao.SpeedButton5MouseEnter(Sender: TObject);

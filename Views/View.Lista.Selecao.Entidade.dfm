@@ -5,24 +5,25 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      Top = 147
-      Height = 493
-      ExplicitTop = 264
-      ExplicitHeight = 379
+      Top = 133
+      Height = 507
+      ExplicitTop = 133
+      ExplicitHeight = 507
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 490
+        Height = 504
         Align = alClient
         DrawingStyle = gdsClassic
-        Options = [dgTitles, dgIndicator, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        Options = [dgTitles, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
+        OnKeyPress = grdListaKeyPress
       end
     end
     object pnlMenu: TPanel
@@ -107,14 +108,16 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
       Left = 0
       Top = 44
       Width = 840
-      Height = 100
+      Height = 86
       Align = alTop
       TabOrder = 2
       ExplicitTop = 44
       inherited pnlFundo: TPanel
+        ExplicitHeight = 86
         inherited pnlConteudo: TPanel
+          ExplicitHeight = 29
           inherited pnlFiltros: TPanel
-            ExplicitHeight = 50
+            ExplicitHeight = 29
           end
         end
         inherited pnlPesquisa: TPanel

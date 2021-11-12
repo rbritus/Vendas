@@ -39,7 +39,7 @@ var
 implementation
 
 uses
-  Utils.ClientDataSet;
+  Utils.ClientDataSet, Utils.Constants;
 
 {$R *.dfm}
 
@@ -47,14 +47,13 @@ uses
 
 procedure TFrameAdicaoEndereco.CriarDataSet;
 begin
-  inherited;
   var Obj := Self.ObterObjetoDoFrame;
   try
     TUtilsClientDataSet.PrepararClientDataSet(cdsDados);
-    TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj as TPersistent);
+    TUtilsClientDataSet.CreateFielsdByEntidade(cdsDados,Obj);
     TUtilsClientDataSet.CreateField(cdsDados,'ESTADO',ftString,2);
     TUtilsClientDataSet.CreateField(cdsDados,'CIDADE',ftString,200);
-    TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj as TPersistent);
+    TUtilsClientDataSet.ConcluirClientDataSet(cdsDados,Obj);
   finally
     Obj.Free
   end;
@@ -72,7 +71,6 @@ end;
 
 procedure TFrameAdicaoEndereco.PreencherDataSet(Obj: TObject);
 begin
-  inherited;
   var Endereco := TEndereco(Obj);
 
   if cdsDados.Locate('ID',Endereco.Id,[]) then
@@ -88,7 +86,7 @@ end;
 procedure TFrameAdicaoEndereco.UpdateItem(Value: TObject);
 begin
   PreencherDataSet(Value);
-  inherited;
+  AtribuirVisibilidadeAGride;
 end;
 
 end.

@@ -74,9 +74,9 @@ begin
   panel.left := 99999;
   panel.AlignWithMargins := True;
   panel.Margins.Left := 10;
-  panel.Margins.Top := 5;
+  panel.Margins.Top := 2;
   panel.Margins.Right := 0;
-  panel.Margins.Bottom := 2;
+  panel.Margins.Bottom := 1;
   panel.AutoSize := True;
   panel.BevelOuter := bvNone;
   panel.BevelInner := bvNone;
@@ -85,7 +85,7 @@ begin
   panel.Font.Color := 16744448;
   panel.Font.Name := 'Sitka Small';
   panel.Font.Style := [fsBold];
-  panel.Padding.Top := 3;
+  panel.Padding.Top := 0;
   panel.ParentBackground := False;
   panel.ParentFont := False;
   panel.Align := alLeft;
@@ -97,17 +97,18 @@ begin
   var LabelFiltro := TLabelCard.Create(FFrame);
   LabelFiltro.Parent := Panel;
   LabelFiltro.Name := 'lblFiltro' + Random(1000000).ToString;
+  LabelFiltro.Top := 0;
   LabelFiltro.Align := alLeft;
-  LabelFiltro.Font.Color := clGrayText;//clWhite;
-  LabelFiltro.Font.Name := 'Sitka Small';
-  LabelFiltro.Font.Size := 14;
+  LabelFiltro.Font.Color := clGrayText;
+  LabelFiltro.Font.Name := 'Lucida Sans Unicode';
+  LabelFiltro.Font.Size := 12;
   LabelFiltro.Font.Style := [fsBold];
   LabelFiltro.Caption := Filtro;
   LabelFiltro.AlignWithMargins := True;
   LabelFiltro.Margins.Top := 0;
   LabelFiltro.Margins.Left := 10;
   LabelFiltro.Margins.Right := 10;
-  LabelFiltro.Margins.Bottom := 6;
+  LabelFiltro.Margins.Bottom := 4;
   LabelFiltro.Alignment := taCenter;
   LabelFiltro.Layout := tlCenter;
   LabelFiltro.AutoSize := True;
@@ -132,7 +133,7 @@ begin
   Imagem.Name := 'imgFiltro' + Random(1000000).ToString;
   Imagem.AlignWithMargins := True;
   Imagem.Left := 100;
-  Imagem.Top := 3;
+  Imagem.Top := 2;
   Imagem.Width := 16;
   Imagem.Height := 28;
   Imagem.Cursor := crHandPoint;
@@ -211,7 +212,7 @@ begin
     (Sender as TDBGrid).Canvas.TextOut(Rect.Left + 2, Rect.Top, Column.Field.DisplayText);
   end;
 
-  DrawTextDestacado(TDbGrid(Sender).Canvas, Rect, Column.Field.AsString, Trim(FTextoFiltro), clBlue);
+  DrawTextDestacado(TDbGrid(Sender).Canvas, Rect, Column.Field.DisplayText, Trim(FTextoFiltro), clBlue);
 end;
 
 procedure TControllerFrameAdicaoPadrao.DrawTextDestacado(Canvas : TCanvas; Rect: TRect;

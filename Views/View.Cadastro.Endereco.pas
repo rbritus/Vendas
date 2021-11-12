@@ -10,7 +10,7 @@ uses
   Utils.Enumerators, Vcl.BaseImageCollection, Vcl.ImageCollection,
   System.ImageList, Vcl.ImgList, Vcl.VirtualImageList,
   Interfaces.Controller.Objeto.ConsultaCEP, Interfaces.Objeto.ConsultaCEP,
-  Entidade.Cidade, Vcl.Mask, Utils.Constants;
+  Entidade.Cidade, Vcl.Mask, Utils.Constants, System.Actions, Vcl.ActnList;
 
 type
   [TClasseCadastro(TEndereco)]

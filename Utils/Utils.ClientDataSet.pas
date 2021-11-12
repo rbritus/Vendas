@@ -87,8 +87,6 @@ end;
 
 class procedure TUtilsClientDataSet.CreateFielsdByEntidade(cds: TClientDataSet;
   Entidade: TObject);
-//var
-//  ObjEstrangeiro: TObject;
 begin
   var Ctx := TRttiContext.Create;
   try
@@ -193,6 +191,57 @@ end;
 
 class procedure TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(cds: TClientDataSet;
   Entidade: TObject);
+
+  function ObterMascaraField(AProp: TRttiProperty): string;
+  begin
+    Result := string.Empty;
+    for var AtribNew in AProp.GetAttributes do
+    begin
+      if AtribNew is TAtributoMascara then
+        Result := TAtributoMascara(AtribNew).Mascara;
+    end;
+  end;
+
+  procedure TratarCustoSelect(Atrib: TAtributoBanco);
+  begin
+    if not TAtributoBanco(Atrib).Visivel then
+      Exit;
+
+    var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
+
+    if cds.FindField(NomeFieldCustom) = nil then
+      Exit;;
+
+    cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
+    cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
+    cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
+    cds.FieldByName(NomeFieldCustom).Visible := True;
+    cds.FieldByName(NomeFieldCustom).EditMask := cds.FieldByName(TAtributoBanco(Atrib).nome).EditMask;
+  end;
+
+  procedure TratarCampoEstrangeiro(Atrib: TAtributoBanco);
+  begin
+    var NomeCampoDescricao := TCampoEstrangeiro(Atrib).caption;
+    if cds.FindField(NomeCampoDescricao) = nil then
+      Exit;
+
+    cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
+    cds.FieldByName(NomeCampoDescricao).Visible := TAtributoBanco(Atrib).Visivel;
+    cds.FieldByName(NomeCampoDescricao).EditMask := cds.FieldByName(TAtributoBanco(Atrib).nome).EditMask;
+  end;
+
+  procedure InformarMascaraAoField(Atrib: TAtributoBanco; AProp: TRttiProperty);
+  begin
+    var Mascara := ObterMascaraField(AProp);
+    if Mascara.IsEmpty  then
+      Exit;
+
+    if Atrib.tipo in ([ftINTEIRO,ftDECIMAL,ftDATA]) then
+      TNumericField(cds.FieldByName(Atrib.nome)).DisplayFormat := Mascara
+    else
+      TStringField(cds.FieldByName(Atrib.nome)).EditMask := Mascara;
+  end;
+
 begin
   var Ctx := TRttiContext.Create;
   try
@@ -211,33 +260,13 @@ begin
 
           cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).caption;
           cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := TAtributoBanco(Atrib).Visivel;
+          InformarMascaraAoField(TAtributoBanco(Atrib),Prop);
 
           if Atrib is TCampoEstrangeiro then
-          begin
-            var NomeCampoDescricao := TCampoEstrangeiro(Atrib).caption;
-            if cds.FindField(NomeCampoDescricao) = nil then
-              Continue;
-
-            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
-            cds.FieldByName(NomeCampoDescricao).Visible := TAtributoBanco(Atrib).Visivel;
-            Continue;
-          end;
-
-          if not TAtributoBanco(Atrib).Visivel then
-            Continue;
+            TratarCampoEstrangeiro(Atrib as TAtributoBanco);
 
           if Assigned(TAtributoBanco(Atrib).CustomSelect) then
-          begin
-            var NomeFieldCustom := TAtributoBanco(Atrib).CustomSelect.getFieldNameCustom(TAtributoBanco(Atrib).nome);
-
-            if cds.FindField(NomeFieldCustom) = nil then
-              Continue;
-
-            cds.FieldByName(TAtributoBanco(Atrib).nome).DisplayLabel := TAtributoBanco(Atrib).nome;
-            cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
-            cds.FieldByName(NomeFieldCustom).DisplayLabel := TAtributoBanco(Atrib).caption;
-            cds.FieldByName(NomeFieldCustom).Visible := True;
-          end;
+            TratarCustoSelect(Atrib as TAtributoBanco);
 
         end;
       end;

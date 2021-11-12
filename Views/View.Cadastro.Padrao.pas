@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls,
   Controller.Cadastro.Padrao, Attributes.Forms, Utils.Enumerators,
-  System.ImageList, Vcl.ImgList;
+  System.ImageList, Vcl.ImgList, System.Actions, Vcl.ActnList;
 
 type
   TFrmCadastroPadrao = class(TFrmPadrao)

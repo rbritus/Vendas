@@ -24,12 +24,16 @@ type
   public
     { Public declarations }
     procedure SetDbGrid(ADbGrid: TDbGrid);
+    procedure SetFocusOnKeyDown(Key: Char);
   end;
 
 var
   FrameFiltroPesquisa: TFrameFiltroPesquisa;
 
 implementation
+
+uses
+  Utils.Validacoes;
 
 {$R *.dfm}
 
@@ -68,6 +72,16 @@ procedure TFrameFiltroPesquisa.SetDbGrid(ADbGrid: TDbGrid);
 begin
   FControllerFrameAdicaoPadrao := TControllerFrameAdicaoPadrao.New(Self);
   FControllerFrameAdicaoPadrao.InformarDbGrid(ADbGrid);
+end;
+
+procedure TFrameFiltroPesquisa.SetFocusOnKeyDown(Key: Char);
+begin
+  if TUtilsValidacoes.SomenteNumeros(Key) or TUtilsValidacoes.SomenteLetras(Key) then
+  begin
+    edtPesquisa.SetFocus;
+    edtPesquisa.Text := edtPesquisa.Text + Key;
+    edtPesquisa.SelStart := Length(edtPesquisa.Text);
+  end;
 end;
 
 end.

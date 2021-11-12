@@ -85,9 +85,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         inherited pnlFundo: TPanel
           inherited pnlConteudo: TPanel
             inherited DBCtrlGrid1: TDBCtrlGrid
-              Left = -8
               Top = 6
-              ExplicitLeft = -8
               ExplicitTop = 6
             end
           end
@@ -100,7 +98,15 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         Height = 21
         TabOrder = 0
         Text = ''
-        OnKeyPress = edtCPFKeyPress
+      end
+      inline FrameAdicaoTelefone: TFrameAdicaoTelefone
+        Left = 40
+        Top = 330
+        Width = 760
+        Height = 180
+        TabOrder = 4
+        ExplicitLeft = 40
+        ExplicitTop = 330
       end
     end
   end

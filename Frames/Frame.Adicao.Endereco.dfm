@@ -1,30 +1,8 @@
 inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
-  Width = 760
-  Height = 180
-  ExplicitWidth = 760
-  ExplicitHeight = 180
   inherited pnlFundo: TPanel
-    Width = 760
-    Height = 180
-    AutoSize = True
-    ExplicitWidth = 760
-    ExplicitHeight = 180
     inherited pnlConteudo: TPanel
-      Width = 760
-      Height = 98
-      AutoSize = True
       TabOrder = 1
-      ExplicitWidth = 760
-      ExplicitHeight = 98
       inherited DBCtrlGrid1: TDBCtrlGrid
-        Width = 760
-        Height = 42
-        Align = alCustom
-        PanelHeight = 42
-        PanelWidth = 743
-        RowCount = 1
-        ExplicitWidth = 760
-        ExplicitHeight = 42
         object edtTipoEndereco: TDBText [0]
           Left = 16
           Top = 6
@@ -107,37 +85,18 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           Height = 13
           Caption = 'CEP:'
         end
-        inherited Panel3: TPanel
-          Left = 656
-          Height = 42
-          ExplicitLeft = 656
-          ExplicitHeight = 42
-          inherited imgBtnExcluir: TImage
-            Top = 7
-            ExplicitTop = 7
-          end
-          inherited imgBtnAlterar: TImage
-            Top = 7
-            ExplicitTop = 7
-          end
-        end
       end
     end
     inherited pnlMenu: TPanel
-      Width = 760
       TabOrder = 0
-      ExplicitWidth = 760
     end
     inherited pnlTitulo: TPanel
-      Width = 760
-      ExplicitWidth = 760
       inherited lblTitulo: TLabel
         Width = 52
         Caption = 'Endere'#231'o'
         ExplicitWidth = 52
       end
       inherited Label4: TLabel
-        Width = 760
         ExplicitWidth = 760
       end
     end
