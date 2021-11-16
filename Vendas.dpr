@@ -1,5 +1,7 @@
 program Vendas;
 
+{$R *.dres}
+
 uses
   Vcl.Forms,
   View.Menu in 'Views\View.Menu.pas' {FrmMenu},
@@ -74,7 +76,10 @@ uses
   Entidade.Telefone in 'Entitys\Entidade.Telefone.pas',
   Interfaces.Entidade.Telefone in 'Interfaces\Interfaces.Entidade.Telefone.pas',
   Frame.Adicao.Telefone in 'Frames\Frame.Adicao.Telefone.pas' {FrameAdicaoTelefone: TFrame},
-  View.Cadastro.Telefone in 'Views\View.Cadastro.Telefone.pas' {FrmCadastroTelefone};
+  View.Cadastro.Telefone in 'Views\View.Cadastro.Telefone.pas' {FrmCadastroTelefone},
+  Componente.TImagemValidacao in 'Components\Componente.TImagemValidacao.pas',
+  Controller.Componente.TImagemValidacao in 'Controllers\Controller.Componente.TImagemValidacao.pas',
+  Interfaces.Controller.Componente.TImagemValidacao in 'Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas';
 
 {$R *.res}
 

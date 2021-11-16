@@ -250,6 +250,13 @@
             <Form>FrmCadastroTelefone</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Components\Componente.TImagemValidacao.pas"/>
+        <DCCReference Include="Controllers\Controller.Componente.TImagemValidacao.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas"/>
+        <RcItem Include="Resources\ImagemValidacaoComponente.gif">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>gifValidation</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -283,6 +290,12 @@
                 <DeployFile LocalName="Win32\Debug\Vendas.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Vendas.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Resources\ImagemValidacaoComponente.gif" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

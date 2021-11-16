@@ -65,7 +65,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object Label5: TLabel
-        Left = 429
+        Left = 440
         Top = 156
         Width = 34
         Height = 13
@@ -131,7 +131,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       object edtLogradouro: TEdit
         Left = 48
         Top = 127
-        Width = 497
+        Width = 489
         Height = 21
         TabOrder = 3
       end
@@ -140,6 +140,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Top = 127
         Width = 88
         Height = 21
+        Alignment = taRightJustify
         TabOrder = 4
       end
       object edtComplemento: TEdit
@@ -150,9 +151,9 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         TabOrder = 5
       end
       object edtBairro: TEdit
-        Left = 429
+        Left = 440
         Top = 175
-        Width = 233
+        Width = 222
         Height = 21
         TabOrder = 6
       end

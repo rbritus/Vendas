@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Vcl.StdCtrls,
   Controller.Cadastro.Padrao, Attributes.Forms, Utils.Enumerators,
-  System.ImageList, Vcl.ImgList, System.Actions, Vcl.ActnList;
+  System.ImageList, Vcl.ImgList, System.Actions, Vcl.ActnList,
+  Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 type
   TFrmCadastroPadrao = class(TFrmPadrao)
@@ -34,11 +35,14 @@ type
     procedure PrepararComboBoxComEnumerators;
     function CamposObrigatoriosEstaoPreenchidos: Boolean;
     procedure CarregarMascaraNosCampos;
+    function CamposObrigatoriosPreenchidos: Boolean;
+    procedure DestruirComponentesTImagemValidacao;
   protected
     [TCadastroVariavel('ID',ftINTEIRO,coNaoObrigatorio)]
     FID: Integer;
   public
     { Public declarations }
+    function ValidacoesEspecificasAtendidas: Boolean; virtual;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarFormParaCadastro;
   end;
@@ -49,7 +53,7 @@ var
 implementation
 
 uses
-  Interfaces.Controller.Cadastro.Padrao;
+  Interfaces.Controller.Cadastro.Padrao, Controller.Componente.TImagemValidacao;
 
 {$R *.dfm}
 
@@ -68,6 +72,18 @@ procedure TFrmCadastroPadrao.PrepararComboBoxComEnumerators;
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarComboBoxComEnumerators;
+end;
+
+procedure TFrmCadastroPadrao.DestruirComponentesTImagemValidacao;
+begin
+  var ControllerTImagemValidacao := TControllerTImagemValidacao.New(Self);
+  ControllerTImagemValidacao.DestruirTImagemValidacaoDoForm;
+end;
+
+function TFrmCadastroPadrao.ValidacoesEspecificasAtendidas: Boolean;
+begin
+  DestruirComponentesTImagemValidacao;
+  Result := True;
 end;
 
 procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
@@ -157,14 +173,24 @@ end;
 procedure TFrmCadastroPadrao.btnCadastrarClick(Sender: TObject);
 begin
   inherited;
-  if not CamposObrigatoriosEstaoPreenchidos then
-  begin
-    LimparEntidades;
+  if not CamposObrigatoriosPreenchidos then
     Exit;
-  end;
+
+  if not ValidacoesEspecificasAtendidas then
+    Exit;
 
   GravarEntidade;
   Close;
+end;
+
+function TFrmCadastroPadrao.CamposObrigatoriosPreenchidos: Boolean;
+begin
+  Result := True;
+  if not CamposObrigatoriosEstaoPreenchidos then
+  begin
+    LimparEntidades;
+    Result := False;
+  end;
 end;
 
 procedure TFrmCadastroPadrao.btnCadastrarMouseEnter(Sender: TObject);

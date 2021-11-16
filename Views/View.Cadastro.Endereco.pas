@@ -30,7 +30,7 @@ type
     [TCadastroEdit('Complemento',ftTEXTO,coNaoObrigatorio)]
     edtComplemento: TEdit;
     Label5: TLabel;
-    [TCadastroEdit('Bairro',ftTEXTO,coObrigatorio)]
+    [TCadastroEdit('Bairro',ftTEXTO,coNaoObrigatorio)]
     edtBairro: TEdit;
     [TCampoExibicao('NOME')]
     [TClassePesquisa(TCidade)]
@@ -53,8 +53,10 @@ type
     procedure PreencherFrameCidade(ACidade: TCidade);
     procedure PreencherCidadePeloCodigoIBGE(IBGE: string);
     function ObterCEPSemMascara: string;
+    function CEPValido: Boolean;
   public
     { Public declarations }
+    function ValidacoesEspecificasAtendidas: Boolean; override;
   end;
 
 var
@@ -63,9 +65,20 @@ var
 implementation
 
 uses
-  Controller.Objeto.ConsultaCEP, Utils.Entidade;
+  Controller.Objeto.ConsultaCEP, Utils.Entidade, Utils.Validacoes;
 
 {$R *.dfm}
+
+function TFrmCadastroEndereco.ValidacoesEspecificasAtendidas: Boolean;
+begin
+  inherited;
+  Result := CEPValido;
+end;
+
+function TFrmCadastroEndereco.CEPValido: Boolean;
+begin
+  Result := TUtilsValidacoes.CEPValido(ObterCEPSemMascara);
+end;
 
 procedure TFrmCadastroEndereco.PreencherFrameCidade(ACidade: TCidade);
 begin

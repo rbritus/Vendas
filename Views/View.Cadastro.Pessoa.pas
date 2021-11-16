@@ -10,7 +10,8 @@ uses
   Utils.Enumerators, Frame.Padrao, Frame.Adicao.Padrao, Frame.Adicao.Endereco,
   Entidade.Endereco, Componente.TObjectList, Frame.Pesquisa.Entidade.Padrao,
   System.ImageList, Vcl.ImgList, Vcl.Mask, Utils.Constants,
-  Frame.Adicao.Telefone, Entidade.Telefone, System.Actions, Vcl.ActnList;
+  Frame.Adicao.Telefone, Entidade.Telefone, System.Actions, Vcl.ActnList,
+  Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 type
   [TClasseCadastro(TPessoa)]
@@ -34,9 +35,11 @@ type
     FEnderecos: TObjectListFuck<TEndereco>;
     [TCadastroVariavel('Telefones',ftLISTAGEM,coNaoObrigatorio,'FrameAdicaoTelefone')]
     FTelefones: TObjectListFuck<TTelefone>;
+    function CPFValido: Boolean;
     { Private declarations }
   public
     { Public declarations }
+    function ValidacoesEspecificasAtendidas: Boolean; override;
   end;
 
 var
@@ -44,7 +47,21 @@ var
 
 implementation
 
+uses
+  Utils.Validacoes, Controller.Componente.TImagemValidacao;
+
 {$R *.dfm}
+
+function TFrmCadastroPessoa.CPFValido: Boolean;
+begin
+  Result := TUtilsValidacoes.CPFValido(edtCPF.Text);
+  if not Result then
+  begin
+    var Mensagem := 'CPF inválido.';
+    var ControllerTImagemValidacao := TControllerTImagemValidacao.New(Self);
+    ControllerTImagemValidacao.CriarImagemDeValidacao(edtCPF, Mensagem);
+  end;
+end;
 
 procedure TFrmCadastroPessoa.btnCadastrarClick(Sender: TObject);
 begin
@@ -59,6 +76,12 @@ begin
   FrameAdicaoEndereco.CarregarFrame(Self.FID);
   FrameAdicaoTelefone.CarregarFrame(Self.FID);
   edtCPF.SetFocus;
+end;
+
+function TFrmCadastroPessoa.ValidacoesEspecificasAtendidas: Boolean;
+begin
+  inherited;
+  Result := CPFValido;
 end;
 
 end.

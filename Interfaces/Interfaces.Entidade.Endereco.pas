@@ -14,7 +14,6 @@ type
     procedure SetLogradouro(const Value: string);
     procedure SetNumero(const Value: Integer);
     procedure SetBairro(const Value: string);
-//    procedure SetLogradouro(const Value: iLogradouro);
     procedure SetCidade(const Value: TCidade);
     procedure SetTipoEndereco(const Value: TTipoEndereco);
     procedure SetComplemento(const Value: string);
@@ -23,13 +22,11 @@ type
     function GetLogradouro: string;
     function GetNumero: Integer;
     function GetBairro: string;
-//    function GetLogradouro: iLogradouro;
     function GetCidade: TCidade;
     function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
     property Id: Integer read GetId write SetId;
     property CEP: string read GetCEP write SetCEP;
-//    property Logradouro: iLogradouro read GetLogradouro write SetLogradouro;
     property Logradouro: string read GetLogradouro write SetLogradouro;
     property Numero: Integer read GetNumero write SetNumero;
     property Bairro: string read GetBairro write SetBairro;

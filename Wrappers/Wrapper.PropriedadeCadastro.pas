@@ -6,11 +6,9 @@ uses
   Utils.Enumerators, Interfaces.Wrapper.PropriedadeCadastro, Attributes.Forms,
   System.Rtti, System.TypInfo, Vcl.StdCtrls, Vcl.WinXCtrls, System.StrUtils,
   System.Math, System.Classes, Componente.TObjectList, Vcl.Dialogs, Vcl.Forms,
-  Utils.Entidade, Attributes.Enumerators, Vcl.Mask, Vcl.ExtCtrls, Vcl.Controls;
+  Utils.Entidade, Attributes.Enumerators, Vcl.Mask, Vcl.Controls;
 
 type
-  TImagemValidacao = class(TImage);
-
   TWrapperPropriedadeCadastro = class(TInterfacedObject, iWrapperPropriedadeCadastro)
   protected
     FForm: TForm;
@@ -73,7 +71,7 @@ type
 implementation
 
 uses
-  System.SysUtils, View.Padrao, Utils.Constants;
+  System.SysUtils, View.Padrao, Utils.Constants, Controller.Componente.TImagemValidacao;
 
 { TWrapperPropriedadeCadastro }
 
@@ -84,36 +82,16 @@ end;
 
 procedure TWrapperPropriedadeCadastro.DestruirAlertasTImagemValidacao;
 begin
-  var Indice := 0;
-  while Indice <= Pred(FForm.ComponentCount) do
-  begin
-    if FForm.Components[Indice].ClassType = TImagemValidacao then
-    begin
-      TImagemValidacao(FForm.Components[Indice]).Free;
-      Continue;
-    end;
-    inc(Indice);
-  end;
+  var ControllerTImagemValidacao := TControllerTImagemValidacao.New(FForm);
+  ControllerTImagemValidacao.DestruirTImagemValidacaoDoForm;
 end;
 
 procedure TWrapperPropriedadeCadastro.IndicarComponenteComoNaoPreenchido(AForm: TForm;
   AComponente: TComponent);
-const
-  LARGURA = 28;
-  ALTURA = 24;
-  RECUO_TOPO = -5;
-  RECUO_ESQUERDA = -32;
-  IMAGEM_ALERTA = 3;
 begin
-  var Imagem := TImagemValidacao.Create(AForm);
-  Imagem.Parent := TWinControl(AComponente).Parent;
-  Imagem.Height := ALTURA;
-  Imagem.Width := LARGURA;
-  Imagem.Top := TWinControl(AComponente).Top + RECUO_TOPO;
-  Imagem.Left := TWinControl(AComponente).Left + RECUO_ESQUERDA;
-  Imagem.Hint := 'Campo com preenchimento obrigatório.';
-  Imagem.ShowHint := True;
-  TFrmPadrao(AForm).imgListaBotoes32.GetBitmap(IMAGEM_ALERTA,Imagem.Picture.Bitmap);
+  const Mensagem = 'Campo com preenchimento obrigatório.';
+  var ControllerTImagemValidacao := TControllerTImagemValidacao.New(AForm);
+  ControllerTImagemValidacao.CriarImagemDeValidacao(TWinControl(AComponente), Mensagem);
 end;
 
 procedure TWrapperPropriedadeCadastro.InicializarCamposEditaveisDoForm;

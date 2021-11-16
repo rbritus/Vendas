@@ -39,9 +39,9 @@ type
     [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
     property Id: Integer read GetId write SetId;
     [TAtributoMascara(TConstantsMasks.CEP)]
-    [TCampoTexto('CEP', 10, [], 'CEP')]
+    [TCampoTexto('CEP', 10, [NOTNULL], 'CEP')]
     property CEP: string read GetCEP write SetCEP;
-    [TCampoTexto('LOGRADOURO', 200, [], 'Endereço')]
+    [TCampoTexto('LOGRADOURO', 200, [NOTNULL], 'Endereço')]
     property Logradouro: string read GetLogradouro write SetLogradouro;
     [TCampoInteiro('NUMERO', [], 'Número')]
     property Numero: Integer read GetNumero write SetNumero;
