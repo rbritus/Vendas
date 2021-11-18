@@ -65,7 +65,8 @@ var
 implementation
 
 uses
-  Controller.Objeto.ConsultaCEP, Utils.Entidade, Utils.Validacoes;
+  Controller.Objeto.ConsultaCEP, Utils.Entidade, Utils.Validacoes,
+  Controller.Componente.TImagemValidacao;
 
 {$R *.dfm}
 
@@ -78,6 +79,12 @@ end;
 function TFrmCadastroEndereco.CEPValido: Boolean;
 begin
   Result := TUtilsValidacoes.CEPValido(ObterCEPSemMascara);
+  if not Result then
+  begin
+    var Mensagem := 'CEP inválido.';
+    var ControllerTImagemValidacao := TControllerTImagemValidacao.New(Self);
+    ControllerTImagemValidacao.CriarImagemDeValidacao(edtCEP, Mensagem);
+  end;
 end;
 
 procedure TFrmCadastroEndereco.PreencherFrameCidade(ACidade: TCidade);
@@ -129,6 +136,9 @@ end;
 procedure TFrmCadastroEndereco.btnConsultaCEPClick(Sender: TObject);
 begin
   inherited;
+  if not CEPValido then
+    Exit;
+
   ConsultarCEP;
   cmbTipoEndereco.SetFocus;
 end;

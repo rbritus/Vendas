@@ -41,6 +41,7 @@ begin
   try
     aGIF.LoadFromStream(Resource);
     aGIF.Animate := true;
+    aGIF.AnimationSpeed := 150;
     Imagem.Picture.Graphic := aGIF;
   finally
     Resource.Free;

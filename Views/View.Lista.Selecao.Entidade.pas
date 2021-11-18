@@ -36,6 +36,7 @@ type
     procedure btnConfirmarExit(Sender: TObject);
     procedure btnCancelarExit(Sender: TObject);
     procedure btnCancelarEnter(Sender: TObject);
+    procedure grdListaDblClick(Sender: TObject);
   private
     { Private declarations }
     FClasseEntidade: TClass;
@@ -49,6 +50,7 @@ type
     procedure OcultarBarraLateralDoBotao;
     procedure InformarObservador(AObjeto: TObject);
     procedure InformarGrideParaPesquisa;
+    procedure RetornarRegistroSelecionado;
   public
     { Public declarations }
     procedure InformarClasseDaEntidade(ClasseEntidade: TClass);
@@ -102,13 +104,21 @@ begin
   Self.FObservador := nil;
 end;
 
-procedure TFrmListaSelecaoEntidade.btnConfirmarClick(Sender: TObject);
+procedure TFrmListaSelecaoEntidade.RetornarRegistroSelecionado;
 begin
+  if FClientDataSet.IsEmpty then
+    Exit;
+
   var Controller := TControllerListaSelecaoEntidade.New(FClasseEntidade);
   var ID := FClientDataSet.FieldByName('ID').AsInteger;
   var Obj := Controller.ObterObjetoSelecionado(ID);
   InformarObservador(Obj);
   Close;
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarClick(Sender: TObject);
+begin
+  RetornarRegistroSelecionado;
 end;
 
 procedure TFrmListaSelecaoEntidade.btnConfirmarEnter(Sender: TObject);
@@ -202,6 +212,12 @@ procedure TFrmListaSelecaoEntidade.FrameFiltroPesquisa1edtPesquisaExit(
 begin
   inherited;
   KeyPreview := False;
+end;
+
+procedure TFrmListaSelecaoEntidade.grdListaDblClick(Sender: TObject);
+begin
+  inherited;
+  RetornarRegistroSelecionado;
 end;
 
 procedure TFrmListaSelecaoEntidade.grdListaKeyPress(Sender: TObject;

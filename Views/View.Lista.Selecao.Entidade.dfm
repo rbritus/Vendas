@@ -30,6 +30,7 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
         TitleFont.Height = -16
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = [fsBold]
+        OnDblClick = grdListaDblClick
         OnKeyPress = grdListaKeyPress
       end
     end

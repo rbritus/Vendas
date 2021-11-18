@@ -5,7 +5,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
       object Label1: TLabel
-        Left = 48
+        Left = 40
         Top = 14
         Width = 23
         Height = 16
@@ -20,7 +20,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object Label2: TLabel
-        Left = 48
+        Left = 40
         Top = 159
         Width = 60
         Height = 16
@@ -50,7 +50,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object Label4: TLabel
-        Left = 49
+        Left = 40
         Top = 233
         Width = 87
         Height = 16
@@ -95,7 +95,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object Label7: TLabel
-        Left = 48
+        Left = 40
         Top = 85
         Width = 26
         Height = 16
@@ -110,7 +110,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentFont = False
       end
       object btnConsultaCEP: TSpeedButton
-        Left = 171
+        Left = 164
         Top = 33
         Width = 21
         Height = 21
@@ -120,7 +120,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         OnClick = btnConsultaCEPClick
       end
       object edtCEP: TMaskEdit
-        Left = 48
+        Left = 40
         Top = 33
         Width = 120
         Height = 24
@@ -128,9 +128,9 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Text = ''
       end
       object edtLogradouro: TEdit
-        Left = 48
+        Left = 40
         Top = 181
-        Width = 489
+        Width = 497
         Height = 24
         TabOrder = 2
       end
@@ -143,9 +143,9 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         TabOrder = 3
       end
       object edtComplemento: TEdit
-        Left = 48
+        Left = 40
         Top = 255
-        Width = 351
+        Width = 361
         Height = 24
         TabOrder = 4
       end
@@ -157,25 +157,24 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         TabOrder = 5
       end
       inline FramePesquisaCidade: TFramePesquisaEntidadePadrao
-        Left = 48
+        Left = 40
         Top = 315
-        Width = 353
+        Width = 361
         Height = 47
         Constraints.MaxHeight = 47
         Constraints.MinHeight = 47
         TabOrder = 6
-        ExplicitLeft = 48
+        ExplicitLeft = 40
         ExplicitTop = 315
-        ExplicitWidth = 353
+        ExplicitWidth = 361
         inherited pnlFundo: TPanel
-          Width = 353
+          Width = 361
           ExplicitWidth = 353
           inherited pnlConteudo: TPanel
-            Width = 353
-            ExplicitTop = 19
+            Width = 361
             ExplicitWidth = 353
             DesignSize = (
-              353
+              361
               47)
             inherited Label1: TLabel
               Width = 43
@@ -183,16 +182,16 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
               ExplicitWidth = 43
             end
             inherited Edit1: TEdit
-              Width = 307
+              Width = 315
               OnChange = FramePesquisaCidadeEdit1Change
               ExplicitWidth = 307
             end
             inherited btnInserir: TBitBtn
-              Left = 308
+              Left = 316
               ExplicitLeft = 308
             end
             inherited btnExcluir: TBitBtn
-              Left = 330
+              Left = 338
               ExplicitLeft = 330
             end
           end
@@ -208,7 +207,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         TabOrder = 7
       end
       object cmbTipoEndereco: TComboBox
-        Left = 49
+        Left = 40
         Top = 107
         Width = 144
         Height = 24

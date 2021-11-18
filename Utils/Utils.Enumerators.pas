@@ -50,9 +50,9 @@ type
   [TEnumAttribute(1,'INATIVO','N')]
   TRegistroAtivo = (raAtivo, raInativo);
 
-  [TEnumAttribute(0,'TELEFONE',0)]
-  [TEnumAttribute(1,'CELULAR',1)]
-  TTipoTelefone = (ttTelefone, ttCelular);
+  [TEnumAttribute(0,'CELULAR',0)]
+  [TEnumAttribute(1,'TELEFONE',1)]
+  TTipoTelefone = (ttCelular,ttTelefone);
 
 implementation
 

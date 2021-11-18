@@ -45,6 +45,7 @@ begin
   Delete(ACPF, ansipos('.', ACPF), 1);
   Delete(ACPF, ansipos('.', ACPF), 1);
   Delete(ACPF, ansipos('-', ACPF), 1);
+  ACPF := StringReplace(ACPF,' ',string.Empty,[rfReplaceAll]);
 
   for Indice := 1 to length(ACPF) do
   begin
@@ -56,10 +57,10 @@ begin
   end;
 
   if not Wvalid then
-  begin
-    Result := false;
-    exit;
-  end;
+    Exit(False);
+
+  if Length(ACPF) < 11 then
+    Exit(False);
 
   for Indice := 1 to 9 do
   begin

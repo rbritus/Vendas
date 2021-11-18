@@ -41,6 +41,9 @@ const
 var
   LResponse: TStringStream;
 begin
+  if ACep.Trim.IsEmpty then
+    Exit(nil);
+
   Result := nil;
   LResponse := TStringStream.Create;
   try

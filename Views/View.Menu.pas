@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.CategoryButtons,
   Vcl.WinXCtrls, System.ImageList, Vcl.ImgList, System.Actions, Vcl.ActnList,
-  Vcl.Menus, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Controller.View, Vcl.Buttons;
+  Vcl.Menus, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Controller.View, Vcl.Buttons,
+  Vcl.OleCtrls;
 
 type
   TFrmMenu = class(TForm)

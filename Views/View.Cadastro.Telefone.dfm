@@ -1,11 +1,11 @@
 inherited FrmCadastroTelefone: TFrmCadastroTelefone
-  Caption = 'FrmCadastroTelefone'
+  Caption = 'Cadastrar Telefone'
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
       object lblTipoTelefone: TLabel
-        Left = 48
+        Left = 40
         Top = 14
         Width = 26
         Height = 16
@@ -20,7 +20,7 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         ParentFont = False
       end
       object lblNumero: TLabel
-        Left = 48
+        Left = 40
         Top = 85
         Width = 49
         Height = 16
@@ -35,7 +35,7 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         ParentFont = False
       end
       object lblObservacao: TLabel
-        Left = 48
+        Left = 40
         Top = 159
         Width = 77
         Height = 16
@@ -50,7 +50,7 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         ParentFont = False
       end
       object cmbTipoTelefone: TComboBox
-        Left = 49
+        Left = 40
         Top = 33
         Width = 144
         Height = 24
@@ -65,14 +65,14 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         OnChange = cmbTipoTelefoneChange
       end
       object edtObservacao: TEdit
-        Left = 48
+        Left = 40
         Top = 181
         Width = 497
         Height = 24
         TabOrder = 2
       end
       object edtNumero: TMaskEdit
-        Left = 48
+        Left = 40
         Top = 107
         Width = 145
         Height = 24

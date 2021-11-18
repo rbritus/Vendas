@@ -4,10 +4,8 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      ExplicitLeft = -96
-      ExplicitTop = 5
       object Label2: TLabel
-        Left = 48
+        Left = 40
         Top = 86
         Width = 35
         Height = 16
@@ -37,7 +35,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentFont = False
       end
       object Label1: TLabel
-        Left = 48
+        Left = 40
         Top = 12
         Width = 22
         Height = 16
@@ -52,9 +50,9 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentFont = False
       end
       object edtNome: TEdit
-        Left = 48
+        Left = 40
         Top = 108
-        Width = 617
+        Width = 625
         Height = 24
         TabOrder = 1
       end
@@ -93,7 +91,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         end
       end
       object edtCPF: TMaskEdit
-        Left = 48
+        Left = 40
         Top = 34
         Width = 169
         Height = 24

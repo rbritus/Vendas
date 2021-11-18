@@ -25,11 +25,11 @@ type
 
   TConstantsMasks = class
   public
-   const CPF = '000\.000\.000\-00;0;';
-   const CNPJ = '00\.000\.000\/0000\-00;0;';
+   const CPF = '999\.999\.999\-99;0;';
+   const CNPJ = '99\.999\.999\/9999\-99;0;';
    const CELULAR = '(99) 99999-9999;0;';
    const TELEFONE = '(99) 9999-9999;0;';
-   const CEP = '00000\-000;0;';
+   const CEP = '99999\-999;0;';
   end;
 
 implementation
