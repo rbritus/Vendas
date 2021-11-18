@@ -22,8 +22,10 @@ type
     procedure InformarObservador;
     function isComponenteTEdit(AComponente: TComponent): Boolean;
     function isComponenteTMaskEdit(AComponente: TComponent): Boolean;
+    function isComponenteTComboBox(AComponente: TComponent): Boolean;
     procedure LimpaFramesAdicao;
     function isComponenteTFrameAdicao(AComponente: TComponent): Boolean;
+    procedure ModificarComboBox(edt: TComboBox);
   public
     procedure GravarEntidade;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
@@ -70,14 +72,28 @@ begin
   edt.BorderStyle := bsNOne;
 end;
 
+procedure TControllerCadastroPadrao.ModificarComboBox(edt: TComboBox);
+begin
+  edt.Style := csDropDownList;
+end;
+
 procedure TControllerCadastroPadrao.CarregarLayoutDeCamposEditaveis;
 begin
   for var Indice := 0 to Pred(FForm.ComponentCount) do
+  begin
     if isComponenteTEdit(FForm.Components[Indice]) or isComponenteTMaskEdit(FForm.Components[Indice])  then
     begin
       ModificarLayoutEdit(TEdit(FForm.Components[Indice]));
       ControllerView.CriarSublinhadoParaCamposEditaveis(FForm.Components[Indice] as TWinControl);
+      Continue;
     end;
+
+    if isComponenteTComboBox(FForm.Components[Indice]) then
+    begin
+      ModificarComboBox(TComboBox(FForm.Components[Indice]));
+      Continue;
+    end;
+  end;
 end;
 
 procedure TControllerCadastroPadrao.CarregarMascarasNosCampos;
@@ -113,6 +129,12 @@ end;
 procedure TControllerCadastroPadrao.InformarObservador;
 begin
   TUtilsEntidade.ExecutarMetodoObjeto(FForm,'NotificarObservador',[FEntidade]);
+end;
+
+function TControllerCadastroPadrao.isComponenteTComboBox(
+  AComponente: TComponent): Boolean;
+begin
+  Result := AComponente.ClassType = TComboBox;
 end;
 
 function TControllerCadastroPadrao.isComponenteTEdit(

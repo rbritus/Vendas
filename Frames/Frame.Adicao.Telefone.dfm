@@ -3,49 +3,49 @@ inherited FrameAdicaoTelefone: TFrameAdicaoTelefone
     inherited pnlConteudo: TPanel
       inherited DBCtrlGrid1: TDBCtrlGrid
         object edtTipoEndereco: TDBText [0]
-          Left = 16
-          Top = 22
-          Width = 57
+          Left = 18
+          Top = 17
+          Width = 73
           Height = 17
           DataField = 'TIPO_TELEFONE_CUSTOM'
           DataSource = dscDados
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
-          Font.Height = -11
+          Font.Height = -13
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
         end
         object edtNumero: TDBText [1]
-          Left = 72
-          Top = 22
-          Width = 169
+          Left = 97
+          Top = 17
+          Width = 154
           Height = 17
           DataField = 'NUMERO'
           DataSource = dscDados
         end
         object edtObservacao: TDBText [2]
-          Left = 325
-          Top = 22
-          Width = 316
+          Left = 366
+          Top = 17
+          Width = 276
           Height = 17
           DataField = 'OBSERVACAO'
           DataSource = dscDados
         end
         object lblCEP: TLabel [3]
-          Left = 257
-          Top = 22
-          Width = 62
-          Height = 13
-          Caption = 'Observa'#231#227'o:'
+          Left = 268
+          Top = 17
+          Width = 92
+          Height = 16
+          Caption = 'OBSERVA'#199#195'O:'
         end
       end
     end
     inherited pnlTitulo: TPanel
       inherited lblTitulo: TLabel
-        Width = 49
+        Width = 72
         Caption = 'Telefone'
-        ExplicitWidth = 49
+        ExplicitWidth = 72
       end
     end
   end

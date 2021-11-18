@@ -13,8 +13,8 @@ uses
 type
   TFrmCadastroPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
-    btnCancelar: TSpeedButton;
-    btnCadastrar: TSpeedButton;
+    btnCancelar: TButton;
+    btnCadastrar: TButton;
     pnlBarraLateralBotao: TPanel;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCadastrarMouseEnter(Sender: TObject);
@@ -23,6 +23,10 @@ type
     procedure btnCancelarMouseLeave(Sender: TObject);
     procedure btnCadastrarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnCadastrarEnter(Sender: TObject);
+    procedure btnCadastrarExit(Sender: TObject);
+    procedure btnCancelarEnter(Sender: TObject);
+    procedure btnCancelarExit(Sender: TObject);
   private
     { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -146,6 +150,18 @@ begin
   Close;
 end;
 
+procedure TFrmCadastroPadrao.btnCancelarEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroPadrao.btnCancelarExit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
 procedure TFrmCadastroPadrao.btnCancelarMouseEnter(Sender: TObject);
 begin
   inherited;
@@ -181,6 +197,18 @@ begin
 
   GravarEntidade;
   Close;
+end;
+
+procedure TFrmCadastroPadrao.btnCadastrarEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroPadrao.btnCadastrarExit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 function TFrmCadastroPadrao.CamposObrigatoriosPreenchidos: Boolean;

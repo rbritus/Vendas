@@ -7,13 +7,13 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       object Label1: TLabel
         Left = 48
         Top = 14
-        Width = 20
-        Height = 13
+        Width = 23
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'CEP'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -21,14 +21,14 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       end
       object Label2: TLabel
         Left = 48
-        Top = 108
-        Width = 52
-        Height = 13
+        Top = 159
+        Width = 60
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Endere'#231'o'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -36,29 +36,29 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       end
       object Label3: TLabel
         Left = 574
-        Top = 108
-        Width = 44
-        Height = 13
+        Top = 159
+        Width = 49
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'N'#250'mero'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
         ParentFont = False
       end
       object Label4: TLabel
-        Left = 48
-        Top = 156
-        Width = 79
-        Height = 13
+        Left = 49
+        Top = 233
+        Width = 87
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Complemento'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -66,29 +66,29 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       end
       object Label5: TLabel
         Left = 440
-        Top = 156
-        Width = 34
-        Height = 13
+        Top = 233
+        Width = 39
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Bairro'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
         ParentFont = False
       end
       object Label6: TLabel
-        Left = 424
-        Top = 211
-        Width = 38
-        Height = 13
+        Left = 440
+        Top = 318
+        Width = 44
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Estado'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -96,28 +96,20 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
       end
       object Label7: TLabel
         Left = 48
-        Top = 60
-        Width = 24
-        Height = 13
+        Top = 85
+        Width = 26
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Tipo'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
         ParentFont = False
       end
-      object edtCEP: TMaskEdit
-        Left = 48
-        Top = 33
-        Width = 120
-        Height = 21
-        TabOrder = 0
-        Text = ''
-      end
-      object btnConsultaCEP: TBitBtn
+      object btnConsultaCEP: TSpeedButton
         Left = 171
         Top = 33
         Width = 21
@@ -125,57 +117,70 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Anchors = [akTop, akRight]
         ImageIndex = 0
         Images = imgListaBotoes16
-        TabOrder = 1
         OnClick = btnConsultaCEPClick
+      end
+      object edtCEP: TMaskEdit
+        Left = 48
+        Top = 33
+        Width = 120
+        Height = 24
+        TabOrder = 0
+        Text = ''
       end
       object edtLogradouro: TEdit
         Left = 48
-        Top = 127
+        Top = 181
         Width = 489
-        Height = 21
-        TabOrder = 3
+        Height = 24
+        TabOrder = 2
       end
       object edtNumero: TEdit
         Left = 574
-        Top = 127
+        Top = 181
         Width = 88
-        Height = 21
+        Height = 24
         Alignment = taRightJustify
-        TabOrder = 4
+        TabOrder = 3
       end
       object edtComplemento: TEdit
         Left = 48
-        Top = 175
+        Top = 255
         Width = 351
-        Height = 21
-        TabOrder = 5
+        Height = 24
+        TabOrder = 4
       end
       object edtBairro: TEdit
         Left = 440
-        Top = 175
+        Top = 255
         Width = 222
-        Height = 21
-        TabOrder = 6
+        Height = 24
+        TabOrder = 5
       end
       inline FramePesquisaCidade: TFramePesquisaEntidadePadrao
         Left = 48
-        Top = 211
+        Top = 315
         Width = 353
-        Height = 45
-        TabOrder = 7
+        Height = 47
+        Constraints.MaxHeight = 47
+        Constraints.MinHeight = 47
+        TabOrder = 6
         ExplicitLeft = 48
-        ExplicitTop = 211
+        ExplicitTop = 315
         ExplicitWidth = 353
         inherited pnlFundo: TPanel
           Width = 353
           ExplicitWidth = 353
           inherited pnlConteudo: TPanel
             Width = 353
+            ExplicitTop = 19
             ExplicitWidth = 353
+            DesignSize = (
+              353
+              47)
             inherited Label1: TLabel
-              Width = 38
+              Width = 43
               Caption = 'Cidade'
-              ExplicitWidth = 38
+              ExplicitWidth = 43
             end
             inherited Edit1: TEdit
               Width = 307
@@ -194,20 +199,27 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         end
       end
       object edtEstado: TEdit
-        Left = 424
-        Top = 230
+        Left = 440
+        Top = 337
         Width = 50
-        Height = 21
+        Height = 24
         TabStop = False
         ReadOnly = True
-        TabOrder = 8
+        TabOrder = 7
       end
       object cmbTipoEndereco: TComboBox
         Left = 49
-        Top = 79
+        Top = 107
         Width = 144
-        Height = 21
-        TabOrder = 2
+        Height = 24
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
       end
     end
   end

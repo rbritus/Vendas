@@ -5,24 +5,31 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
-      Top = 133
-      Height = 507
-      ExplicitTop = 133
-      ExplicitHeight = 507
+      Top = 139
+      Height = 501
+      ExplicitTop = 139
+      ExplicitHeight = 501
       object grdLista: TDBGrid
         Left = 0
         Top = 3
         Width = 840
-        Height = 504
+        Height = 498
         Align = alClient
         DrawingStyle = gdsClassic
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = []
         Options = [dgTitles, dgColumnResize, dgTabs, dgRowSelect, dgTitleClick, dgTitleHotTrack]
+        ParentFont = False
+        ReadOnly = True
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
-        TitleFont.Height = -11
+        TitleFont.Height = -16
         TitleFont.Name = 'Tahoma'
-        TitleFont.Style = []
+        TitleFont.Style = [fsBold]
         OnKeyPress = grdListaKeyPress
       end
     end
@@ -30,72 +37,73 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
       Left = 0
       Top = 0
       Width = 840
-      Height = 44
+      Height = 50
       Align = alTop
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
-      object btnCancelar: TSpeedButton
+      object btnCancelar: TButton
         AlignWithMargins = True
-        Left = 49
+        Left = 55
         Top = 5
-        Width = 34
-        Height = 34
+        Width = 40
+        Height = 40
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
-        GroupIndex = 1
-        ImageIndex = 2
-        Images = imgListaBotoes32
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
+        ImageAlignment = iaCenter
+        ImageIndex = 2
+        Images = imgListaBotoes32
         ParentFont = False
-        Spacing = 10
+        TabOrder = 2
         OnClick = btnCancelarClick
+        OnEnter = btnCancelarEnter
+        OnExit = btnCancelarExit
         OnMouseEnter = btnCancelarMouseEnter
         OnMouseLeave = btnCancelarMouseLeave
-        ExplicitLeft = 47
       end
-      object btnConfirmar: TSpeedButton
+      object btnConfirmar: TButton
         AlignWithMargins = True
         Left = 5
         Top = 5
-        Width = 34
-        Height = 34
+        Width = 40
+        Height = 40
         Hint = 'Utilizar registro selecionado.'
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
-        GroupIndex = 1
-        ImageIndex = 0
-        Images = imgListaBotoes32
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
+        ImageAlignment = iaCenter
+        ImageIndex = 0
+        Images = imgListaBotoes32
         ParentFont = False
         ParentShowHint = False
         ShowHint = True
-        Spacing = 10
+        TabOrder = 1
         OnClick = btnConfirmarClick
+        OnEnter = btnConfirmarEnter
+        OnExit = btnConfirmarExit
         OnMouseEnter = btnConfirmarMouseEnter
         OnMouseLeave = btnConfirmarMouseLeave
       end
       object pnlBarraLateralBotao: TPanel
-        Left = 7
-        Top = 38
-        Width = 34
+        Left = 5
+        Top = 45
+        Width = 40
         Height = 5
         BevelOuter = bvNone
         Color = 16744448
@@ -106,20 +114,13 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
     end
     inline FrameFiltroPesquisa1: TFrameFiltroPesquisa
       Left = 0
-      Top = 44
+      Top = 50
       Width = 840
       Height = 86
       Align = alTop
       TabOrder = 2
-      ExplicitTop = 44
+      ExplicitTop = 50
       inherited pnlFundo: TPanel
-        ExplicitHeight = 86
-        inherited pnlConteudo: TPanel
-          ExplicitHeight = 29
-          inherited pnlFiltros: TPanel
-            ExplicitHeight = 29
-          end
-        end
         inherited pnlPesquisa: TPanel
           inherited edtPesquisa: TEdit
             OnEnter = FrameFiltroPesquisa1edtPesquisaEnter

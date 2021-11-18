@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   View.Cadastro.Padrao, System.ImageList, Vcl.ImgList, Vcl.Buttons,
   Vcl.ExtCtrls, Entidade.Telefone, Vcl.StdCtrls, Vcl.Mask, Attributes.Forms,
-  Utils.Enumerators, System.StrUtils;
+  Utils.Enumerators, System.StrUtils, Vcl.BaseImageCollection,
+  Vcl.ImageCollection, System.Actions, Vcl.ActnList;
 
 type
   [TClasseCadastro(TTelefone)]

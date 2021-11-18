@@ -4,31 +4,33 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   TextHeight = 13
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
+      ExplicitLeft = -96
+      ExplicitTop = 5
       object Label2: TLabel
         Left = 48
-        Top = 60
-        Width = 32
-        Height = 13
+        Top = 86
+        Width = 35
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Nome'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
         ParentFont = False
       end
       object Label3: TLabel
-        Left = 48
-        Top = 108
-        Width = 30
-        Height = 13
+        Left = 713
+        Top = 86
+        Width = 35
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Ativo'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -36,14 +38,14 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       object Label1: TLabel
         Left = 48
-        Top = 14
-        Width = 20
-        Height = 13
+        Top = 12
+        Width = 22
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'CPF'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -51,19 +53,18 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       object edtNome: TEdit
         Left = 48
-        Top = 79
-        Width = 614
-        Height = 21
+        Top = 108
+        Width = 617
+        Height = 24
         TabOrder = 1
       end
       object ToggleSwitch1: TToggleSwitch
-        Left = 48
-        Top = 127
-        Width = 77
+        Left = 713
+        Top = 108
         Height = 20
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         FrameColor = clDefault
@@ -76,12 +77,12 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       inline FrameAdicaoEndereco: TFrameAdicaoEndereco
         Left = 40
-        Top = 151
+        Top = 164
         Width = 760
         Height = 180
         TabOrder = 3
         ExplicitLeft = 40
-        ExplicitTop = 151
+        ExplicitTop = 164
         inherited pnlFundo: TPanel
           inherited pnlConteudo: TPanel
             inherited DBCtrlGrid1: TDBCtrlGrid
@@ -93,20 +94,20 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       object edtCPF: TMaskEdit
         Left = 48
-        Top = 33
+        Top = 34
         Width = 169
-        Height = 21
+        Height = 24
         TabOrder = 0
         Text = ''
       end
       inline FrameAdicaoTelefone: TFrameAdicaoTelefone
         Left = 40
-        Top = 330
+        Top = 357
         Width = 760
         Height = 180
         TabOrder = 4
         ExplicitLeft = 40
-        ExplicitTop = 330
+        ExplicitTop = 357
       end
     end
   end

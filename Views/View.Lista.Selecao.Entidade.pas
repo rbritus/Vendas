@@ -8,14 +8,15 @@ uses
   View.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Controller.Lista.Selecao.Entidade, Datasnap.DBClient,
   System.ImageList, Vcl.ImgList, Vcl.StdCtrls, Frame.Padrao,
-  Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList;
+  Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList, Vcl.BaseImageCollection,
+  Vcl.ImageCollection;
 
 type
   TFrmListaSelecaoEntidade = class(TFrmPadrao)
     grdLista: TDBGrid;
     pnlMenu: TPanel;
-    btnCancelar: TSpeedButton;
-    btnConfirmar: TSpeedButton;
+    btnCancelar: TButton;
+    btnConfirmar: TButton;
     pnlBarraLateralBotao: TPanel;
     FrameFiltroPesquisa1: TFrameFiltroPesquisa;
     procedure btnConfirmarClick(Sender: TObject);
@@ -31,6 +32,10 @@ type
     procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
     procedure grdListaKeyPress(Sender: TObject; var Key: Char);
+    procedure btnConfirmarEnter(Sender: TObject);
+    procedure btnConfirmarExit(Sender: TObject);
+    procedure btnCancelarExit(Sender: TObject);
+    procedure btnCancelarEnter(Sender: TObject);
   private
     { Private declarations }
     FClasseEntidade: TClass;
@@ -64,6 +69,18 @@ begin
   Close;
 end;
 
+procedure TFrmListaSelecaoEntidade.btnCancelarEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmListaSelecaoEntidade.btnCancelarExit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
 procedure TFrmListaSelecaoEntidade.btnCancelarMouseEnter(Sender: TObject);
 begin
   inherited;
@@ -92,6 +109,18 @@ begin
   var Obj := Controller.ObterObjetoSelecionado(ID);
   InformarObservador(Obj);
   Close;
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmListaSelecaoEntidade.btnConfirmarExit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmListaSelecaoEntidade.btnConfirmarMouseEnter(Sender: TObject);

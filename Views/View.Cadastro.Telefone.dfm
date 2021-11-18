@@ -7,13 +7,13 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
       object lblTipoTelefone: TLabel
         Left = 48
         Top = 14
-        Width = 24
-        Height = 13
+        Width = 26
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Tipo'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -21,14 +21,14 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
       end
       object lblNumero: TLabel
         Left = 48
-        Top = 62
-        Width = 44
-        Height = 13
+        Top = 85
+        Width = 49
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'N'#250'mero'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -36,14 +36,14 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
       end
       object lblObservacao: TLabel
         Left = 48
-        Top = 108
-        Width = 67
-        Height = 13
+        Top = 159
+        Width = 77
+        Height = 16
         BiDiMode = bdLeftToRight
         Caption = 'Observa'#231#227'o'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False
@@ -53,22 +53,29 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         Left = 49
         Top = 33
         Width = 144
-        Height = 21
+        Height = 24
+        Style = csDropDownList
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 0
         OnChange = cmbTipoTelefoneChange
       end
       object edtObservacao: TEdit
         Left = 48
-        Top = 127
+        Top = 181
         Width = 497
-        Height = 21
+        Height = 24
         TabOrder = 2
       end
       object edtNumero: TMaskEdit
         Left = 48
-        Top = 81
+        Top = 107
         Width = 145
-        Height = 21
+        Height = 24
         TabOrder = 1
         Text = ''
       end

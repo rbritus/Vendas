@@ -8,13 +8,14 @@ uses
   View.Padrao, Vcl.ExtCtrls, Vcl.Buttons, Data.DB, Vcl.Grids, Vcl.DBGrids,
   View.Cadastro.Padrao, Datasnap.DBClient, Controller.Cadastro.Lista.Padrao,
   Interfaces.Padrao.Observer, System.ImageList, Vcl.ImgList, Vcl.StdCtrls,
-  Frame.Padrao, Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList;
+  Frame.Padrao, Frame.Filtro.Pesquisa, System.Actions, Vcl.ActnList,
+  Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 type
   TFrmCadastroListaPadrao = class(TFrmPadrao, iObservador)
     pnlMenu: TPanel;
-    SpeedButton5: TSpeedButton;
-    btnAdicionar: TSpeedButton;
+    SpeedButton5: TButton;
+    btnAdicionar: TButton;
     pnlBarraLateralBotao: TPanel;
     grdLista: TDBGrid;
     FrameFiltroPesquisa1: TFrameFiltroPesquisa;
@@ -31,6 +32,10 @@ type
     procedure FrameFiltroPesquisa1edtPesquisaEnter(Sender: TObject);
     procedure FrameFiltroPesquisa1edtPesquisaExit(Sender: TObject);
     procedure grdListaKeyPress(Sender: TObject; var Key: Char);
+    procedure btnAdicionarEnter(Sender: TObject);
+    procedure btnAdicionarExit(Sender: TObject);
+    procedure SpeedButton5Exit(Sender: TObject);
+    procedure SpeedButton5Enter(Sender: TObject);
   private
     { Private declarations }
     FClientDataSet : TClientDataSet;
@@ -146,6 +151,18 @@ begin
   FrameFiltroPesquisa1.SetFocusOnKeyDown(Key);
 end;
 
+procedure TFrmCadastroListaPadrao.SpeedButton5Enter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroListaPadrao.SpeedButton5Exit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
+end;
+
 procedure TFrmCadastroListaPadrao.SpeedButton5MouseEnter(Sender: TObject);
 begin
   inherited;
@@ -163,6 +180,18 @@ begin
   inherited;
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
   ControllerListaView.ApresentarFormParaCadastro;
+end;
+
+procedure TFrmCadastroListaPadrao.btnAdicionarEnter(Sender: TObject);
+begin
+  inherited;
+  AjustarPosicaoBarraLateralAoBotao(TButton(Sender));
+end;
+
+procedure TFrmCadastroListaPadrao.btnAdicionarExit(Sender: TObject);
+begin
+  inherited;
+  OcultarBarraLateralDoBotao;
 end;
 
 procedure TFrmCadastroListaPadrao.btnAdicionarMouseEnter(Sender: TObject);

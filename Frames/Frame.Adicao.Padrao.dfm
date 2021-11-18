@@ -10,13 +10,13 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
     ExplicitWidth = 760
     ExplicitHeight = 180
     inherited pnlConteudo: TPanel
-      Top = 82
+      Top = 88
       Width = 760
-      Height = 98
+      Height = 92
       AutoSize = True
-      ExplicitTop = 82
+      ExplicitTop = 88
       ExplicitWidth = 760
-      ExplicitHeight = 98
+      ExplicitHeight = 92
       object DBCtrlGrid1: TDBCtrlGrid
         Left = 0
         Top = 3
@@ -26,8 +26,14 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         AllowDelete = False
         AllowInsert = False
         DataSource = dscDados
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
         PanelHeight = 42
         PanelWidth = 743
+        ParentFont = False
         TabOrder = 0
         RowCount = 1
         Visible = False
@@ -161,69 +167,66 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       Left = 0
       Top = 38
       Width = 760
-      Height = 44
+      Height = 50
       Align = alTop
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
       TabOrder = 1
-      object SpeedButton5: TSpeedButton
+      object SpeedButton5: TButton
         AlignWithMargins = True
-        Left = 49
+        Left = 55
         Top = 5
-        Width = 34
-        Height = 34
+        Width = 40
+        Height = 40
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
-        GroupIndex = 1
         Caption = 'X'
-        ImageIndex = 0
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
+        ImageAlignment = iaCenter
+        ImageIndex = 0
         ParentFont = False
-        Spacing = 10
+        TabOrder = 1
         Visible = False
         OnMouseEnter = SpeedButton5MouseEnter
         OnMouseLeave = SpeedButton5MouseLeave
-        ExplicitLeft = 47
       end
-      object btnAdicionar: TSpeedButton
+      object btnAdicionar: TButton
         AlignWithMargins = True
         Left = 5
         Top = 5
-        Width = 34
-        Height = 34
+        Width = 40
+        Height = 40
         Margins.Left = 5
         Margins.Top = 5
         Margins.Right = 5
         Margins.Bottom = 5
         Align = alLeft
-        GroupIndex = 1
-        ImageIndex = 3
-        Images = imgListaBotoes32
-        Flat = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 6710886
         Font.Height = -16
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
+        ImageAlignment = iaCenter
+        ImageIndex = 3
+        Images = imgListaBotoes32
         ParentFont = False
-        Spacing = 10
+        TabOrder = 2
         OnClick = btnAdicionarClick
         OnMouseEnter = btnAdicionarMouseEnter
         OnMouseLeave = btnAdicionarMouseLeave
       end
       object pnlBarraLateralBotao: TPanel
         Left = 5
-        Top = 38
-        Width = 34
+        Top = 45
+        Width = 40
         Height = 5
         BevelOuter = bvNone
         Color = 16744448
@@ -244,14 +247,14 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       TabOrder = 2
       object lblTitulo: TLabel
         Left = 5
-        Top = 12
-        Width = 32
-        Height = 13
+        Top = 10
+        Width = 48
+        Height = 19
         BiDiMode = bdLeftToRight
         Caption = 'T'#237'tulo'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -11
+        Font.Height = -16
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentBiDiMode = False

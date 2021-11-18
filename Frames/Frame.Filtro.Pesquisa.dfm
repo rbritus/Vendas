@@ -7,7 +7,7 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
     Width = 840
     Height = 86
     ExplicitWidth = 840
-    ExplicitHeight = 100
+    ExplicitHeight = 86
     inherited pnlConteudo: TPanel
       Top = 57
       Width = 840
@@ -15,7 +15,7 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
       TabOrder = 1
       ExplicitTop = 57
       ExplicitWidth = 840
-      ExplicitHeight = 43
+      ExplicitHeight = 29
       object pnlFiltros: TPanel
         AlignWithMargins = True
         Left = 0
@@ -33,7 +33,6 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
         Padding.Top = 3
         ParentBackground = False
         TabOrder = 0
-        ExplicitHeight = 43
       end
     end
     object pnlPesquisa: TPanel
@@ -56,8 +55,14 @@ inherited FrameFiltroPesquisa: TFrameFiltroPesquisa
         Left = 33
         Top = 18
         Width = 769
-        Height = 21
+        Height = 27
         CharCase = ecUpperCase
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 0
         OnChange = edtPesquisaChange
         OnKeyDown = edtPesquisaKeyDown

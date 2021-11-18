@@ -13,8 +13,8 @@ uses
 type
   TFrameAdicaoPadrao = class(TFramePadrao, iObservador)
     pnlMenu: TPanel;
-    SpeedButton5: TSpeedButton;
-    btnAdicionar: TSpeedButton;
+    SpeedButton5: TButton;
+    btnAdicionar: TButton;
     pnlBarraLateralBotao: TPanel;
     DBCtrlGrid1: TDBCtrlGrid;
     Panel3: TPanel;
