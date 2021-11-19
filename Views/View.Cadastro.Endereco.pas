@@ -19,7 +19,7 @@ type
     [TMascaraCampo(TConstantsMasks.CEP)]
     [TCadastroEdit('CEP',ftTEXTO,coObrigatorio)]
     edtCEP: TMaskEdit;
-    btnConsultaCEP: TSpeedButton;
+    btnConsultaCEP: TButton;
     Label2: TLabel;
     [TCadastroEdit('Logradouro',ftTEXTO,coObrigatorio)]
     edtLogradouro: TEdit;

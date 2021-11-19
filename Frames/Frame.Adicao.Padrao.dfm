@@ -245,11 +245,13 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       Color = clWhite
       ParentBackground = False
       TabOrder = 2
+      ExplicitTop = -3
       object lblTitulo: TLabel
-        Left = 5
-        Top = 10
+        Left = 0
+        Top = 13
         Width = 48
         Height = 19
+        Align = alCustom
         BiDiMode = bdLeftToRight
         Caption = 'T'#237'tulo'
         Font.Charset = DEFAULT_CHARSET
@@ -271,7 +273,23 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
           '________________________________________________________________' +
           '________________________________________________________________' +
           '________'
-        ExplicitWidth = 752
+        ExplicitTop = 19
+      end
+      object lblQuantidadeRegistros: TLabel
+        Left = 55
+        Top = 17
+        Width = 136
+        Height = 13
+        BiDiMode = bdLeftToRight
+        Caption = 'Quantidade de registros'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBiDiMode = False
+        ParentFont = False
+        Layout = tlCenter
       end
     end
   end
@@ -419,6 +437,10 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
   inherited imgListaBotoes32: TImageList
     Left = 432
     Top = 0
+  end
+  inherited ImageCollection1: TImageCollection
+    Left = 488
+    Top = 1
   end
   object cdsDados: TClientDataSet
     Aggregates = <>

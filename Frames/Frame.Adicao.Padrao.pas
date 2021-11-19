@@ -8,7 +8,7 @@ uses
   Frame.Padrao, Vcl.Buttons, Vcl.ExtCtrls, Vcl.StdCtrls, System.ImageList,
   Vcl.ImgList, Vcl.Imaging.pngimage, Vcl.DBCGrids, Data.DB, Datasnap.DBClient,
   Componente.TObjectList, Interfaces.Padrao.Observer, Vcl.BaseImageCollection,
-  Vcl.ImageCollection;
+  Vcl.ImageCollection, Vcl.DBCtrls;
 
 type
   TFrameAdicaoPadrao = class(TFramePadrao, iObservador)
@@ -26,6 +26,7 @@ type
     pnlTitulo: TPanel;
     lblTitulo: TLabel;
     Label4: TLabel;
+    lblQuantidadeRegistros: TLabel;
     procedure imgBtnExcluirClick(Sender: TObject);
     procedure btnAdicionarClick(Sender: TObject);
     procedure imgBtnAlterarClick(Sender: TObject);
@@ -36,11 +37,16 @@ type
   private
     { Private declarations }
     FIdObjRelacional: Integer;
+    FQuantidadeMaximaDeLinhas: Integer;
     procedure CarregarDataSet;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
     procedure OcultarBarraLateralDoBotao;
+    procedure InformarQuantidadeRegistros(Quantidade: integer);
     function DataSetGridEstaVazio: Boolean;
     function ObterQuantidadeDeRegistrosDoDataSetGrid: Integer;
+    procedure InformarQuantidadeDeLinhasParaAGride(Quantidade: integer);
+    function LimitarQuantidadeDeLinhasDaGride(Quantidade: integer): Boolean;
+    const LabelQuantidadeRegistros = '(%d)';
   protected
     procedure AtribuirVisibilidadeAGride;
     procedure ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
@@ -53,6 +59,7 @@ type
     { Public declarations }
     procedure CarregarFrame(IdEntidade: Integer);
     procedure LimparDataSet;
+    property QuantidadeMaximaDeLinhas: Integer read FQuantidadeMaximaDeLinhas write FQuantidadeMaximaDeLinhas Default 0;
   end;
 
 var
@@ -86,6 +93,8 @@ begin
   try
     for Obj in Lista do
       PreencherDataSet(Obj);
+
+    cdsDados.First;
   finally
     Lista.Free;
   end;
@@ -100,6 +109,11 @@ begin
 
   cdsDados.Delete;
   AtribuirVisibilidadeAGride;
+end;
+
+procedure TFrameAdicaoPadrao.InformarQuantidadeRegistros(Quantidade: integer);
+begin
+  lblQuantidadeRegistros.Caption := Format(LabelQuantidadeRegistros,[Quantidade]);
 end;
 
 procedure TFrameAdicaoPadrao.LimparDataSet;
@@ -166,10 +180,28 @@ begin
   Result := cdsDados.IsEmpty;
 end;
 
+function TFrameAdicaoPadrao.LimitarQuantidadeDeLinhasDaGride(Quantidade: integer): Boolean;
+begin
+  Result := (FQuantidadeMaximaDeLinhas > 0) and (FQuantidadeMaximaDeLinhas < Quantidade);
+end;
+
+procedure TFrameAdicaoPadrao.InformarQuantidadeDeLinhasParaAGride(Quantidade: integer);
+begin
+  if LimitarQuantidadeDeLinhasDaGride(Quantidade) then
+  begin
+    DBCtrlGrid1.RowCount := FQuantidadeMaximaDeLinhas;
+    Exit;
+  end;
+
+  DBCtrlGrid1.RowCount := Quantidade;
+end;
+
 procedure TFrameAdicaoPadrao.AtribuirVisibilidadeAGride;
 begin
   DBCtrlGrid1.Visible := not DataSetGridEstaVazio;
-  DBCtrlGrid1.RowCount := ObterQuantidadeDeRegistrosDoDataSetGrid;
+  var Quantidade := ObterQuantidadeDeRegistrosDoDataSetGrid;
+  InformarQuantidadeRegistros(Quantidade);
+  InformarQuantidadeDeLinhasParaAGride(Quantidade)
 end;
 
 procedure TFrameAdicaoPadrao.btnAdicionarClick(Sender: TObject);

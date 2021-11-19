@@ -78,6 +78,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         Top = 164
         Width = 760
         Height = 180
+        AutoSize = True
         TabOrder = 3
         ExplicitLeft = 40
         ExplicitTop = 164
@@ -106,6 +107,11 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         TabOrder = 4
         ExplicitLeft = 40
         ExplicitTop = 357
+        inherited pnlFundo: TPanel
+          inherited pnlTitulo: TPanel
+            ExplicitTop = 0
+          end
+        end
       end
     end
   end

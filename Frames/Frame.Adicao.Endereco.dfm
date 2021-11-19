@@ -2,8 +2,6 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
   inherited pnlFundo: TPanel
     inherited pnlConteudo: TPanel
       TabOrder = 1
-      ExplicitTop = 88
-      ExplicitHeight = 92
       inherited DBCtrlGrid1: TDBCtrlGrid
         object edtTipoEndereco: TDBText [0]
           Left = 16
@@ -140,8 +138,9 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
         Caption = 'Endere'#231'o'
         ExplicitWidth = 75
       end
-      inherited Label4: TLabel
-        ExplicitWidth = 760
+      inherited lblQuantidadeRegistros: TLabel
+        Left = 80
+        ExplicitLeft = 80
       end
     end
   end

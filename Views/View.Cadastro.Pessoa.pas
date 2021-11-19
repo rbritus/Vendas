@@ -36,6 +36,7 @@ type
     [TCadastroVariavel('Telefones',ftLISTAGEM,coNaoObrigatorio,'FrameAdicaoTelefone')]
     FTelefones: TObjectListFuck<TTelefone>;
     function CPFValido: Boolean;
+    const DUAS_LINHAS = 2;
     { Private declarations }
   public
     { Public declarations }
@@ -73,7 +74,9 @@ end;
 procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin
   inherited;
+  FrameAdicaoEndereco.QuantidadeMaximaDeLinhas := DUAS_LINHAS;
   FrameAdicaoEndereco.CarregarFrame(Self.FID);
+  FrameAdicaoTelefone.QuantidadeMaximaDeLinhas := DUAS_LINHAS;
   FrameAdicaoTelefone.CarregarFrame(Self.FID);
   edtCPF.SetFocus;
 end;

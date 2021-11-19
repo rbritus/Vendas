@@ -109,14 +109,16 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ParentBiDiMode = False
         ParentFont = False
       end
-      object btnConsultaCEP: TSpeedButton
+      object btnConsultaCEP: TButton
         Left = 164
         Top = 33
         Width = 21
         Height = 21
         Anchors = [akTop, akRight]
+        ImageAlignment = iaCenter
         ImageIndex = 0
         Images = imgListaBotoes16
+        TabOrder = 1
         OnClick = btnConsultaCEPClick
       end
       object edtCEP: TMaskEdit
@@ -132,7 +134,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Top = 181
         Width = 497
         Height = 24
-        TabOrder = 2
+        TabOrder = 3
       end
       object edtNumero: TEdit
         Left = 574
@@ -140,21 +142,21 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Width = 88
         Height = 24
         Alignment = taRightJustify
-        TabOrder = 3
+        TabOrder = 4
       end
       object edtComplemento: TEdit
         Left = 40
         Top = 255
         Width = 361
         Height = 24
-        TabOrder = 4
+        TabOrder = 5
       end
       object edtBairro: TEdit
         Left = 440
         Top = 255
         Width = 222
         Height = 24
-        TabOrder = 5
+        TabOrder = 6
       end
       inline FramePesquisaCidade: TFramePesquisaEntidadePadrao
         Left = 40
@@ -163,16 +165,16 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Height = 47
         Constraints.MaxHeight = 47
         Constraints.MinHeight = 47
-        TabOrder = 6
+        TabOrder = 7
         ExplicitLeft = 40
         ExplicitTop = 315
         ExplicitWidth = 361
         inherited pnlFundo: TPanel
           Width = 361
-          ExplicitWidth = 353
+          ExplicitWidth = 361
           inherited pnlConteudo: TPanel
             Width = 361
-            ExplicitWidth = 353
+            ExplicitWidth = 361
             DesignSize = (
               361
               47)
@@ -184,15 +186,15 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
             inherited Edit1: TEdit
               Width = 315
               OnChange = FramePesquisaCidadeEdit1Change
-              ExplicitWidth = 307
+              ExplicitWidth = 315
             end
             inherited btnInserir: TBitBtn
               Left = 316
-              ExplicitLeft = 308
+              ExplicitLeft = 316
             end
             inherited btnExcluir: TBitBtn
               Left = 338
-              ExplicitLeft = 330
+              ExplicitLeft = 338
             end
           end
         end
@@ -204,7 +206,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Height = 24
         TabStop = False
         ReadOnly = True
-        TabOrder = 7
+        TabOrder = 8
       end
       object cmbTipoEndereco: TComboBox
         Left = 40
@@ -218,7 +220,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 2
       end
     end
   end

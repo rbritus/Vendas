@@ -42,10 +42,15 @@ inherited FrameAdicaoTelefone: TFrameAdicaoTelefone
       end
     end
     inherited pnlTitulo: TPanel
+      ExplicitTop = 0
       inherited lblTitulo: TLabel
         Width = 72
         Caption = 'Telefone'
         ExplicitWidth = 72
+      end
+      inherited lblQuantidadeRegistros: TLabel
+        Left = 77
+        ExplicitLeft = 77
       end
     end
   end
