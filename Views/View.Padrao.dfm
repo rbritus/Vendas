@@ -36,7 +36,7 @@ object FrmPadrao: TFrmPadrao
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
-    object pnlConteudo: TPanel
+    object pnlConteudo: TScrollBox
       AlignWithMargins = True
       Left = 0
       Top = 3
@@ -45,18 +45,20 @@ object FrmPadrao: TFrmPadrao
       Margins.Left = 0
       Margins.Right = 0
       Margins.Bottom = 0
+      HorzScrollBar.Visible = False
       Align = alClient
       BevelOuter = bvNone
-      Color = clWhite
+      BorderStyle = bsNone
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       Padding.Top = 3
-      ParentBackground = False
       ParentFont = False
       TabOrder = 0
+      OnMouseWheelDown = pnlConteudoMouseWheelDown
+      OnMouseWheelUp = pnlConteudoMouseWheelUp
     end
   end
   object imgListaBotoes16: TImageList

@@ -34,6 +34,9 @@ type
     procedure ShowOwnerCaption(AForm: Tform);
     procedure CriarSublinhadoParaCamposEditaveis(Componente: TWinControl);
     procedure AtribuirUpperCaseParaCamponentesEditaveis(AForm: TForm);
+    procedure CentralizarHorizontalmenteComOParent(AControl : TControl);
+    procedure CentralizarVerticalmenteComOParent(AControl : TControl);
+    procedure AjustarLarguraMinimaDaAplicao;
 
     procedure AdicionarFormNalista(Value: TComponentClass; var AForm: TForm);
     procedure ShowForm(Value: TComponentClass);
@@ -96,6 +99,18 @@ begin
   Result := AForm;
 end;
 
+procedure TControllerView.CentralizarHorizontalmenteComOParent(
+  AControl: TControl);
+begin
+  AControl.Left := (AControl.Parent.ClientWidth - AControl.Width) div 2;
+end;
+
+procedure TControllerView.CentralizarVerticalmenteComOParent(
+  AControl: TControl);
+begin
+  AControl.Top := (AControl.Parent.ClientHeight - AControl.Height) div 2;
+end;
+
 function TControllerView.ShowFormModal(Value: TComponentClass): TForm;
 begin
   var FormModal := CarregarFormModal(Value);
@@ -128,6 +143,12 @@ begin
   panel.Width := Componente.Width;
   panel.Height := 2;
   panel.Parent := Componente.Parent;
+end;
+
+procedure TControllerView.AjustarLarguraMinimaDaAplicao;
+begin
+  const DIFERENCA_ENTRE_BORDAS = 260;
+  FMainForm.Constraints.MinWidth :=  FParent.Width + DIFERENCA_ENTRE_BORDAS;
 end;
 
 procedure TControllerView.ArredondarCantos(componente: TWinControl);

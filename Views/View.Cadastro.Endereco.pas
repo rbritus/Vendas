@@ -65,8 +65,7 @@ var
 implementation
 
 uses
-  Controller.Objeto.ConsultaCEP, Utils.Entidade, Utils.Validacoes,
-  Controller.Componente.TImagemValidacao;
+  Controller.Objeto.ConsultaCEP, Utils.Entidade, Utils.Validacoes;
 
 {$R *.dfm}
 
@@ -82,8 +81,7 @@ begin
   if not Result then
   begin
     var Mensagem := 'CEP inválido.';
-    var ControllerTImagemValidacao := TControllerTImagemValidacao.New(Self);
-    ControllerTImagemValidacao.CriarImagemDeValidacao(edtCEP, Mensagem);
+    CriarImagemDeValidacaoParaCampo(edtCEP, Mensagem);
   end;
 end;
 

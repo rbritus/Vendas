@@ -3,7 +3,7 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    inherited pnlConteudo: TPanel
+    inherited pnlConteudo: TScrollBox
       object Label1: TLabel
         Left = 40
         Top = 14

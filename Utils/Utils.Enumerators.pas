@@ -44,7 +44,9 @@ type
 
   [TEnumAttribute(0,'RESIDENCIAL',0)]
   [TEnumAttribute(1,'COMERCIAL',1)]
-  TTipoEndereco = (teResidencial, teComercial);
+  [TEnumAttribute(2,'FINANCEIRO',2)]
+  [TEnumAttribute(3,'ENTREGA',3)]
+  TTipoEndereco = (teResidencial, teComercial, teFinanceiro, teEntrega);
 
   [TEnumAttribute(0,'ATIVO','S')]
   [TEnumAttribute(1,'INATIVO','N')]

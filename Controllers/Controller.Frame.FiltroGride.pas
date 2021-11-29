@@ -7,9 +7,11 @@ uses
   System.Types, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.Controls, Vcl.Grids,
   System.SysUtils, Vcl.Graphics, Winapi.Windows, System.Classes,
   System.Generics.Collections, Data.DB, System.Generics.Defaults,
-  Winapi.Messages, system.StrUtils, Componente.TObjectList;
+  Winapi.Messages, system.StrUtils, Componente.TObjectList, System.Variants,
+  System.Threading;
 
 type
+  TPanelCard = class(TPanel);
   TLabelCard = class(TLabel);
 
   TControllerFrameAdicaoPadrao = class(TInterfacedObject, iControllerFrameFiltroGride)
@@ -17,11 +19,11 @@ type
     FFrame: TFrame;
   private
     FDbGrid: TDbGrid;
-    FFiltroEmAcao: Boolean;
+    FFiltroEmExecucao: Boolean;
     FTextoFiltro: string;
-    function ObterPanel: TPanel;
-    procedure CriarLabel(Panel: TPanel; Filtro: string);
-    procedure CriarImagemFechar(Panel: TPanel);
+    function ObterPanel: TPanelCard;
+    procedure CriarLabel(Panel: TPanelCard; Filtro: string);
+    procedure CriarImagemFechar(Panel: TPanelCard);
     procedure ArredondarCantos(componente: TWinControl);
     procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
@@ -32,14 +34,16 @@ type
     function GetCamposComFiltro(TextoFiltro: string): string;
     function GetCaptionFiltro: TListFuck<string>;
     function GetFiltroAplicado: string;
+    procedure DestruirPanelsCard;
   protected
     constructor Create(AFrame: TFrame);
-    property FiltroEmAcao: Boolean read FFiltroEmAcao write FFiltroEmAcao default False;
+    property FiltroEmExecucao: Boolean read FFiltroEmExecucao write FFiltroEmExecucao default False;
   public
     class function New(AFrame: TFrame): iControllerFrameFiltroGride;
     procedure CriarPanelFiltro(Filtro: string);
     procedure InformarDbGrid(ADbGrid: TDbGrid);
     procedure Filtrar(Filtro: string);
+    procedure LimparPesquisa;
   end;
 
 implementation
@@ -65,9 +69,9 @@ begin
   Result := Self.Create(AFrame);
 end;
 
-function TControllerFrameAdicaoPadrao.ObterPanel: TPanel;
+function TControllerFrameAdicaoPadrao.ObterPanel: TPanelCard;
 begin
-  var panel := TPanel.Create(FFrame);
+  var panel := TPanelCard.Create(FFrame);
   panel.Parent := TWinControl(FFrame.FindComponent('pnlFiltros'));
   panel.Name := 'pnlFiltro' + Random(1000000).ToString;
   panel.Caption := string.Empty;
@@ -92,7 +96,7 @@ begin
   Result := panel;
 end;
 
-procedure TControllerFrameAdicaoPadrao.CriarLabel(Panel: TPanel; Filtro: string);
+procedure TControllerFrameAdicaoPadrao.CriarLabel(Panel: TPanelCard; Filtro: string);
 begin
   var LabelFiltro := TLabelCard.Create(FFrame);
   LabelFiltro.Parent := Panel;
@@ -124,9 +128,10 @@ end;
 constructor TControllerFrameAdicaoPadrao.Create(AFrame: TFrame);
 begin
   FFrame := AFrame;
+  FTextoFiltro := string.Empty;
 end;
 
-procedure TControllerFrameAdicaoPadrao.CriarImagemFechar(Panel: TPanel);
+procedure TControllerFrameAdicaoPadrao.CriarImagemFechar(Panel: TPanelCard);
 begin
   var Imagem := TImage.Create(FFrame);
   Imagem.Parent := Panel;
@@ -149,10 +154,23 @@ begin
 end;
 
 procedure TControllerFrameAdicaoPadrao.ImageClick(Sender: TObject);
+//var
+//  ATask: iTask;
 begin
   var Panel := TImage(Sender).Parent;
-  Panel.Free;
-  Filtrar('');
+//  ATask := TTask.Create(
+//   procedure
+//   begin
+//     Sleep(200);
+//     TThread.Synchronize(TThread.Current,
+//       procedure
+//       begin
+//         Filtrar(string.Empty);
+//       end);
+//   end);
+//   ATask.Start;
+  FreeAndNil(Panel);
+  Filtrar(string.Empty);
 end;
 
 procedure TControllerFrameAdicaoPadrao.InformarDbGrid(ADbGrid: TDbGrid);
@@ -161,9 +179,29 @@ begin
   FDbGrid.OnDrawColumnCell := DBGrid1DrawColumnCell;
 end;
 
+procedure TControllerFrameAdicaoPadrao.DestruirPanelsCard;
+begin
+  var Indice := 0;
+  while Indice <= Pred(FFrame.ComponentCount) do
+  begin
+    if FFrame.Components[Indice] is TPanelCard then
+    begin
+      FreeAndNil(FFrame.Components[Indice]);
+      Continue;
+    end;
+    inc(Indice);
+  end;
+end;
+
+procedure TControllerFrameAdicaoPadrao.LimparPesquisa;
+begin
+  DestruirPanelsCard;
+  Filtrar(string.Empty);
+end;
+
 procedure TControllerFrameAdicaoPadrao.Filtrar(Filtro: string);
 begin
-  if FiltroEmAcao then
+  if FiltroEmExecucao then
     Exit;
 
   var FiltroAplicado := GetFiltroAplicado;
@@ -240,14 +278,14 @@ var
   P : Integer;
   CorOrig : TColor;
 begin
-  if FiltroEmAcao then
+  if FiltroEmExecucao then
     Exit;
 
   Canvas.FillRect(Rect);
   Inc(Rect.Left, 2);
   CorOrig := Canvas.Font.Color;
 
-  FiltroEmAcao := True;
+  FiltroEmExecucao := True;
   var Lista := GetCaptionFiltro;
   try
     if not TextoDestaque.Trim.IsEmpty then
@@ -293,10 +331,10 @@ begin
     end;
   finally
     Lista.Free;
-    FiltroEmAcao := False;
+    FiltroEmExecucao := False;
   end;
 
-  if not (TextoOrig = '') then
+  if not (TextoOrig = string.Empty) then
     DrawOrigem(TextoOrig, CorOrig);
 end;
 

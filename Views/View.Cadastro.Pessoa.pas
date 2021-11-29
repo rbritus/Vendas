@@ -59,8 +59,7 @@ begin
   if not Result then
   begin
     var Mensagem := 'CPF inválido.';
-    var ControllerTImagemValidacao := TControllerTImagemValidacao.New(Self);
-    ControllerTImagemValidacao.CriarImagemDeValidacao(edtCPF, Mensagem);
+    CriarImagemDeValidacaoParaCampo(edtCPF, Mensagem);
   end;
 end;
 

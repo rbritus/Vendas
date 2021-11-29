@@ -130,20 +130,21 @@ begin
   {$IFDEF  DEBUG}
     ReportMemoryLeaksOnShutdown := True;
   {$ENDIF}
-end;
-
-procedure TFrmMenu.FormShow(Sender: TObject);
-begin
-  TControllerScript.RegistrarEntidadesNoBanco;
   ControllerView.MenuExpandido := True;
   ControllerView.MainForm := Self;
   ControllerView.Parent := pnlMainForm;
   ControllerView.Title := PanelTitulo;
 end;
 
+procedure TFrmMenu.FormShow(Sender: TObject);
+begin
+  TControllerScript.RegistrarEntidadesNoBanco;
+end;
+
 procedure TFrmMenu.pnlMainFormResize(Sender: TObject);
 begin
-//  ControllerView.Arredondarcantos(pnlMainForm);
+  ControllerView.CentralizarHorizontalmenteComOParent(pnlMainForm);
+  ControllerView.AjustarLarguraMinimaDaAplicao;
 end;
 
 procedure TFrmMenu.actMouseLeaveExecute(Sender: TObject);

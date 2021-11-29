@@ -49,6 +49,7 @@ type
     function ValidacoesEspecificasAtendidas: Boolean; virtual;
     procedure CarregarEntidadeParaEdicao(pId: Integer);
     procedure CarregarFormParaCadastro;
+    procedure CriarImagemDeValidacaoParaCampo(AComponente: TWinControl; Mensagem: string);
   end;
 
 var
@@ -135,6 +136,13 @@ procedure TFrmCadastroPadrao.CarregarMascaraNosCampos;
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarMascarasNosCampos;
+end;
+
+procedure TFrmCadastroPadrao.CriarImagemDeValidacaoParaCampo(
+  AComponente: TWinControl; Mensagem: string);
+begin
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.CriarImagemDeValidacaoDeCampo(AComponente,Mensagem);
 end;
 
 procedure TFrmCadastroPadrao.FormShow(Sender: TObject);

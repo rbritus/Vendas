@@ -17,7 +17,7 @@ type
     btnAdicionar: TButton;
     pnlBarraLateralBotao: TPanel;
     DBCtrlGrid1: TDBCtrlGrid;
-    Panel3: TPanel;
+    pnlBotoes: TPanel;
     imgBtnExcluir: TImage;
     imgBtnAlterar: TImage;
     Panel4: TPanel;
@@ -34,6 +34,8 @@ type
     procedure btnAdicionarMouseLeave(Sender: TObject);
     procedure SpeedButton5MouseLeave(Sender: TObject);
     procedure SpeedButton5MouseEnter(Sender: TObject);
+    procedure FrameMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
     FIdObjRelacional: Integer;
@@ -180,6 +182,29 @@ begin
   Result := cdsDados.IsEmpty;
 end;
 
+procedure TFrameAdicaoPadrao.FrameMouseWheel(Sender: TObject;
+  Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
+  var Handled: Boolean);
+var
+  Direction: Shortint;
+
+  function GetNumScrollLines: Integer;
+  begin
+    SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, @Result, 0);
+  end;
+
+begin
+  Direction := 1;
+  if WheelDelta = 0 then
+    Exit
+  else if WheelDelta > 0 then
+    Direction := -1;
+
+  if Assigned(DBCtrlGrid1.DataSource) and Assigned(DBCtrlGrid1.DataSource.DataSet) then
+    DBCtrlGrid1.DataSource.DataSet.MoveBy(Direction * GetNumScrollLines);
+  Invalidate;
+end;
+
 function TFrameAdicaoPadrao.LimitarQuantidadeDeLinhasDaGride(Quantidade: integer): Boolean;
 begin
   Result := (FQuantidadeMaximaDeLinhas > 0) and (FQuantidadeMaximaDeLinhas < Quantidade);
@@ -256,9 +281,10 @@ procedure TFrameAdicaoPadrao.PreencherDataSet(Obj: TObject);
 begin
   var ID := TUtilsEntidade.ObterValorPropriedade(Obj,'ID').AsInteger;
   if cdsDados.Locate('ID',ID,[]) then
-    cdsDados.Delete;
+    cdsDados.Edit
+  else
+    cdsDados.Append;
 
-  cdsDados.Append;
   TUtilsClientDataSet.PreencherDataSet(cdsDados,Obj);
   cdsDados.Post;
 end;

@@ -72,11 +72,11 @@ end;
 procedure TFrameAdicaoEndereco.PreencherDataSet(Obj: TObject);
 begin
   var Endereco := TEndereco(Obj);
-
   if cdsDados.Locate('ID',Endereco.Id,[]) then
-    cdsDados.Delete;
+    cdsDados.Edit
+  else
+    cdsDados.Append;
 
-  cdsDados.Append;
   TUtilsClientDataSet.PreencherDataSet(cdsDados,TPersistent(Endereco));
   cdsDados.FieldByName('ESTADO').AsString := Endereco.Cidade.Estado.Abreviacao;
   cdsDados.FieldByName('CIDADE').AsString := Endereco.Cidade.Nome;

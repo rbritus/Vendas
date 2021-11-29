@@ -36,6 +36,7 @@ type
     procedure CarregarComboBoxComEnumerators;
     procedure CarregarMascarasNosCampos;
     function CamposObrigatoriosEstaoPreenchidos: Boolean;
+    procedure CriarImagemDeValidacaoDeCampo(AComponente: TWinControl; Mensagem: string);
 
     class function New(AForm: TForm): iControllerCadastroPadrao;
   end;
@@ -104,6 +105,12 @@ end;
 constructor TControllerCadastroPadrao.Create(AForm: TForm);
 begin
   FForm := AForm;
+end;
+
+procedure TControllerCadastroPadrao.CriarImagemDeValidacaoDeCampo(
+  AComponente: TWinControl; Mensagem: string);
+begin
+  TUtilsForm.CriarImagemDeValidacao(FForm,AComponente,Mensagem);
 end;
 
 procedure TControllerCadastroPadrao.Gravar;

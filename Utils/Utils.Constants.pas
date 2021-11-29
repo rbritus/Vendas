@@ -10,7 +10,7 @@ type
   public
    const REGISTROATIVO = 'S';
    const REGISTROINATIVO = 'N';
-   const CHAR_RESULT = #0;
+   const CHAR_RESULT_VAZIO = #0;
   end;
 
   TConstantsInteger = class

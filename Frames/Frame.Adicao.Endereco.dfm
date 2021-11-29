@@ -73,7 +73,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           ParentFont = False
         end
         object edtCidade: TDBText [5]
-          Left = 432
+          Left = 428
           Top = 22
           Width = 170
           Height = 17
@@ -88,7 +88,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           ParentFont = False
         end
         object edtEstado: TDBText [6]
-          Left = 620
+          Left = 616
           Top = 22
           Width = 30
           Height = 17
@@ -102,7 +102,7 @@ inherited FrameAdicaoEndereco: TFrameAdicaoEndereco
           ParentFont = False
         end
         object lblTraco: TLabel [7]
-          Left = 608
+          Left = 604
           Top = 24
           Width = 5
           Height = 13

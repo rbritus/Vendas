@@ -304,7 +304,6 @@ Begin
   end;
 
   Result := ListObj;
-//  ListObj.Free;
 end;
 
 class function TUtilsEntidade.ObterNomeDaTabela(Classe: TPersistentClass): string;
@@ -514,7 +513,6 @@ var
   Prop: TRttiProperty;
   Tipo: TRTTIType;
   Atrib: TCustomAttribute;
-//  MemoStream: TMemoryStream;
 begin
   Ctx := TRttiContext.Create;
   try
@@ -564,28 +562,6 @@ begin
               tkVariant:
                 Prop.SetValue(Obj, TValue.From(DSet.FieldByName(TAtributoBanco(Atrib).nome).AsVariant));
             end;
-
-//            case TAtributoBanco(Atrib).Tipo of
-//              ftINTEIRO:
-//                Prop.SetValue(Obj, DSet.FieldByName(TAtributoBanco(Atrib).nome).AsInteger);
-//              ftDECIMAL:
-//                Prop.SetValue(Obj, DSet.FieldByName(TAtributoBanco(Atrib).nome).AsFloat);
-//              ftTEXTO:
-//                Prop.SetValue(Obj, DSet.FieldByName(TAtributoBanco(Atrib).nome).AsString);
-//              ftDATA:
-//                begin
-//                  if not DSet.FieldByName(TAtributoBanco(Atrib).nome).IsNull then
-//                    Prop.SetValue(Obj, DSet.FieldByName(TAtributoBanco(Atrib).nome).AsDateTime);
-//                end;
-//              ftLOGICO:
-//                Prop.SetValue(Obj, DSet.FieldByName(TAtributoBanco(Atrib).nome).AsBoolean);
-//              ftBLOBT:
-//                begin
-//                  MemoStream := TMemoryStream.Create;
-//                  (DSet.FieldByName(TAtributoBanco(Atrib).nome) as TBlobField).SaveToStream(MemoStream);
-//                  Prop.SetValue(Obj, MemoStream);
-//                end;
-//            end;
           end;
         end;
       end;
@@ -600,7 +576,6 @@ var
   Ctx: TRttiContext;
   Prop: TRttiProperty;
   Tipo: TRTTIType;
-//  Atrib: TCustomAttribute;
 begin
   Ctx := TRttiContext.Create;
   Tipo := Ctx.GetType(Objeto.ClassType);
@@ -610,46 +585,25 @@ begin
     begin
       for Prop in Tipo.GetDeclaredProperties do
       begin
-//        for Atrib in Prop.GetAttributes do
-//        begin
-
-          case Prop.PropertyType.TypeKind of
-            tkClass:
-              begin
-                var Obj := Prop.GetValue(Objeto).AsObject;
-                if Assigned(Obj) then
-                  Obj.Free;
-              end;
-            tkInteger, tkFloat:
-              Prop.SetValue(Objeto, 0);
-            tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
-              Prop.SetValue(Objeto, EmptyStr);
-            tkVariant:
-              Prop.SetValue(Objeto, EmptyStr);
-            tkEnumeration:
-              begin
-                var Value := TValue.FromOrdinal(Prop.GetValue(Objeto).TypeInfo, 0);
-                Prop.SetValue(Objeto, Value);
-              end;
-          end;
-
-
-//          if Atrib is TAtributoBanco then
-//          begin
-//            case TAtributoBanco(Atrib).Tipo of
-//              ftINTEIRO, ftDECIMAL, ftDATA:
-//                Prop.SetValue(Objeto, 0);
-//              ftTEXTO:
-//                Prop.SetValue(Objeto, EmptyStr);
-//              ftLOGICO:
-//                Prop.SetValue(Objeto, False);
-//              ftBLOBT, ftESTRANGEIRO, ftLISTAGEM:
-//                Prop.SetValue(Objeto, nil);
-//            else
-//              Prop.SetValue(Objeto, EmptyStr);
-//            end;
-//          end;
-//        end;
+        case Prop.PropertyType.TypeKind of
+          tkClass:
+            begin
+              var Obj := Prop.GetValue(Objeto).AsObject;
+              if Assigned(Obj) then
+                Obj.Free;
+            end;
+          tkInteger, tkFloat:
+            Prop.SetValue(Objeto, 0);
+          tkString, tkChar, tkWChar, tkLString, tkWString, tkUString:
+            Prop.SetValue(Objeto, EmptyStr);
+          tkVariant:
+            Prop.SetValue(Objeto, EmptyStr);
+          tkEnumeration:
+            begin
+              var Value := TValue.FromOrdinal(Prop.GetValue(Objeto).TypeInfo, 0);
+              Prop.SetValue(Objeto, Value);
+            end;
+        end;
       end;
     end;
   finally

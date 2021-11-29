@@ -202,7 +202,7 @@ class procedure TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(cds
     end;
   end;
 
-  procedure TratarCustoSelect(Atrib: TAtributoBanco);
+  procedure TratarCustomSelect(Atrib: TAtributoBanco);
   begin
     if not TAtributoBanco(Atrib).Visivel then
       Exit;
@@ -266,7 +266,7 @@ begin
             TratarCampoEstrangeiro(Atrib as TAtributoBanco);
 
           if Assigned(TAtributoBanco(Atrib).CustomSelect) then
-            TratarCustoSelect(Atrib as TAtributoBanco);
+            TratarCustomSelect(Atrib as TAtributoBanco);
 
         end;
       end;

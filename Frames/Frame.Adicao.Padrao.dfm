@@ -1,6 +1,7 @@
 inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
   Width = 760
   Height = 180
+  OnMouseWheel = FrameMouseWheel
   ExplicitWidth = 760
   ExplicitHeight = 180
   inherited pnlFundo: TPanel
@@ -20,7 +21,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       object DBCtrlGrid1: TDBCtrlGrid
         Left = 0
         Top = 3
-        Width = 760
+        Width = 750
         Height = 42
         Align = alCustom
         AllowDelete = False
@@ -32,19 +33,18 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         PanelHeight = 42
-        PanelWidth = 743
+        PanelWidth = 733
         ParentFont = False
         TabOrder = 0
         RowCount = 1
         Visible = False
-        object Panel3: TPanel
-          Left = 656
+        object pnlBotoes: TPanel
+          Left = 646
           Top = 0
           Width = 87
           Height = 42
           Align = alRight
           BevelOuter = bvNone
-          Caption = 'Panel2'
           UseDockManager = False
           ShowCaption = False
           TabOrder = 0
@@ -56,6 +56,7 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
             Height = 32
             Cursor = crHandPoint
             Hint = 'Excluir registro'
+            Center = True
             ParentShowHint = False
             Picture.Data = {
               0954506E67496D61676589504E470D0A1A0A0000000D49484452000000200000
@@ -245,7 +246,6 @@ inherited FrameAdicaoPadrao: TFrameAdicaoPadrao
       Color = clWhite
       ParentBackground = False
       TabOrder = 2
-      ExplicitTop = -3
       object lblTitulo: TLabel
         Left = 0
         Top = 13

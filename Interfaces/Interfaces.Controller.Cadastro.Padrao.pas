@@ -3,7 +3,7 @@ unit Interfaces.Controller.Cadastro.Padrao;
 interface
 
 uses
-   System.Classes;
+   System.Classes, Vcl.Controls;
 
 type
 
@@ -18,6 +18,7 @@ type
     procedure CarregarComboBoxComEnumerators;
     procedure CarregarMascarasNosCampos;
     function CamposObrigatoriosEstaoPreenchidos: Boolean;
+    procedure CriarImagemDeValidacaoDeCampo(AComponente: TWinControl; Mensagem: string);
   end;
 
 implementation

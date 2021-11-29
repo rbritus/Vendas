@@ -12,9 +12,13 @@ type
     class function SomenteLetras(Key: Char): Boolean;
     class function CPFValido(ACPF: string): Boolean;
     class function CEPValido(ACEP: string): Boolean;
+    class function TelefoneValido(ANumero: string): Boolean;
   end;
 
 implementation
+
+uses
+  Utils.Constants;
 
 { TUtilsEdit }
 
@@ -87,6 +91,12 @@ begin
   end;
 
   Result := True;
+end;
+
+class function TUtilsValidacoes.TelefoneValido(ANumero: string): Boolean;
+begin
+  Result := (Length(ANumero) = TConstantsInteger.TAMANHO_NUMERO_TELEFONE) OR
+    (Length(ANumero) = TConstantsInteger.TAMANHO_NUMERO_CELULAR)
 end;
 
 class function TUtilsValidacoes.CEPValido(ACEP: string): Boolean;

@@ -3,7 +3,7 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    inherited pnlConteudo: TPanel
+    inherited pnlConteudo: TScrollBox
       object lblTipoTelefone: TLabel
         Left = 40
         Top = 14
@@ -78,6 +78,7 @@ inherited FrmCadastroTelefone: TFrmCadastroTelefone
         Height = 24
         TabOrder = 1
         Text = ''
+        OnKeyPress = edtNumeroKeyPress
       end
     end
   end

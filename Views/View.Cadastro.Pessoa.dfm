@@ -3,7 +3,7 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    inherited pnlConteudo: TPanel
+    inherited pnlConteudo: TScrollBox
       object Label2: TLabel
         Left = 40
         Top = 86
@@ -75,13 +75,13 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       inline FrameAdicaoEndereco: TFrameAdicaoEndereco
         Left = 40
-        Top = 164
+        Top = 152
         Width = 760
         Height = 180
         AutoSize = True
         TabOrder = 3
         ExplicitLeft = 40
-        ExplicitTop = 164
+        ExplicitTop = 152
         inherited pnlFundo: TPanel
           inherited pnlConteudo: TPanel
             inherited DBCtrlGrid1: TDBCtrlGrid
@@ -101,17 +101,12 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       end
       inline FrameAdicaoTelefone: TFrameAdicaoTelefone
         Left = 40
-        Top = 357
+        Top = 345
         Width = 760
         Height = 180
         TabOrder = 4
         ExplicitLeft = 40
-        ExplicitTop = 357
-        inherited pnlFundo: TPanel
-          inherited pnlTitulo: TPanel
-            ExplicitTop = 0
-          end
-        end
+        ExplicitTop = 345
       end
     end
   end

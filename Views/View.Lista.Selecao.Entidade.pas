@@ -197,6 +197,7 @@ begin
   inherited;
   ApresentarDadosNaGrid;
   AjustarColunasDaGride;
+  FrameFiltroPesquisa1.LimparPesquisa;
   FrameFiltroPesquisa1.edtPesquisa.SetFocus;
 end;
 

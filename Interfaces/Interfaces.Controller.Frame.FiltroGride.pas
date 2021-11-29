@@ -12,6 +12,7 @@ type
     procedure CriarPanelFiltro(Filtro: string);
     procedure InformarDbGrid(ADbGrid: TDbGrid);
     procedure Filtrar(Filtro: string);
+    procedure LimparPesquisa;
   end;
 
 implementation

@@ -7,7 +7,7 @@ inherited FrmCadastroPadrao: TFrmCadastroPadrao
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    inherited pnlConteudo: TPanel
+    inherited pnlConteudo: TScrollBox
       Top = 50
       Height = 590
       Margins.Top = 0

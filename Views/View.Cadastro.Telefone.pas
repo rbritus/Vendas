@@ -24,12 +24,16 @@ type
     edtNumero: TMaskEdit;
     procedure FormShow(Sender: TObject);
     procedure cmbTipoTelefoneChange(Sender: TObject);
+    procedure edtNumeroKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     procedure ValidarMascadaNoCampoNumero;
     function RegistroTipoCelular: Boolean;
+    function ObterTelefoneSemMascara: string;
+    function TelefoneValido: Boolean;
   public
     { Public declarations }
+    function ValidacoesEspecificasAtendidas: Boolean; override;
   end;
 
 var
@@ -38,7 +42,7 @@ var
 implementation
 
 uses
-  Utils.Constants;
+  Utils.Constants, Utils.Validacoes;
 
 {$R *.dfm}
 
@@ -48,10 +52,41 @@ begin
   ValidarMascadaNoCampoNumero;
 end;
 
+procedure TFrmCadastroTelefone.edtNumeroKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if not TUtilsValidacoes.SomenteNumeros(Key) then
+    Key := TConstantsString.CHAR_RESULT_VAZIO;
+end;
+
 procedure TFrmCadastroTelefone.FormShow(Sender: TObject);
 begin
   inherited;
   cmbTipoTelefone.SetFocus;
+end;
+
+function TFrmCadastroTelefone.ValidacoesEspecificasAtendidas: Boolean;
+begin
+  inherited;
+  Result := TelefoneValido;
+end;
+
+function TFrmCadastroTelefone.TelefoneValido: Boolean;
+begin
+  Result := TUtilsValidacoes.TelefoneValido(ObterTelefoneSemMascara);
+  if not Result then
+  begin
+    var Mensagem := 'Número inválido.';
+    CriarImagemDeValidacaoParaCampo(edtNumero, Mensagem);
+  end;
+end;
+
+function TFrmCadastroTelefone.ObterTelefoneSemMascara: string;
+begin
+  edtNumero.EditMask := String.Empty;
+  Result := edtNumero.Text;
+  ValidarMascadaNoCampoNumero;
 end;
 
 procedure TFrmCadastroTelefone.ValidarMascadaNoCampoNumero;

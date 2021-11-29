@@ -11,7 +11,7 @@ uses
 type
   TFrmPadrao = class(TForm)
     pnlFundo: TPanel;
-    pnlConteudo: TPanel;
+    pnlConteudo: TScrollBox;
     imgListaBotoes16: TImageList;
     imgListaBotoes32: TImageList;
     actLista: TActionList;
@@ -20,6 +20,10 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure pnlConteudoMouseWheelDown(Sender: TObject; Shift: TShiftState;
+      MousePos: TPoint; var Handled: Boolean);
+    procedure pnlConteudoMouseWheelUp(Sender: TObject; Shift: TShiftState;
+      MousePos: TPoint; var Handled: Boolean);
   private
     FOwnerCaption: string;
     { Private declarations }
@@ -54,6 +58,24 @@ begin
 
   FObservador.UpdateItem(Value);
   FObservador := nil;
+end;
+
+procedure TFrmPadrao.pnlConteudoMouseWheelDown(Sender: TObject;
+  Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
+begin
+  with TScrollBox(Sender).VertScrollBar do
+  begin
+    Position := Position + Increment;
+  end;
+end;
+
+procedure TFrmPadrao.pnlConteudoMouseWheelUp(Sender: TObject;
+  Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
+begin
+  with TScrollBox(Sender).VertScrollBar do
+  begin
+    Position := Position - Increment;
+  end;
 end;
 
 procedure TFrmPadrao.SetObservador(Value: TWinControl);

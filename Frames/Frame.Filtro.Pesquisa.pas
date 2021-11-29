@@ -25,6 +25,7 @@ type
     { Public declarations }
     procedure SetDbGrid(ADbGrid: TDbGrid);
     procedure SetFocusOnKeyDown(Key: Char);
+    procedure LimparPesquisa;
   end;
 
 var
@@ -66,6 +67,12 @@ begin
     edtPesquisa.Clear;
     edtPesquisa.SetFocus;
   end;
+end;
+
+procedure TFrameFiltroPesquisa.LimparPesquisa;
+begin
+  edtPesquisa.Clear;
+  FControllerFrameAdicaoPadrao.LimparPesquisa;
 end;
 
 procedure TFrameFiltroPesquisa.SetDbGrid(ADbGrid: TDbGrid);

@@ -4,7 +4,7 @@ interface
 
 uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades, System.SysUtils,
-  Vcl.Forms, Attributes.Forms, Attributes.Enumerators, Vcl.StdCtrls;
+  Vcl.Forms, Attributes.Forms, Attributes.Enumerators, Vcl.StdCtrls, Vcl.Controls;
 
 type
   TUtilsForm = class
@@ -20,13 +20,15 @@ type
     class procedure CarregarComboBoxComEnumerators(var AEntidade: TObject;AForm: TForm);
     class function CamposObrigatoriosEstaoPreenchidos(AForm: TForm): Boolean;
     class procedure CarregarMascarasEmTMaskEdits(AForm: TForm);
+    class procedure CriarImagemDeValidacao(AForm: TForm; AComponente: TWinControl;
+      Mensagem: string); static;
   end;
 
 implementation
 
 uses
   Interfaces.Wrapper.PropriedadeCadastro, Wrapper.PropriedadeCadastro,
-  Utils.Entidade, Utils.Enumerators, Vcl.Mask;
+  Utils.Entidade, Utils.Enumerators, Vcl.Mask, Controller.Componente.TImagemValidacao;
 
 { TUtilsForm }
 
@@ -228,6 +230,13 @@ begin
     Ctx.Free;
   end;
   Result := Classe;
+end;
+
+class procedure TUtilsForm.CriarImagemDeValidacao(AForm: TForm; AComponente: TWinControl;
+  Mensagem: string);
+begin
+  var ControllerTImagemValidacao := TControllerTImagemValidacao.New(AForm);
+  ControllerTImagemValidacao.CriarImagemDeValidacao(TWinControl(AComponente), Mensagem);
 end;
 
 end.
