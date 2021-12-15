@@ -32,7 +32,7 @@ type
     class function ObterValorPropriedade(Obj: TObject; cNomePropriedade: string): TValue;
     class function ObterValorField(Obj: TObject; cNomePropriedade: string): TValue;
     class function ObterObjetoChaveEstrangeira(ObjPai: TObject; ClasseObjEstrangeiro: TPersistentClass): TObject;
-    class function ObterListaComTabelaRelacional<T: class>(ID: Integer; CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
+    class function ObterListaComTabelaRelacional<T: class>(GUID: string; CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
          ClasseDestino: TPersistentClass): TObjectListFuck<T>;
     class function GetCaptionEnumerator(Prop: TRttiProperty; Obj: TObject): string; static;
 
@@ -211,14 +211,14 @@ var
   cPK: string;
 begin
   DSetSelf := TConexao.GetInstance.EnviaConsulta('select * from ' + ObterNomeDaTabela(ObjPai) +
-    ' where ' + ObterChavePrimaria(ObjPai) + ' = ' + IntToStr(ObterValorPropriedade(ObjPai, 'ID').AsInteger));
+    ' where ' + ObterChavePrimaria(ObjPai) + ' = ' + (ObterValorPropriedade(ObjPai, 'GUID').AsString.QuotedString));
   try
     ObjEstrangeiro := TObject(ClasseObjEstrangeiro.Create);
 
     cTabela := ObterNomeDaTabela(TObject(ObjEstrangeiro));
     cPK := ObterChavePrimaria(TObject(ObjEstrangeiro));
     DSetEstrangeiro := TConexao.GetInstance.EnviaConsulta('select * from ' + cTabela +
-      ' where ' + cPK + ' = ' + IntToStr(DSetSelf.FieldByName(cTabela + '_FK').AsInteger));
+      ' where ' + cPK + ' = ' + (DSetSelf.FieldByName(cTabela + '_FK').AsString.QuotedString));
     try
       if DSetEstrangeiro.IsEmpty then
       begin
@@ -258,7 +258,7 @@ begin
             if CHAVE_PRIMARIA in TAtributoBanco(Atrib).propriedades then
             begin
               Result := Trim(TAtributoBanco(Atrib).nome);
-              Break;
+              Exit;
             end;
           end;
         end;
@@ -269,15 +269,15 @@ begin
   end;
 end;
 
-class function TUtilsEntidade.ObterListaComTabelaRelacional<T>(ID: Integer;
+class function TUtilsEntidade.ObterListaComTabelaRelacional<T>(GUID: string;
   CampoRelacionalProprio, CampoRelacionalTerceiro, TabelaIntermediaria: String;
   ClasseDestino: TPersistentClass): TObjectListFuck<T>;
 var
   ListObj: TObjectListFuck<T>;
 Begin
-  const ctSelect = 'select TAB1.* from %s TAB1 inner join %s TAB2 on TAB2.%s = TAB1.ID where TAB2.%s = %d';
+  const ctSelect = 'select TAB1.* from %s TAB1 inner join %s TAB2 on TAB2.%s = TAB1.GUID where TAB2.%s = %s';
   var sql := Format(ctSelect, [TUtilsEntidade.ObterNomeDaTabela(ClasseDestino),
-    TabelaIntermediaria, CampoRelacionalTerceiro, CampoRelacionalProprio, ID]);
+    TabelaIntermediaria, CampoRelacionalTerceiro, CampoRelacionalProprio, GUID.QuotedString]);
 
   ListObj := TObjectListFuck<T>.Create;
   var DSet := TConexao.GetInstance.EnviaConsulta(sql);
@@ -519,7 +519,7 @@ begin
     Tipo := Ctx.GetType(FindClass(Obj.ClassName));
     if Tipo <> Nil then
     begin
-      for Prop in Tipo.GetDeclaredProperties do
+      for Prop in Tipo.GetProperties do
       begin
         for Atrib in Prop.GetAttributes do
         begin
@@ -583,7 +583,7 @@ begin
   try
     if Tipo <> Nil then
     begin
-      for Prop in Tipo.GetDeclaredProperties do
+      for Prop in Tipo.GetProperties do
       begin
         case Prop.PropertyType.TypeKind of
           tkClass:
@@ -622,7 +622,7 @@ begin
   try
     if Assigned(Tipo) then
     begin
-      for var Prop in Tipo.GetDeclaredProperties do
+      for var Prop in Tipo.GetProperties do
       begin
         case Prop.PropertyType.TypeKind of
           tkClass:
@@ -646,6 +646,10 @@ var
   JSONValue: TJSONValue;
 begin
   Result:= nil;
+
+  if not Assigned(ObjetoClone) then
+    Exit;
+
   MarshalObj := TJSONMarshal.Create;
   UnMarshalObj := TJSONUnMarshal.Create;
   try

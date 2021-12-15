@@ -11,7 +11,7 @@ type
   [TNomeTabela('ENDERECO')]
   TEndereco = class(TEntidade<TEndereco>, iEndereco)
   private
-    FId: Integer;
+    FGUID: string;
     FCEP: string;
     FLogradouro: string;
     FNumero: Integer;
@@ -19,7 +19,7 @@ type
     FCidade: TCidade;
     FTipoEndereco: TTipoEndereco;
     FComplemento: string;
-    procedure SetId(const Value: integer);
+    procedure SetGUID(const Value: string);
     procedure SetCEP(const Value: string);
     procedure SetLogradouro(const Value: string);
     procedure SetNumero(const Value: Integer);
@@ -27,7 +27,7 @@ type
     procedure SetCidade(const Value: TCidade);
     procedure SetTipoEndereco(const Value: TTipoEndereco);
     procedure SetComplemento(const Value: string);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetCEP: string;
     function GetLogradouro: string;
     function GetNumero: Integer;
@@ -36,8 +36,8 @@ type
     function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TAtributoMascara(TConstantsMasks.CEP)]
     [TCampoTexto('CEP', 10, [NOTNULL], 'CEP')]
     property CEP: string read GetCEP write SetCEP;
@@ -49,7 +49,7 @@ type
     property Bairro: string read GetBairro write SetBairro;
     [TCampoTexto('COMPLEMENTO', 200, [], 'Complemento',False)]
     property Complemento: string read GetComplemento write SetComplemento;
-    [TCampoEstrangeiro('CIDADE_FK', [NOTNULL], 'CIDADE', 'Nome')]
+    [TCampoEstrangeiro('CIDADE_FK', [NOTNULL], 'CIDADE', 'Nome', 'Cidade')]
     property Cidade: TCidade read GetCidade write SetCidade;
     [TCampoInteiro('TIPO_ENDERECO', [NOTNULL], TCustomSelectTipoEndereco, 'Tipo')]
     property TipoEndereco: TTipoEndereco read GetTipoEndereco write SetTipoEndereco;
@@ -61,13 +61,13 @@ type
 implementation
 
 uses
-  Utils.Entidade;
+  Utils.Entidade, Utils.GUID;
 
 { TEndereco }
 
 function TEndereco.EstaVazia: Boolean;
 begin
-  Result := (FId = 0) and (FCEP = EmptyStr);
+  Result := (FGUID = string.Empty) and (FCEP = string.Empty);
 end;
 
 function TEndereco.GetBairro: string;
@@ -98,9 +98,12 @@ begin
   Result := FLogradouro;
 end;
 
-function TEndereco.GetId: Integer;
+function TEndereco.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TEndereco.GetNumero: Integer;
@@ -143,9 +146,9 @@ begin
   FLogradouro := Value;
 end;
 
-procedure TEndereco.SetId(const Value: integer);
+procedure TEndereco.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TEndereco.SetNumero(const Value: Integer);

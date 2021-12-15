@@ -79,7 +79,8 @@ uses
   View.Cadastro.Telefone in 'Views\View.Cadastro.Telefone.pas' {FrmCadastroTelefone},
   Componente.TImagemValidacao in 'Components\Componente.TImagemValidacao.pas',
   Controller.Componente.TImagemValidacao in 'Controllers\Controller.Componente.TImagemValidacao.pas',
-  Interfaces.Controller.Componente.TImagemValidacao in 'Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas';
+  Interfaces.Controller.Componente.TImagemValidacao in 'Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas',
+  Utils.GUID in 'Utils\Utils.GUID.pas';
 
 {$R *.res}
 

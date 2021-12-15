@@ -9,19 +9,19 @@ type
 
   iCidade = interface
     ['{D06017CB-AA15-4153-965E-97BB58091B50}']
-    procedure SetId(const Value: Integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetCodigoIBGE(const Value: Integer);
     procedure SetCodigoMunicipio(const Value: string);
     procedure SetCodigoDistrito(const Value: string);
     procedure SetEstado(const Value: TEstado);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetCodigoIBGE: Integer;
     function GetCodigoMunicipio: string;
     function GetCodigoDistrito: string;
     function GetEstado: TEstado;
-    property Id: Integer read GetId write SetId;
+    property GUID: string read GetGUID write SetGUID;
     property Nome: string read GetNome write SetNome;
     property CodigoIBGE: Integer read GetCodigoIBGE write SetCodigoIBGE;
     property CodigoMunicipio: string read GetCodigoMunicipio write SetCodigoMunicipio;

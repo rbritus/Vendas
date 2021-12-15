@@ -162,9 +162,6 @@ var
    begin
       FTransaction := TFDTransaction.Create( nil );
       FTransaction.Connection := FInstance;
-      FTransaction.Options.AutoCommit := True;
-      FTransaction.Options.ReadOnly := False;
-      FTransaction.Options.Isolation := xiReadCommitted;
    end;
 
 begin
@@ -203,6 +200,15 @@ begin
       FInstance.Params.Values['SharedCache'] := 'False';
       FInstance.Params.Values['Synchronous'] := 'Normal';
       FInstance.Params.Values['LockingMode'] := 'Normal';
+
+      FInstance.TxOptions.AutoCommit := True;
+      FInstance.TxOptions.AutoStart := True;
+      FInstance.TxOptions.EnableNested := False;
+      FInstance.TxOptions.AutoStop := False;
+      FInstance.TxOptions.ReadOnly := False;
+      FInstance.TxOptions.Isolation := xiReadCommitted;
+      FInstance.TxOptions.StopOptions := [xoIfAutoStarted,xoIfCmdsInactive];
+
       FInstance.Connected := True;
    finally
       Reg.Free;

@@ -93,7 +93,7 @@ begin
     var Tipo := Ctx.GetType(FindClass(Entidade.ClassName));
     if Tipo <> Nil then
     begin
-      for var Prop in Tipo.GetDeclaredProperties do
+      for var Prop in Tipo.GetProperties do
       begin
         for var Atrib in Prop.GetAttributes do
         begin
@@ -104,7 +104,7 @@ begin
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftInteger);
               ftDECIMAL:
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftCurrency);
-              ftTEXTO:
+              ftTEXTO, ftESTRANGEIRO:
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftString, TCampoTexto(Atrib).tamanho);
               ftDATA:
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftDate);
@@ -112,13 +112,13 @@ begin
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftBoolean);
               ftBLOBT:
                 TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftBlob);
-              ftESTRANGEIRO:
-              begin
-                TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftInteger);
-//                ObjEstrangeiro := TObject(Prop.GetValue(Entidade).AsInterface);
-//                TUtilsClientDataSet.CriarFieldDescricaoConsultaDoCampoEstrangeiro(cds,
-//                  ObjEstrangeiro  ,TCampoEstrangeiro(Atrib).CampoDescricaoConsulta);
-              end;
+//              ftESTRANGEIRO:
+//              begin
+//                TUtilsClientDataSet.CreateField(cds,TAtributoBanco(Atrib).nome,ftString);
+////                ObjEstrangeiro := TObject(Prop.GetValue(Entidade).AsInterface);
+////                TUtilsClientDataSet.CriarFieldDescricaoConsultaDoCampoEstrangeiro(cds,
+////                  ObjEstrangeiro  ,TCampoEstrangeiro(Atrib).CampoDescricaoConsulta);
+//              end;
             end;
           end;
 
@@ -144,7 +144,7 @@ begin
     if not Assigned(Tipo) then
       Exit;
 
-    for var Prop in Tipo.GetDeclaredProperties do
+    for var Prop in Tipo.GetProperties do
     begin
       for var Atrib in Prop.GetAttributes do
       begin
@@ -157,9 +157,9 @@ begin
             tkEnumeration:
               cds.FieldByName(TAtributoBanco(Atrib).nome).AsVariant := TUtilsEntidade.ObterValorPropriedade(Entidade,Prop.Name).AsVariant;
             tkClass:
-              cds.FieldByName(TAtributoBanco(Atrib).nome).AsInteger := TUtilsEntidade.ObterValorPropriedade(Prop.GetValue(Entidade).AsType<TObject>, 'id').AsInteger;
+              cds.FieldByName(TAtributoBanco(Atrib).nome).AsString := TUtilsEntidade.ObterValorPropriedade(Prop.GetValue(Entidade).AsType<TObject>, 'GUID').AsString;
             tkInterface:
-              cds.FieldByName(TAtributoBanco(Atrib).nome).AsInteger := TUtilsEntidade.ObterValorPropriedade(TObject(Prop.GetValue(Entidade).AsInterface), 'id').AsInteger;
+              cds.FieldByName(TAtributoBanco(Atrib).nome).AsString := TUtilsEntidade.ObterValorPropriedade(TObject(Prop.GetValue(Entidade).AsInterface), 'GUID').AsString;
           else
             cds.FieldByName(TAtributoBanco(Atrib).nome).AsVariant := Prop.GetValue(Entidade).AsVariant;
           end;
@@ -221,13 +221,14 @@ class procedure TUtilsClientDataSet.AlterarPropriedadeCaptionEVisibleDoField(cds
 
   procedure TratarCampoEstrangeiro(Atrib: TAtributoBanco);
   begin
-    var NomeCampoDescricao := TCampoEstrangeiro(Atrib).caption;
+    var NomeCampoDescricao := TCampoEstrangeiro(Atrib).Tabela;
     if cds.FindField(NomeCampoDescricao) = nil then
       Exit;
 
     cds.FieldByName(TAtributoBanco(Atrib).nome).Visible := False;
     cds.FieldByName(NomeCampoDescricao).Visible := TAtributoBanco(Atrib).Visivel;
     cds.FieldByName(NomeCampoDescricao).EditMask := cds.FieldByName(TAtributoBanco(Atrib).nome).EditMask;
+    cds.FieldByName(NomeCampoDescricao).DisplayLabel := TCampoEstrangeiro(Atrib).caption;
   end;
 
   procedure InformarMascaraAoField(Atrib: TAtributoBanco; AProp: TRttiProperty);
@@ -249,7 +250,7 @@ begin
     if not Assigned(Tipo) then
       Exit;
 
-    for var Prop in Tipo.GetDeclaredProperties do
+    for var Prop in Tipo.GetProperties do
     begin
       for var Atrib in Prop.GetAttributes do
       begin

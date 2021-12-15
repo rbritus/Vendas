@@ -487,7 +487,7 @@ begin
       begin
         var Obj := AField.GetValue(AForm).AsObject;
         if Assigned(Obj) then
-          Obj.Free;
+          Obj.DisposeOf;
       end;
   end;
 end;
@@ -531,9 +531,13 @@ begin
   case ATipo of
     ftINTEIRO : Result := AValor.AsInteger;
     ftDECIMAL, ftDATA : Result := AValor.AsCurrency;
-    ftLISTAGEM : Result := TObjectListFuck<TObject>(AValor.AsObject);
+    ftLISTAGEM :
+      begin
+        Result := TObjectListFuck<TObject>(AValor.AsObject);
+        Result := TUtilsEntidade.ObterCloneObjeto(Result.AsObject);
+      end;
     ftLOGICO : Result := AValor.AsBoolean;
-    ftESTRANGEIRO : Result := AValor.AsObject;
+    ftESTRANGEIRO : Result := TUtilsEntidade.ObterCloneObjeto(AValor.AsObject);
   else
     Result := AValor.AsString;
   end;

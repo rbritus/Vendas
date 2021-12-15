@@ -9,17 +9,17 @@ type
 
   iEstado = interface
     ['{D27319EB-5D68-4AA0-ADAC-27CC2C0EE5CD}']
-    procedure SetId(const Value: Integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetAbreviacao(const Value: string);
     procedure SetCodigoUF(const Value: Integer);
     procedure SetPais(const Value: TPais);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetAbreviacao: string;
     function GetCodigoUF: Integer;
     function GetPais: TPais;
-    property Id: Integer read GetId write SetId;
+    property GUID: string read GetGUID write SetGUID;
     property Nome: string read GetNome write SetNome;
     property Abreviacao: string read GetAbreviacao write SetAbreviacao;
     property CodigoUF: Integer read GetCodigoUF write SetCodigoUF;

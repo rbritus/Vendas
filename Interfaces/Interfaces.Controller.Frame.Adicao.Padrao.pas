@@ -10,13 +10,13 @@ type
   iControllerFrameAdicaoPadrao = interface
     ['{2B0418C5-FE1E-4A9E-92E3-781CF12FBFC8}']
     procedure ApresentarFormParaCadastro;
-    procedure ApresentarFormParaEdicao(ID: Integer);
+    procedure ApresentarFormParaEdicao(AGUID: string);
     function CarregarDataSet(pSql: string): TDataSet;
-    function ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
+    function ObterSqlDeTabelaRelacional(pGUIDObjetoRelacional: string): string;
     procedure ObterListaPreenchidaDoFrame(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
     function ObterObjetoDoFrame: TObject;
     function ObterClasseDaEntidadeDeCadastro: TClass;
-    function CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
+    function CarregarListaDeObjetosParaFrame(pGUIDObjetoRelacional: string): TObjectListFuck<TObject>;
   end;
 
 implementation

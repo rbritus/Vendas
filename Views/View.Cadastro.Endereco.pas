@@ -90,7 +90,7 @@ begin
   if not Assigned(ACidade) then
     Exit;
 
-  FramePesquisaCidade.CarregarEntidade(ACidade.Id);
+  FramePesquisaCidade.CarregarEntidade(ACidade.GUID);
 end;
 
 procedure TFrmCadastroEndereco.PreencherCidadePeloCodigoIBGE(IBGE: string);
@@ -127,6 +127,7 @@ end;
 
 procedure TFrmCadastroEndereco.btnCadastrarClick(Sender: TObject);
 begin
+  FCidade.DisposeOf;
   FCidade := TCidade(FramePesquisaCidade.ObterEntidade);
   inherited;
 end;

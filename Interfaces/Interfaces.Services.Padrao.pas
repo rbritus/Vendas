@@ -14,7 +14,7 @@ type
       procedure Excluir(Objeto: TObject);
       function ListarTodos(): TObjectListFuck<T>;
       function ListarTodosCDS(): TDataSet;
-      function PesquisarPorId(Id: Integer): T;
+      function PesquisarPorGUID(GUID: string): T;
       function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
  end;
 

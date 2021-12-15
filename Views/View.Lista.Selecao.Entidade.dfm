@@ -4,7 +4,7 @@ inherited FrmListaSelecaoEntidade: TFrmListaSelecaoEntidade
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
-    inherited pnlConteudo: TPanel
+    inherited pnlConteudo: TScrollBox
       Top = 139
       Height = 501
       ExplicitTop = 139

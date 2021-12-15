@@ -28,7 +28,7 @@ type
     procedure ModificarComboBox(edt: TComboBox);
   public
     procedure GravarEntidade;
-    procedure CarregarEntidadeParaEdicao(pId: Integer);
+    procedure CarregarEntidadeParaEdicao(AGUID: string);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
     procedure LimparEntidades;
@@ -60,10 +60,10 @@ begin
   DestruirEntidade;
 end;
 
-procedure TControllerCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
+procedure TControllerCadastroPadrao.CarregarEntidadeParaEdicao(AGUID: string);
 begin
   var Classe := TUtilsForm.ObterClasseDoObjetoDeCadastroDoForm(FForm);
-  FEntidade := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[pId]).AsType<TObject>;
+  FEntidade := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorGUID',[AGUID]).AsType<TObject>;
   PreencherFormComCamposDaEntidade;
   DestruirEntidade;
 end;

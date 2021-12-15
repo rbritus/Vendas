@@ -3,7 +3,7 @@ unit Attributes.Entidades;
 interface
 
 uses
-  System.SysUtils, Utils.Enumerators, Objeto.CustomSelect;
+  System.SysUtils, Utils.Enumerators, Objeto.CustomSelect, Utils.Constants;
 
 type
   TNomeTabela = class(TCustomAttribute)
@@ -94,15 +94,17 @@ type
     function getScriptCampo: string; override;
   end;
 
-  TCampoEstrangeiro = class(TCampoInteiro)
+  TCampoEstrangeiro = class(TCampoTexto)
   private
     FCampoDescricaoConsulta: string;
+    FTabela: string;
   public
     constructor create(pNome: string; pConfig: TConfiguracaoCampo; pTabela: string = '';
-      pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
+      pCampoDescricaoConsulta: string = ''; ACaption: string = ''; pVisivel: Boolean = True);
       //Propriedade utilizada na consulta da entidade, ela aponta qual é a
       //propriedade que serve como descrição da entidade relacionada
     property CampoDescricaoConsulta: string read FCampoDescricaoConsulta write FCampoDescricaoConsulta;
+    property Tabela: string read FTabela write FTabela;
   end;
 
   TCampoListagem = class(TAtributoBanco)
@@ -247,15 +249,20 @@ end;
 { TCampoEstrangeiro }
 
 constructor TCampoEstrangeiro.create(pNome: string; pConfig: TConfiguracaoCampo;
-  pTabela: string = ''; pCampoDescricaoConsulta: string = ''; pVisivel: Boolean = True);
+  pTabela: string = ''; pCampoDescricaoConsulta: string = ''; ACaption: string = '';
+  pVisivel: Boolean = True);
 begin
   self.nome := pNome;
   self.tipo := ftESTRANGEIRO;
   self.propriedades := pConfig;
-  self.caption := pTabela;
+  self.Tabela := pTabela;
   Self.CampoDescricaoConsulta := pCampoDescricaoConsulta;
   self.Visivel := pVisivel;
   Self.CustomSelect := nil;
+  self.caption := pTabela;
+  Self.Tamanho := TConstantsInteger.TAMANHO_GUID;
+  if not ACaption.IsEmpty then
+    self.caption := ACaption;
 end;
 
 { TCampoListagem }
@@ -280,13 +287,14 @@ begin
     Exit;
 
   var cRetorno := 'Create Table ' + self.TabelaRelacional + '(' + sLineBreak;
-  cRetorno := cRetorno + 'ID integer not null primary key AUTOINCREMENT,';
-  cRetorno := cRetorno + self.CampoPai + ' integer not null, ';
-  cRetorno := cRetorno + self.CampoFilho + ' integer not null, ';
+  cRetorno := cRetorno + 'GUID TEXT not null primary key,';
+//  cRetorno := cRetorno + 'ID integer not null primary key AUTOINCREMENT,';
+  cRetorno := cRetorno + self.CampoPai + ' string not null, ';
+  cRetorno := cRetorno + self.CampoFilho + ' string not null, ';
   cRetorno := cRetorno + 'FOREIGN KEY(' + self.CampoPai + ') REFERENCES ' +
-    StringReplace(self.CampoPai, '_FK', '', [rfReplaceAll]) + '(ID),';
+    StringReplace(self.CampoPai, '_FK', '', [rfReplaceAll]) + '(GUID),';
   cRetorno := cRetorno + 'FOREIGN KEY(' + self.CampoFilho + ') REFERENCES ' +
-    StringReplace(self.CampoFilho, '_FK', '', [rfReplaceAll]) + '(ID));';
+    StringReplace(self.CampoFilho, '_FK', '', [rfReplaceAll]) + '(GUID));';
   Result := cRetorno;
 end;
 

@@ -4,37 +4,37 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Estado, Entidade.Pais;
+  Interfaces.Entidade.Estado, Entidade.Pais, Utils.Constants;
 
 type
   [TNomeTabela('ESTADO')]
   TEstado = class(TEntidade<TEstado>, iEstado)
   private
-    FId: Integer;
+    FGUID: string;
     FNome: string;
     FAbreviacao: string;
     FCodigoUF: Integer;
     FPais: TPais;
-    procedure SetId(const Value: Integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetAbreviacao(const Value: string);
     procedure SetCodigoUF(const Value: Integer);
     procedure SetPais(const Value: TPais);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetAbreviacao: string;
     function GetCodigoUF: Integer;
     function GetPais: TPais;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NOME', 100, [NOTNULL], 'Estado')]
     property Nome: string read GetNome write SetNome;
     [TCampoTexto('ABREVIACAO', 2, [NOTNULL], 'UF')]
     property Abreviacao: string read GetAbreviacao write SetAbreviacao;
     [TCampoInteiro('CODIGO_UF', [], 'Código',False)]
     property CodigoUF: Integer read GetCodigoUF write SetCodigoUF;
-    [TCampoEstrangeiro('PAIS_FK', [NOTNULL], 'PAIS', 'Abreviacao')]
+    [TCampoEstrangeiro('PAIS_FK', [NOTNULL], 'PAIS', 'Abreviacao', 'País')]
     property Pais: TPais read GetPais write SetPais;
 
     class function New : iEstado;
@@ -44,13 +44,13 @@ type
 implementation
 
 uses
-  Utils.Entidade;
+  Utils.Entidade, Utils.GUID;
 
 { TEstado }
 
 function TEstado.EstaVazia: Boolean;
 begin
-  Result := (FId = 0);
+  Result := (FGUID = string.Empty);
 end;
 
 function TEstado.GetAbreviacao: string;
@@ -63,9 +63,12 @@ begin
   Result := FCodigoUF;
 end;
 
-function TEstado.GetId: Integer;
+function TEstado.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TEstado.GetNome: string;
@@ -96,9 +99,9 @@ begin
   FCodigoUF := Value;
 end;
 
-procedure TEstado.SetId(const Value: Integer);
+procedure TEstado.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TEstado.SetNome(const Value: string);

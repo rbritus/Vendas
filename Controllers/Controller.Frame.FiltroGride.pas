@@ -154,23 +154,23 @@ begin
 end;
 
 procedure TControllerFrameAdicaoPadrao.ImageClick(Sender: TObject);
-//var
-//  ATask: iTask;
+var
+  ATask: iTask;
 begin
   var Panel := TImage(Sender).Parent;
-//  ATask := TTask.Create(
-//   procedure
-//   begin
-//     Sleep(200);
-//     TThread.Synchronize(TThread.Current,
-//       procedure
-//       begin
-//         Filtrar(string.Empty);
-//       end);
-//   end);
-//   ATask.Start;
+  ATask := TTask.Create(
+   procedure
+   begin
+     Sleep(100);
+     TThread.Synchronize(TThread.Current,
+       procedure
+       begin
+         Filtrar(string.Empty);
+       end);
+   end);
+   ATask.Start;
   FreeAndNil(Panel);
-  Filtrar(string.Empty);
+//  Filtrar(string.Empty);
 end;
 
 procedure TControllerFrameAdicaoPadrao.InformarDbGrid(ADbGrid: TDbGrid);

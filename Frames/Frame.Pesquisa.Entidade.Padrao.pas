@@ -21,13 +21,13 @@ type
     procedure btnExcluirClick(Sender: TObject);
   private
     { Private declarations }
-    FIdObjeto: Integer;
+    FGUIDObjeto: string;
     procedure AplicarDescricaoDoObjetoNoEdit;
     procedure UpdateItem(Value : TObject);
   public
     { Public declarations }
     function ObterEntidade: TObject;
-    procedure CarregarEntidade(AID: Integer);
+    procedure CarregarEntidade(AGUID: string);
     procedure LimparEdit;
   end;
 
@@ -44,7 +44,7 @@ uses
 procedure TFramePesquisaEntidadePadrao.AplicarDescricaoDoObjetoNoEdit;
 begin
   var Controller := TControllerFrameAdicaoPadrao.New(Self);
-  Edit1.Text := Controller.ObterValorDoCampoDeExibicao(FIdObjeto);
+  Edit1.Text := Controller.ObterValorDoCampoDeExibicao(FGUIDObjeto);
 end;
 
 procedure TFramePesquisaEntidadePadrao.btnExcluirClick(Sender: TObject);
@@ -60,12 +60,12 @@ begin
   Controller.ExibirListaDeRegistrosParaSelecao();
 end;
 
-procedure TFramePesquisaEntidadePadrao.CarregarEntidade(AID: Integer);
+procedure TFramePesquisaEntidadePadrao.CarregarEntidade(AGUID: string);
 begin
-  if AID = TConstantsInteger.ZERO then
+  if AGUID = string.Empty then
     Exit;
 
-  FIdObjeto := AID;
+  FGUIDObjeto := AGUID;
   AplicarDescricaoDoObjetoNoEdit;
 end;
 
@@ -77,7 +77,7 @@ end;
 function TFramePesquisaEntidadePadrao.ObterEntidade: TObject;
 begin
   var Controller := TControllerFrameAdicaoPadrao.New(Self);
-  Result := Controller.ObterEntidade(FIdObjeto);
+  Result := Controller.ObterEntidade(FGUIDObjeto);
 end;
 
 procedure TFramePesquisaEntidadePadrao.UpdateItem(Value: TObject);
@@ -85,7 +85,7 @@ begin
   if not Assigned(Value) then
     Exit;
 
-  FIdObjeto := TUtilsEntidade.ObterValorPropriedade(Value,'ID').AsInteger;
+  FGUIDObjeto := TUtilsEntidade.ObterValorPropriedade(Value,'GUID').AsString;
   Value.Free;
   AplicarDescricaoDoObjetoNoEdit;
 end;

@@ -19,8 +19,8 @@ type
   public
     class function New(pFrame: TFrame): iControllerFramePesquisaEntidadePadrao;
     procedure ExibirListaDeRegistrosParaSelecao;
-    function ObterValorDoCampoDeExibicao(ID: Integer): string;
-    function ObterEntidade(ID: Integer): TObject;
+    function ObterValorDoCampoDeExibicao(GUID: string): string;
+    function ObterEntidade(GUID: string): TObject;
   end;
 
 implementation
@@ -52,11 +52,11 @@ begin
   Result := Self.Create(pFrame);
 end;
 
-function TControllerFrameAdicaoPadrao.ObterValorDoCampoDeExibicao(ID: Integer): string;
+function TControllerFrameAdicaoPadrao.ObterValorDoCampoDeExibicao(GUID: string): string;
 begin
   var Campo := ObterCampoExibicao;
   var Classe := ObterClasseDePesquisaDoFrame;
-  var Obj := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[ID]).AsType<TObject>;
+  var Obj := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorGUID',[GUID]).AsType<TObject>;
 
   if not Assigned(Obj) then
     Exit(EmptyStr);
@@ -96,10 +96,10 @@ begin
   end;
 end;
 
-function TControllerFrameAdicaoPadrao.ObterEntidade(ID: Integer): TObject;
+function TControllerFrameAdicaoPadrao.ObterEntidade(GUID: string): TObject;
 begin
   var Classe := ObterClasseDePesquisaDoFrame;
-  var Obj := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorId',[ID]).AsType<TObject>;
+  var Obj := TUtilsEntidade.ExecutarMetodoClasse(Classe,'PesquisarPorGUID',[GUID]).AsType<TObject>;
   Result := Obj;
 end;
 

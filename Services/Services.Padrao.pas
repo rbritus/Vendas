@@ -31,7 +31,7 @@ type
     procedure PreencherQueryComArray(Qry: TQuery; Parametros: TArrayParametros);
     procedure ObterSqlParaPersistencia(Qry: TQuery; Objeto: TObject; Parametros: TArrayParametros);
     function ObterSqlCustomizada: string;
-    procedure RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
+//    procedure RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
     procedure PersistirPropriedadesTipoLista(Objeto: TObject);
     procedure NotificarObservadores(Objeto: TObject);
     const ID_ZERADO = 0;
@@ -40,7 +40,7 @@ type
     procedure Excluir(Objeto: TObject);
     function ListarTodos: TObjectListFuck<T>;
     function ListarTodosCDS: TDataSet;
-    function PesquisarPorId(Id: Integer): T;
+    function PesquisarPorGUID(GUID: string): T;
     function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
     class function New: iServico<T>;
   end;
@@ -49,7 +49,7 @@ implementation
 
 uses
   Objeto.CustomSelect, FireDAC.Phys.Intf, Utils.ClientDataSet,
-  Controller.Padrao.Observer;
+  Controller.Padrao.Observer, Utils.GUID, Utils.Constants;
 
 { TServico<T> }
 
@@ -105,7 +105,7 @@ begin
                       begin
                         Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         for ObjEstrangeiro in Lista do
-                          TConexao.GetInstance.EnviarComando('UPDATE ' + TCampoListagem(Atrib).TabelaRelacional + ' SET ' + TCampoListagem(Atrib).CampoPai + ' = NULL ' + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID').AsInteger));
+                          TConexao.GetInstance.EnviarComando('UPDATE ' + TCampoListagem(Atrib).TabelaRelacional + ' SET ' + TCampoListagem(Atrib).CampoPai + ' = NULL ' + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + (TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'GUID').AsString.QuotedString));
                       end;
                     ctRestrict:
                       raise Exception.Create('Erro de exclusão (OneToMany)');
@@ -121,7 +121,7 @@ begin
                         Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         for ObjEstrangeiro in Lista do
                         begin
-                          TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'ID').AsInteger));
+                          TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoFilho + ' = ' + (TUtilsEntidade.ObterValorPropriedade(ObjEstrangeiro, 'GUID').AsString.QuotedString));
 
                           TUtilsEntidade.ExecutarMetodoObjeto(ObjEstrangeiro, 'Excluir', []);
                         end;
@@ -162,8 +162,8 @@ begin
   case RecParam.FTipoPropriedade of
     ftESTRANGEIRO:
       begin
-        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsObject, 'id').AsInteger.ToString;
-        if RecParam.FValorParametro = '0' then
+        RecParam.FValorParametro := TUtilsEntidade.ObterValorPropriedade(Propriedade.GetValue(Objeto).AsObject, 'GUID').AsString;
+        if RecParam.FValorParametro = string.Empty then
           RecParam.FValorParametro := 'null';
       end;
     ftBLOBT:
@@ -210,8 +210,8 @@ begin
       begin
         if (Atrib is TAtributoBanco) then
         begin
-          if CHAVE_PRIMARIA in TAtributoBanco(Atrib).propriedades then
-            Continue;
+//          if CHAVE_PRIMARIA in TAtributoBanco(Atrib).propriedades then
+//            Continue;
 
           if (TAtributoBanco(Atrib).Tipo = ftLISTAGEM) then
             Continue;
@@ -275,8 +275,8 @@ end;
 
 function TServico<T>.RegistroJaGravadoEmBanco(Objeto: TObject): Boolean;
 begin
-  var IdBanco: Integer := TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID').AsInteger;
-  Result := (IdBanco <> ID_ZERADO)
+  var DATA_INSERCAO := TUtilsEntidade.ObterValorPropriedade(Objeto, 'DATA_INSERCAO').AsExtended;
+  Result := (DATA_INSERCAO <> TConstantsDataHora.DATAHORA_VAZIA)
 end;
 
 function TServico<T>.CriarSqlParaInsercao(Objeto: TObject; Parametros: TArrayParametros): string;
@@ -299,7 +299,7 @@ begin
       cSqlParametros := cSqlParametros + ',';
   end;
 
-  Result := cSqlCampos + ') VALUES (' + cSqlParametros + ');';
+  Result := cSqlCampos + ',DATA_INSERCAO) VALUES (' + cSqlParametros + ',DATE(''now''));';
 end;
 
 function TServico<T>.CriarSqlParaAtualizacao(Objeto: TObject; Parametros: TArrayParametros): string;
@@ -316,7 +316,7 @@ begin
     if IndiceArray <> High(Parametros) then
       cSql := cSql + ',';
   end;
-  Result := cSql + ' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(Objeto, 'ID').AsInteger);
+  Result := cSql + ' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + TUtilsEntidade.ObterValorPropriedade(Objeto, 'GUID').AsString.QuotedString;
 end;
 
 procedure TServico<T>.PreencherQueryComArray(Qry: TQuery; Parametros: TArrayParametros);
@@ -362,20 +362,24 @@ begin
     Qry.Command.CommandKind := skUpdate;
     Qry.SQL.Add(CriarSqlParaAtualizacao(Objeto, Parametros));
     Exit;
+  end
+  else
+  begin
+    Qry.Command.CommandKind := skInsert;
+    Qry.SQL.Add(CriarSqlParaInsercao(Objeto, Parametros));
   end;
 
-  Qry.SQL.Add(CriarSqlParaInsercao(Objeto, Parametros));
-  Qry.SQL.Add(TConexao.SELECT_RECUPERACAO_ID);
+//  Qry.SQL.Add(TConexao.SELECT_RECUPERACAO_ID);
 end;
 
-procedure TServico<T>.RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
-begin
-  if RegistroJaGravadoEmBanco(Objeto) then
-    Exit;
-
-  var Id := qry.FieldByName('result_id').AsInteger;
-  TUtilsEntidade.SetarValorParaPropriedade(Objeto, 'ID', TValue.FromVariant(Id));
-end;
+//procedure TServico<T>.RecuperarIdParaObjeto(Objeto: TObject; qry: TFDQuery);
+//begin
+//  if RegistroJaGravadoEmBanco(Objeto) then
+//    Exit;
+//
+//  var Id := qry.FieldByName('result_id').AsInteger;
+//  TUtilsEntidade.SetarValorParaPropriedade(Objeto, 'ID', TValue.FromVariant(Id));
+//end;
 
 procedure TServico<T>.PersistirObjetoEmBanco(Objeto: TObject; Parametros: TArrayParametros);
 begin
@@ -384,7 +388,7 @@ begin
     ObterSqlParaPersistencia(Qry, Objeto, Parametros);
     PreencherQueryComArray(Qry, Parametros);
     Qry.ExecScript;
-    RecuperarIdParaObjeto(Objeto, Qry);
+//    RecuperarIdParaObjeto(Objeto, Qry);
     PersistirPropriedadesTipoLista(Objeto);
     Qry.Close;
   finally
@@ -416,8 +420,8 @@ end;
 procedure TServico<T>.GravarPropertyLista(Propriedade: TRttiProperty; Lista: TObjectListFuck<TObject>; EntidadePai: TObject);
 var
   entFilho: TObject;
-  idPai: Integer;
-  idFilho: Integer;
+  GUIDPai: string;
+  GUIDFilho: string;
   cTabela: string;
   cCampoPai: string;
   cCampoFilho: string;
@@ -430,7 +434,7 @@ var
   lAchou: Boolean;
   cIdRemovidos: string;
 begin
-  idPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'id').AsInteger;
+  GUIDPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'GUID').AsString.QuotedString;
 
   Ctx := TRttiContext.Create;
   try
@@ -450,17 +454,18 @@ begin
 
     if nRelacao = taManyToMany then
     begin
-      DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + cTabela + ' where ' + cCampoPai + ' = ' + IntToStr(idPai));
+      DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + cTabela + ' where ' + cCampoPai + ' = ' + (GUIDPai));
       try
         for entFilho in Lista do
         begin
 //          TUtilsEntidade.ExecutarMetodoObjeto(entFilho,'Gravar',[]);
-          if (DSet.Locate(cCampoFilho, TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger, [])) then
+          if (DSet.Locate(cCampoFilho, TUtilsEntidade.ObterValorPropriedade(entFilho, 'GUID').AsString, [])) then
             Continue;
 
-          TConexao.GetInstance.EnviarComando('insert into ' + cTabela + ' (' + cCampoPai + ',' + cCampoFilho + ') values (' +
-          {IntToStr(TConexao.GetInstance.ObterProximaSequencia(cTabela)) + ',' +} IntToStr(idPai) + ',' +
-          IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger) + ')');
+          TConexao.GetInstance.EnviarComando('insert into ' + cTabela + ' (GUID, ' + cCampoPai + ',' + cCampoFilho + ') values (' +
+          TUtilsGUID.CreateClassGUID.QuotedString + ',' +
+          {IntToStr(TConexao.GetInstance.ObterProximaSequencia(cTabela)) + ',' +} (GUIDPai) + ',' +
+          (TUtilsEntidade.ObterValorPropriedade(entFilho, 'GUID').AsString.QuotedString) + ')');
         end;
 
         cIdRemovidos := EmptyStr;
@@ -470,7 +475,7 @@ begin
           lAchou := False;
           for entFilho in Lista do
           begin
-            if ((TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger) = (DSet.FieldByName(cCampoFilho).AsInteger)) then
+            if ((TUtilsEntidade.ObterValorPropriedade(entFilho, 'GUID').AsString) = (DSet.FieldByName(cCampoFilho).AsString)) then
             begin
               lAchou := True;
               break;
@@ -479,22 +484,22 @@ begin
           if (not lAchou) then
           begin
             if (cIdRemovidos <> EmptyStr) then
-              cIdRemovidos := cIdRemovidos + ', ' + DSet.FieldByName(cCampoFilho).AsString
+              cIdRemovidos := cIdRemovidos + ', ' + DSet.FieldByName(cCampoFilho).AsString.QuotedString
             else
-              cIdRemovidos := DSet.FieldByName(cCampoFilho).AsString;
+              cIdRemovidos := DSet.FieldByName(cCampoFilho).AsString.QuotedString;
           end;
           DSet.Next;
         end;
 
         if (cIdRemovidos <> EmptyStr) then
         begin
-          TConexao.GetInstance.EnviarComando('delete from ' + cTabela + ' where ' + cCampoPai + ' = ' + IntToStr(idPai) + ' and ' +
+          TConexao.GetInstance.EnviarComando('delete from ' + cTabela + ' where ' + cCampoPai + ' = ' + (GUIDPai) + ' and ' +
           cCampoFilho + ' in (' + cIdRemovidos + ')');
 
           if TipoCascata = ctCascade then
           begin
             var TabelaCampoFilho := StringReplace(cCampoFilho, '_FK', '', [rfReplaceAll]);
-            TConexao.GetInstance.EnviarComando('delete from ' + TabelaCampoFilho + ' where ID in (' + cIdRemovidos + ')');
+            TConexao.GetInstance.EnviarComando('delete from ' + TabelaCampoFilho + ' where GUID in (' + cIdRemovidos + ')');
           end;
         end;
         DSet.Close;
@@ -504,11 +509,11 @@ begin
     end
     else
     begin
-      TConexao.GetInstance.EnviarComando('update ' + cTabela + ' set ' + cCampoPai + ' = null ' + ' where ' + cCampoPai + ' = ' + IntToStr(idPai));
+      TConexao.GetInstance.EnviarComando('update ' + cTabela + ' set ' + cCampoPai + ' = null ' + ' where ' + cCampoPai + ' = ' + (GUIDPai));
 
       for entFilho in Lista do
-        TConexao.GetInstance.EnviarComando('update ' + cTabela + ' set ' + cCampoPai + ' = ' + IntToStr(idPai) + ' where ' +
-        cCampoFilho + ' = ' + IntToStr(TUtilsEntidade.ObterValorPropriedade(entFilho, 'id').AsInteger));
+        TConexao.GetInstance.EnviarComando('update ' + cTabela + ' set ' + cCampoPai + ' = ' + (GUIDPai) + ' where ' +
+        cCampoFilho + ' = ' + (TUtilsEntidade.ObterValorPropriedade(entFilho, 'GUID').AsString.QuotedString));
     end;
   finally
     Ctx.Free;
@@ -520,7 +525,7 @@ function TServico<T>.ObterSqlCustomizada: string;
 //var
 //  Objeto: T;
 const
-  JOIN_SCRIPT = ' inner join %s on (%s.ID = %s) ';
+  JOIN_SCRIPT = ' inner join %s on (%s.GUID = %s) ';
 begin
   var Sql := EmptyStr;
   var Join := EmptyStr;
@@ -531,7 +536,7 @@ begin
     if not Assigned(Tipo) then
       Exit;
 
-    for var Prop in Tipo.GetDeclaredProperties do
+    for var Prop in Tipo.GetProperties do
     begin
       for var Atrib in Prop.GetAttributes do
       begin
@@ -548,7 +553,7 @@ begin
 
         if Atrib is TCampoEstrangeiro then
         begin
-          var TabelaJoin := TCampoEstrangeiro(Atrib).caption;
+          var TabelaJoin := TCampoEstrangeiro(Atrib).Tabela.ToUpper;
           var Relacao := Tabela + '.' + TAtributoBanco(Atrib).nome;
 
           Sql := Sql + ', ';
@@ -645,14 +650,14 @@ begin
   Result := ListObj;
 end;
 
-function TServico<T>.PesquisarPorId(Id: Integer): T;
+function TServico<T>.PesquisarPorGUID(GUID: string): T;
 var
   DSet: TDataSet;
   Objeto: T;
 begin
   Objeto := TUtilsEntidade.ObterObjetoGenerico<T>;
 
-  DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + IntToStr(Id));
+  DSet := TConexao.GetInstance.EnviaConsulta('select * from ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' where ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + (GUID.QuotedString));
 
   if DSet.IsEmpty then
   begin

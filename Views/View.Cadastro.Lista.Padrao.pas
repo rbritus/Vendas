@@ -140,7 +140,7 @@ end;
 procedure TFrmCadastroListaPadrao.grdListaDblClick(Sender: TObject);
 begin
   var ControllerListaView := TControllerCadastroListaPadrao.New(Self);
-  ControllerListaView.ApresentarFormParaEdicao(grdLista.DataSource.DataSet.FieldByName('id').AsInteger);
+  ControllerListaView.ApresentarFormParaEdicao(grdLista.DataSource.DataSet.FieldByName('GUID').AsString);
   inherited;
 end;
 
@@ -215,8 +215,8 @@ end;
 
 procedure TFrmCadastroListaPadrao.UpdateItem(Value: TObject);
 begin
-  var ID := TUtilsEntidade.ObterValorPropriedade(Value,'Id').AsInteger;
-  if FClientDataSet.Locate('ID',ID,[]) then
+  var GUID := TUtilsEntidade.ObterValorPropriedade(Value,'GUID').AsString;
+  if FClientDataSet.Locate('GUID',GUID,[]) then
     FClientDataSet.Edit
   else
     FClientDataSet.Append;

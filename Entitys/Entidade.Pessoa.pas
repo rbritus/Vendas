@@ -12,20 +12,20 @@ type
   [TNomeTabela('PESSOA')]
   TPessoa = class(TEntidade<TPessoa>, iPessoa)
   private
-    FId: integer;
+    FGUID: string;
     FNome: string;
     FAtivo: TRegistroAtivo;
     FCPF: string;
     FEmail: string;
     FEnderecos: TObjectListFuck<TEndereco>;
     FTelefones: TObjectListFuck<TTelefone>;
-    procedure SetId(const Value: integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetAtivo(const Value: TRegistroAtivo);
     procedure SetCPF(const Value: string);
     procedure SetEmail(const Value: string);
     procedure SetEnderecos(const Value: TObjectListFuck<TEndereco>);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetAtivo: TRegistroAtivo;
     function GetCPF: string;
@@ -34,8 +34,8 @@ type
     procedure SetTelefones(const Value: TObjectListFuck<TTelefone>);
     function GetTelefones: TObjectListFuck<TTelefone>;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID',False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
     [TAtributoMascara(TConstantsMasks.CPF)]
@@ -57,13 +57,16 @@ type
 implementation
 
 uses
-  Utils.Entidade;
+  Utils.Entidade, Utils.GUID;
 
 { TPessoa }
 
-function TPessoa.GetId: Integer;
+function TPessoa.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TPessoa.GetNome: string;
@@ -74,7 +77,7 @@ end;
 function TPessoa.GetTelefones: TObjectListFuck<TTelefone>;
 begin
    If not Assigned(FTelefones) Then
-      FTelefones := TUtilsEntidade.ObterListaComTabelaRelacional<TTelefone>(Self.id,
+      FTelefones := TUtilsEntidade.ObterListaComTabelaRelacional<TTelefone>(Self.GUID,
         'PESSOA_FK', 'TELEFONE_FK', 'TELEFONE_PESSOA', TTelefone);
 
    Result := FTelefones;
@@ -98,15 +101,15 @@ end;
 function TPessoa.GetEnderecos: TObjectListFuck<TEndereco>;
 begin
    If not Assigned(FEnderecos) Then
-      FEnderecos := TUtilsEntidade.ObterListaComTabelaRelacional<TEndereco>(Self.id,
+      FEnderecos := TUtilsEntidade.ObterListaComTabelaRelacional<TEndereco>(Self.GUID,
         'PESSOA_FK', 'ENDERECO_FK', 'ENDERECO_PESSOA', TEndereco);
 
    Result := FEnderecos;
 end;
 
-procedure TPessoa.SetId(const Value: integer);
+procedure TPessoa.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TPessoa.SetNome(const Value: string);

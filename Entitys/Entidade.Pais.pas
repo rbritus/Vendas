@@ -4,30 +4,30 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Pais;
+  Interfaces.Entidade.Pais, Utils.Constants;
 
 type
   [TNomeTabela('PAIS')]
   TPais = class(TEntidade<TPais>, iPais)
   private
-    FId: Integer;
+    FGUID: string;
     FAbreviacao: string;
     FNome: string;
     FCodigoSISCOMEX: string;
     FCodigoBACEN: string;
     procedure SetAbreviacao(const Value: string);
-    procedure SetId(const Value: Integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetCodigoBACEN(const Value: string);
     procedure SetCodigoSISCOMEX(const Value: string);
     function GetAbreviacao: string;
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetCodigoBACEN: string;
     function GetCodigoSISCOMEX: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NOME', 200, [NOTNULL], 'País')]
     property Nome: string read GetNome write SetNome;
     [TCampoTexto('ABREVIACAO', 5, [NOTNULL], 'Abreviação', False)]
@@ -43,11 +43,14 @@ type
 
 implementation
 
+uses
+  Utils.GUID;
+
 { TPais }
 
 function TPais.EstaVazia: Boolean;
 begin
-  Result := (FId = 0);
+  Result := (FGUID = string.Empty);
 end;
 
 function TPais.GetAbreviacao: string;
@@ -65,9 +68,12 @@ begin
   Result := FCodigoSISCOMEX;
 end;
 
-function TPais.GetId: Integer;
+function TPais.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TPais.GetNome: string;
@@ -95,9 +101,9 @@ begin
   FCodigoSISCOMEX := Value;
 end;
 
-procedure TPais.SetId(const Value: Integer);
+procedure TPais.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TPais.SetNome(const Value: string);

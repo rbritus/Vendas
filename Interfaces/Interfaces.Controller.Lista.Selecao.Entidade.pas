@@ -9,7 +9,7 @@ type
 
   iControllerListaSelecaoEntidade = interface
     ['{F29FE33D-3608-454C-9D56-01DD9717FF55}']
-    function ObterObjetoSelecionado(pId: Integer): TObject;
+    function ObterObjetoSelecionado(AGUID: string): TObject;
     function ObterDataSetPreenchido: TDataSet;
   end;
 

@@ -42,12 +42,14 @@ type
     function CamposObrigatoriosPreenchidos: Boolean;
     procedure DestruirComponentesTImagemValidacao;
   protected
-    [TCadastroVariavel('ID',ftINTEIRO,coNaoObrigatorio)]
-    FID: Integer;
+    [TCadastroVariavel('GUID',ftTEXTO,coNaoObrigatorio)]
+    FGUID: string;
+    [TCadastroVariavel('DATA_INSERCAO',ftDATA,coNaoObrigatorio)]
+    FDATA_INSERCAO: TDateTime;
   public
     { Public declarations }
     function ValidacoesEspecificasAtendidas: Boolean; virtual;
-    procedure CarregarEntidadeParaEdicao(pId: Integer);
+    procedure CarregarEntidadeParaEdicao(AGUID: string);
     procedure CarregarFormParaCadastro;
     procedure CriarImagemDeValidacaoParaCampo(AComponente: TWinControl; Mensagem: string);
   end;
@@ -91,14 +93,14 @@ begin
   Result := True;
 end;
 
-procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(pId: Integer);
+procedure TFrmCadastroPadrao.CarregarEntidadeParaEdicao(AGUID: string);
 begin
-  FID := pId;
+  FGUID := AGUID;
   PrepararComboBoxComEnumerators;
   LimparCampos;
   LimparEntidades;
   var ControllerView := TControllerCadastroPadrao.New(Self);
-  ControllerView.CarregarEntidadeParaEdicao(pId);
+  ControllerView.CarregarEntidadeParaEdicao(AGUID);
 end;
 
 procedure TFrmCadastroPadrao.CarregarFormParaCadastro;
@@ -111,7 +113,8 @@ end;
 
 procedure TFrmCadastroPadrao.InicializarID;
 begin
-  FID := 0;
+  FGUID := string.Empty;
+  FDATA_INSERCAO := 0;
 end;
 
 procedure TFrmCadastroPadrao.LimparCampos;

@@ -110,8 +110,8 @@ begin
     Exit;
 
   var Controller := TControllerListaSelecaoEntidade.New(FClasseEntidade);
-  var ID := FClientDataSet.FieldByName('ID').AsInteger;
-  var Obj := Controller.ObterObjetoSelecionado(ID);
+  var GUID := FClientDataSet.FieldByName('GUID').AsString;
+  var Obj := Controller.ObterObjetoSelecionado(GUID);
   InformarObservador(Obj);
   Close;
 end;

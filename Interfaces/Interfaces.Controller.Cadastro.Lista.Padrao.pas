@@ -11,7 +11,7 @@ type
     ['{E53FF557-9668-4463-BF94-95D7333E7B13}']
     function ObterClasseDaEntidadeDeCadastro: TClass;
     function ObterDataSetComDadosParaGride: TDataSet;
-    procedure ApresentarFormParaEdicao(ID: Integer);
+    procedure ApresentarFormParaEdicao(AGUID: string);
     procedure ApresentarFormParaCadastro;
   end;
 

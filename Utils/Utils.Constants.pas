@@ -15,6 +15,7 @@ type
 
   TConstantsInteger = class
   public
+   const TAMANHO_GUID = 100;
    const MENOS_UM = -1;
    const ZERO = 0;
    const LARGURA_MENU_MAXIMIZADO = 200;
@@ -30,6 +31,11 @@ type
    const CELULAR = '(99) 99999-9999;0;';
    const TELEFONE = '(99) 9999-9999;0;';
    const CEP = '99999\-999;0;';
+  end;
+
+  TConstantsDataHora = class
+  public
+   const DATAHORA_VAZIA = 0;
   end;
 
 implementation

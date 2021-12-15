@@ -36,7 +36,6 @@ object FrmMenu: TFrmMenu
     Color = 16117996
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 716
     object PanelTitulo: TPanel
       AlignWithMargins = True
       Left = 15
@@ -77,7 +76,6 @@ object FrmMenu: TFrmMenu
       ShowHint = False
       TabOrder = 1
       OnResize = pnlMainFormResize
-      ExplicitHeight = 667
     end
   end
   object pnlMenuLateral: TPanel
@@ -90,7 +88,6 @@ object FrmMenu: TFrmMenu
     Color = clWhite
     ParentBackground = False
     TabOrder = 1
-    ExplicitHeight = 716
     object pnlBarraLateralBotao: TPanel
       Left = 0
       Top = 1

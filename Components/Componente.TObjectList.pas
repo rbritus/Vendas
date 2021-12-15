@@ -10,7 +10,7 @@ type
   private
     function Clone(ObjetoClone: TObject): TObject;
   public
-    procedure CopyTo(Lista: TObjectListFuck<T>);
+    function GetCloneLista: TObjectListFuck<T>;
   end;
 
   TListFuck<T> = class(TList<T>);
@@ -22,14 +22,14 @@ uses
 
 { TObjectListFuck<T> }
 
-procedure TObjectListFuck<T>.CopyTo(Lista: TObjectListFuck<T>);
+function TObjectListFuck<T>.GetCloneLista: TObjectListFuck<T>;
 begin
-  if not Assigned(Lista) then
-    Exit;
+  var Lista := TObjectListFuck<T>.Create;
 
-  Self.Clear;
-  for var Obj in Lista do
-    Self.Add(Self.Clone(Obj));
+  for var Obj in Self do
+    Lista.Add(Lista.Clone(Obj));
+
+  Result := Lista;
 end;
 
 function TObjectListFuck<T>.Clone(ObjetoClone: TObject): TObject;

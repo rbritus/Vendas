@@ -10,7 +10,7 @@ type
   iControllerCadastroPadrao = interface
     ['{83B6B9DB-59B8-4277-9F36-1A4BC300EB05}']
     procedure GravarEntidade;
-    procedure CarregarEntidadeParaEdicao(pId: Integer);
+    procedure CarregarEntidadeParaEdicao(AGUID: string);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
     procedure LimparEntidades;

@@ -253,6 +253,7 @@
         <DCCReference Include="Components\Componente.TImagemValidacao.pas"/>
         <DCCReference Include="Controllers\Controller.Componente.TImagemValidacao.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas"/>
+        <DCCReference Include="Utils\Utils.GUID.pas"/>
         <RcItem Include="Resources\ImagemValidacao3.gif">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>gifValidation</ResourceId>

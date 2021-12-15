@@ -10,11 +10,11 @@ type
   TControllerFrameAdicaoPadrao = class(TInterfacedObject, iControllerFrameAdicaoPadrao)
   strict private
     FFrame: TFrame;
-    const JOIN = 'INNER JOIN %s ON(%s.ID = %s.%s)';
-    const JOINLISTAGEM = 'INNER JOIN %s ON(%s.%S = %s.ID)';
-    const WHERE = 'WHERE %s.ID = %d';
+    const JOIN = 'INNER JOIN %s ON(%s.GUID = %s.%s)';
+    const JOINLISTAGEM = 'INNER JOIN %s ON(%s.%s = %s.GUID)';
+    const WHERE = 'WHERE %s.GUID = %S';
   private
-    FIdObjRelacional: Integer;
+    FGUIDObjRelacional: string;
     FEntidadeFrame: TObject;
     FEntidadeRelacional: TObject;
     constructor Create(pFrame: TFrame);
@@ -34,11 +34,11 @@ type
     class function New(pFrame: TFrame): iControllerFrameAdicaoPadrao;
 
     procedure ApresentarFormParaCadastro;
-    procedure ApresentarFormParaEdicao(ID: Integer);
+    procedure ApresentarFormParaEdicao(AGUID: string);
     function CarregarDataSet(pSql: string): TDataSet;
-    function ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
+    function ObterSqlDeTabelaRelacional(pGUIDObjetoRelacional: string): string;
     procedure ObterListaPreenchidaDoFrame(cds: TDataSet; var Lista: TObjectListFuck<TObject>);
-    function CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
+    function CarregarListaDeObjetosParaFrame(pGUIDObjetoRelacional: string): TObjectListFuck<TObject>;
     function ObterObjetoDoFrame: TObject;
     function ObterClasseDaEntidadeDeCadastro: TClass;
   end;
@@ -51,12 +51,12 @@ uses
 
 { TControllerFrameAdicaoPadrao }
 
-function TControllerFrameAdicaoPadrao.ObterSqlDeTabelaRelacional(pIdObjetoRelacional: Integer): string;
+function TControllerFrameAdicaoPadrao.ObterSqlDeTabelaRelacional(pGUIDObjetoRelacional: string): string;
 begin
   Result := EmptyStr;
   FEntidadeFrame := ObterObjetoDoFrame;
   FEntidadeRelacional := ObterObjetoDeClassRelacional;
-  FIdObjRelacional := pIdObjetoRelacional;
+  FGUIDObjRelacional := pGUIDObjetoRelacional;
   var cSql: string;
   try
     if RelacionamentoPorCampoEstrangeiro then
@@ -113,7 +113,7 @@ end;
 function TControllerFrameAdicaoPadrao.ObterCondicaoWhere: string;
 begin
   var TabelaObjPrimario := ObterNomeDaTabela(FEntidadeRelacional);
-  var cSql := Format(WHERE,[TabelaObjPrimario,FIdObjRelacional]);
+  var cSql := Format(WHERE,[TabelaObjPrimario,FGUIDObjRelacional]);
   Result := cSql;
 end;
 
@@ -197,7 +197,7 @@ begin
       for var Prop in Tipo.GetDeclaredProperties do
         for var Atrib in Prop.GetAttributes do
           if Atrib is TCampoEstrangeiro then
-            if TCampoEstrangeiro(Atrib).caption = TabelaObjFrame then
+            if TCampoEstrangeiro(Atrib).Tabela = TabelaObjFrame then
             begin
               Result := TCampoEstrangeiro(Atrib).nome;
               Break;
@@ -233,7 +233,7 @@ begin
       for var Prop in Tipo.GetDeclaredProperties do
         for var Atrib in Prop.GetAttributes do
           if Atrib is TCampoEstrangeiro then
-            if TCampoEstrangeiro(Atrib).caption = TabelaObjFrame then
+            if TCampoEstrangeiro(Atrib).Tabela = TabelaObjFrame then
             begin
               Result := True;
               Break;
@@ -270,7 +270,7 @@ begin
     begin
       if Atrib is TClasseCadastro then
       begin
-        Entidade := TUtilsEntidade.ExecutarMetodoClasse(TClasseCadastro(Atrib).Classe,'PesquisarPorId',[FIdObjRelacional]).AsObject;
+        Entidade := TUtilsEntidade.ExecutarMetodoClasse(TClasseCadastro(Atrib).Classe,'PesquisarPorGUID',[FGUIDObjRelacional]).AsObject;
         Break;
       end;
     end;
@@ -332,9 +332,9 @@ begin
   end;
 end;
 
-function TControllerFrameAdicaoPadrao.CarregarListaDeObjetosParaFrame(pIdObjetoRelacional: Integer): TObjectListFuck<TObject>;
+function TControllerFrameAdicaoPadrao.CarregarListaDeObjetosParaFrame(pGUIDObjetoRelacional: string): TObjectListFuck<TObject>;
 begin
-  FIdObjRelacional := pIdObjetoRelacional;
+  FGUIDObjRelacional := pGUIDObjetoRelacional;
   FEntidadeFrame := ObterObjetoDoFrame;
   FEntidadeRelacional := ObterObjetoDeClassRelacional;
   try
@@ -342,8 +342,7 @@ begin
     if not Assigned(ListaParaClone) then
       Exit(nil);
 
-    var Lista := TObjectListFuck<TObject>.Create;
-    Lista.CopyTo(ListaParaClone);
+    var Lista := ListaParaClone.GetCloneLista;
     Result := Lista;
   finally
     FEntidadeFrame.Free;
@@ -361,13 +360,13 @@ begin
   ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 
-procedure TControllerFrameAdicaoPadrao.ApresentarFormParaEdicao(ID: Integer);
+procedure TControllerFrameAdicaoPadrao.ApresentarFormParaEdicao(AGUID: string);
 begin
   var ClasseForm := TUtilsFrame.ObterClasseDoFormularioCadastro(FFrame);
   var Form : TForm := nil;
   ControllerView.AdicionarFormNalista(TComponentClass(ClasseForm), Form);
   TUtilsEntidade.ExecutarMetodoObjeto(Form,'SetObservador',TValue.From<TWinControl>(FFrame));
-  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[ID]);
+  TUtilsEntidade.ExecutarMetodoObjeto(Form,'CarregarEntidadeParaEdicao',[AGUID]);
   ControllerView.ShowForm(TComponentClass(ClasseForm));
 end;
 

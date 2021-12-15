@@ -83,7 +83,7 @@ begin
               cScriptTabela := cScriptTabela + Format(txtPadrao, [FNomeTabela, RetirarNotNull(TAtributoBanco(atrib).getScriptCampo)]);
 
               if atrib is TCampoEstrangeiro then
-                cScriptTabela := cScriptTabela + ' REFERENCES ' + TAtributoBanco(atrib).caption + '(ID);' + sLineBreak;
+                cScriptTabela := cScriptTabela + ' REFERENCES ' + TCampoEstrangeiro(atrib).Tabela.ToUpper + '(GUID);' + sLineBreak;
 
               cScriptTabela := cScriptTabela + ';' + sLineBreak;
             end;
@@ -107,10 +107,10 @@ begin
     try
       TConexao.GetInstance.EnviarComando(Script.Script);
       TConexao.GetInstance.EnviarComando(Script.ObterSqlParaRegistrarExecucaoDoScriptNoBanco);
-      TConexao.GetInstance.Commit;
+      TConexao.GetInstance.CommitRetaining;
       Result := True;
     except
-      TConexao.GetInstance.Rollback;
+      TConexao.GetInstance.RollbackRetaining;
     end;
   finally
     FreeAndNil(DataSet);
@@ -143,7 +143,7 @@ begin
   var cScriptTabela := 'Create Table ' + FNomeTabela + '(' + sLineBreak;
   var cFK := EmptyStr;
   var ctx := TRttiContext.Create;
-  for var prop in ctx.GetType(FClasse).GetDeclaredProperties do
+  for var prop in ctx.GetType(FClasse).GetProperties do
     for var atrib in prop.GetAttributes do
     begin
       if atrib is TAtributoBanco then
@@ -161,10 +161,10 @@ begin
         cAuxiliar := TAtributoBanco(atrib).getScriptCampo;
 
         if CHAVE_PRIMARIA in TAtributoBanco(atrib).propriedades then
-          cAuxiliar := cAuxiliar + ' primary key AUTOINCREMENT';
+          cAuxiliar := cAuxiliar + ' primary key ';//' primary key AUTOINCREMENT';
 
         if atrib is TCampoEstrangeiro then
-          cFK := cFK + ', FOREIGN KEY(' + TAtributoBanco(atrib).nome + ') REFERENCES ' + TAtributoBanco(atrib).caption + '(ID)';
+          cFK := cFK + ', FOREIGN KEY(' + TAtributoBanco(atrib).nome + ') REFERENCES ' + TCampoEstrangeiro(atrib).Tabela.ToUpper + '(GUID)';
 
         if Trim(cAuxiliar) <> '' then
           cScriptTabela := cScriptTabela + cAuxiliar + ',';

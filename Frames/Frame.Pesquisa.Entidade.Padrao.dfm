@@ -8,13 +8,13 @@ inherited FramePesquisaEntidadePadrao: TFramePesquisaEntidadePadrao
   inherited pnlFundo: TPanel
     Width = 397
     Height = 47
-    ExplicitWidth = 372
-    ExplicitHeight = 45
+    ExplicitWidth = 397
+    ExplicitHeight = 47
     inherited pnlConteudo: TPanel
       Width = 397
       Height = 47
-      ExplicitWidth = 372
-      ExplicitHeight = 51
+      ExplicitWidth = 397
+      ExplicitHeight = 47
       DesignSize = (
         397
         47)

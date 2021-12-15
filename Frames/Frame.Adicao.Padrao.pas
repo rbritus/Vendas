@@ -38,7 +38,7 @@ type
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
-    FIdObjRelacional: Integer;
+    FGUIDObjRelacional: string;
     FQuantidadeMaximaDeLinhas: Integer;
     procedure CarregarDataSet;
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -59,7 +59,7 @@ type
     procedure UpdateItem(Value : TObject); virtual;
   public
     { Public declarations }
-    procedure CarregarFrame(IdEntidade: Integer);
+    procedure CarregarFrame(GUIDEntidade: string);
     procedure LimparDataSet;
     property QuantidadeMaximaDeLinhas: Integer read FQuantidadeMaximaDeLinhas write FQuantidadeMaximaDeLinhas Default 0;
   end;
@@ -83,7 +83,7 @@ var
 begin
   CriarDataSet;
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  var Lista := ControllerFrame.CarregarListaDeObjetosParaFrame(FIdObjRelacional);
+  var Lista := ControllerFrame.CarregarListaDeObjetosParaFrame(FGUIDObjRelacional);
 
   if not Assigned(Lista) then
   begin
@@ -133,7 +133,7 @@ begin
     Exit;
 
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  ControllerFrame.ApresentarFormParaEdicao(cdsDados.FieldByName('id').AsInteger);
+  ControllerFrame.ApresentarFormParaEdicao(cdsDados.FieldByName('GUID').AsString);
 end;
 
 procedure TFrameAdicaoPadrao.ObterListaPreenchida(var Lista: TObjectListFuck<TObject>);
@@ -156,7 +156,7 @@ end;
 function TFrameAdicaoPadrao.ObterSqlDeTabelaRelacional: string;
 begin
   var ControllerFrame := TControllerFrameAdicaoPadrao.New(Self);
-  Result := ControllerFrame.ObterSqlDeTabelaRelacional(FIdObjRelacional);
+  Result := ControllerFrame.ObterSqlDeTabelaRelacional(FGUIDObjRelacional);
 end;
 
 procedure TFrameAdicaoPadrao.SpeedButton5MouseEnter(Sender: TObject);
@@ -248,9 +248,9 @@ begin
   OcultarBarraLateralDoBotao;
 end;
 
-procedure TFrameAdicaoPadrao.CarregarFrame(IdEntidade: Integer);
+procedure TFrameAdicaoPadrao.CarregarFrame(GUIDEntidade: string);
 begin
-  FIdObjRelacional := IdEntidade;
+  FGUIDObjRelacional := GUIDEntidade;
   CarregarDataSet;
 end;
 
@@ -279,8 +279,8 @@ end;
 
 procedure TFrameAdicaoPadrao.PreencherDataSet(Obj: TObject);
 begin
-  var ID := TUtilsEntidade.ObterValorPropriedade(Obj,'ID').AsInteger;
-  if cdsDados.Locate('ID',ID,[]) then
+  var GUID := TUtilsEntidade.ObterValorPropriedade(Obj,'GUID').AsString;
+  if cdsDados.Locate('GUID',GUID,[]) then
     cdsDados.Edit
   else
     cdsDados.Append;

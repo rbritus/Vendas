@@ -4,26 +4,26 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Cidade, Entidade.Estado;
+  Interfaces.Entidade.Cidade, Entidade.Estado, Utils.Constants;
 
 type
   [TNomeTabela('CIDADE')]
   TCidade = class(TEntidade<TCidade>, iCidade)
   private
-    FId: Integer;
+    FGUID: string;
     FNome: string;
     FCodigoIBGE: Integer;
     FCodigoMunicipio: string;
     FCodigoDistrito: string;
     FEstado: TEstado;
     FCodigoSubdistrito: string;
-    procedure SetId(const Value: Integer);
+    procedure SetGUID(const Value: string);
     procedure SetNome(const Value: string);
     procedure SetCodigoIBGE(const Value: Integer);
     procedure SetCodigoMunicipio(const Value: string);
     procedure SetCodigoDistrito(const Value: string);
     procedure SetEstado(const Value: TEstado);
-    function GetId: Integer;
+    function GetGUID: string;
     function GetNome: string;
     function GetCodigoIBGE: Integer;
     function GetCodigoMunicipio: string;
@@ -32,8 +32,8 @@ type
     procedure SetCodigoSubdistrito(const Value: string);
     function GetCodigoSubdistrito: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NOME', 200, [NOTNULL], 'Cidade')]
     property Nome: string read GetNome write SetNome;
     [TCampoInteiro('CODIGO_IBGE', [NOTNULL], 'Cód. IBGE')]
@@ -44,7 +44,7 @@ type
     property CodigoDistrito: string read GetCodigoDistrito write SetCodigoDistrito;
     [TCampoTexto('CODIGO_SUBDISTRITO', 10, [], 'Cód. Subdistrito', False)]
     property CodigoSubdistrito: string read GetCodigoSubdistrito write SetCodigoSubdistrito;
-    [TCampoEstrangeiro('ESTADO_FK', [NOTNULL], 'ESTADO', 'Abreviacao')]
+    [TCampoEstrangeiro('ESTADO_FK', [NOTNULL], 'ESTADO', 'Abreviacao', 'UF')]
     property Estado: TEstado read GetEstado write SetEstado;
 
     class function New : iCidade;
@@ -54,13 +54,13 @@ type
 implementation
 
 uses
-  Utils.Entidade;
+  Utils.Entidade, Utils.GUID;
 
 { TCidade }
 
 function TCidade.EstaVazia: Boolean;
 begin
-  Result := (FId = 0);
+  Result := (FGUID = string.Empty);
 end;
 
 function TCidade.GetCodigoDistrito: string;
@@ -91,9 +91,12 @@ begin
    Result := FEstado;
 end;
 
-function TCidade.GetId: Integer;
+function TCidade.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TCidade.GetNome: string;
@@ -131,9 +134,9 @@ begin
   FEstado := Value;
 end;
 
-procedure TCidade.SetId(const Value: Integer);
+procedure TCidade.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TCidade.SetNome(const Value: string);

@@ -3,18 +3,18 @@ unit Objeto.ScriptDML;
 interface
 
 uses
-  System.Generics.Collections, Attributes.Entidades;
+  System.Generics.Collections, Attributes.Entidades, Utils.Constants;
 
 type
   [TNomeTabela('SCRIPT_CONTROLE')]
   TScriptDML = class(TObject)
   private
-    FIDControle: string;
+    FGUIDControle: string;
     FScript: string;
     FVersao: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID')]
-    property IDControle: string read FIDControle write FIDControle;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID')]
+    property GUIDControle: string read FGUIDControle write FGUIDControle;
     [TCampoTexto('VERSAO', 50, [NOTNULL], 'Versão')]
     property Versao: string read FVersao write FVersao;
     [TCampoTexto('ID_CONTROLE', 50, [NOTNULL], 'Id Controle')]
@@ -28,25 +28,25 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, Utils.GUID;
 
 { TScriptDML }
 
 constructor TScriptDML.Create(pID, pVersao, pScript: string);
 begin
-  FIDControle := pID;
+  FGUIDControle := pID;
   FScript := pScript;
   FVersao := pVersao;
 end;
 
 function TScriptDML.ObterSqlParaRegistrarExecucaoDoScriptNoBanco: string;
 begin
-  Result := 'INSERT INTO SCRIPT_CONTROLE (VERSAO,ID_CONTROLE) VALUES ( ' + FVersao.QuotedString + ',' + FIDControle.QuotedString + ')';
+  Result := 'INSERT INTO SCRIPT_CONTROLE (GUID,VERSAO,ID_CONTROLE) VALUES ( ' + TUtilsGUID.CreateClassGUID.QuotedString + ',' + FVersao.QuotedString + ',' + FGUIDControle.QuotedString + ')';
 end;
 
 function TScriptDML.ObterSqlParaVerificarSeScriptFoiExecutado: string;
 begin
-  Result := 'SELECT * FROM SCRIPT_CONTROLE WHERE VERSAO = ' + FVersao.QuotedString + ' AND ID_CONTROLE = ' + FIDControle.QuotedString;
+  Result := 'SELECT * FROM SCRIPT_CONTROLE WHERE VERSAO = ' + FVersao.QuotedString + ' AND ID_CONTROLE = ' + FGUIDControle.QuotedString;
 end;
 
 end.

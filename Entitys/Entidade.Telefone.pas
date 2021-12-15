@@ -4,18 +4,19 @@ interface
 
 uses
   System.Classes, Entidade.Padrao, Attributes.Entidades, System.SysUtils,
-  Interfaces.Entidade.Telefone, Utils.Enumerators, Objeto.CustomSelect;
+  Interfaces.Entidade.Telefone, Utils.Enumerators, Objeto.CustomSelect,
+  Utils.Constants;
 
 type
   [TNomeTabela('TELEFONE')]
   TTelefone = class(TEntidade<TTelefone>, iTelefone)
   private
-    FId: Integer;
+    FGUID: string;
     FNumero: string;
     FTipoTelefone: TTipoTelefone;
     FObservacao: string;
-    function GetId: Integer;
-    procedure SetId(const Value: Integer);
+    function GetGUID: string;
+    procedure SetGUID(const Value: string);
     procedure SetNumero(const Value: string);
     function GetNumero: string;
     function GetTipoEndereco: TTipoTelefone;
@@ -23,8 +24,8 @@ type
     procedure SetObservacao(const Value: string);
     function GetObservacao: string;
   public
-    [TCampoInteiro('ID', [CHAVE_PRIMARIA, NOTNULL], 'ID', False)]
-    property Id: Integer read GetId write SetId;
+    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NUMERO', 20,[NOTNULL], 'Número', True)]
     property Numero: string read GetNumero write SetNumero;
     [TCampoInteiro('TIPO_TELEFONE', [NOTNULL], TCustomSelectTipoTelefone, 'Tipo')]
@@ -38,6 +39,9 @@ type
 
 implementation
 
+uses
+  Utils.GUID;
+
 { TTelefone }
 
 function TTelefone.EstaVazia: Boolean;
@@ -45,9 +49,12 @@ begin
   Result := (FNumero = string.Empty);
 end;
 
-function TTelefone.GetId: Integer;
+function TTelefone.GetGUID: string;
 begin
-  Result := FId;
+  if FGUID.Trim.IsEmpty then
+    FGUID := TUtilsGUID.CreateClassGUID;
+
+  Result := FGUID;
 end;
 
 function TTelefone.GetNumero: string;
@@ -70,9 +77,9 @@ begin
   Result := Self.Create;
 end;
 
-procedure TTelefone.SetId(const Value: Integer);
+procedure TTelefone.SetGUID(const Value: string);
 begin
-  FId := Value;
+  FGUID := Value;
 end;
 
 procedure TTelefone.SetNumero(const Value: string);

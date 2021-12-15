@@ -65,6 +65,8 @@ end;
 
 procedure TFrmCadastroPessoa.btnCadastrarClick(Sender: TObject);
 begin
+  FEnderecos.DisposeOf;
+  FTelefones.DisposeOf;
   FEnderecos := FrameAdicaoEndereco.ObterLista;
   FTelefones := FrameAdicaoTelefone.ObterLista;
   inherited;
@@ -74,9 +76,9 @@ procedure TFrmCadastroPessoa.FormShow(Sender: TObject);
 begin
   inherited;
   FrameAdicaoEndereco.QuantidadeMaximaDeLinhas := DUAS_LINHAS;
-  FrameAdicaoEndereco.CarregarFrame(Self.FID);
+  FrameAdicaoEndereco.CarregarFrame(Self.FGUID);
   FrameAdicaoTelefone.QuantidadeMaximaDeLinhas := DUAS_LINHAS;
-  FrameAdicaoTelefone.CarregarFrame(Self.FID);
+  FrameAdicaoTelefone.CarregarFrame(Self.FGUID);
   edtCPF.SetFocus;
 end;
 

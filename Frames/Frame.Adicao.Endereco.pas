@@ -72,7 +72,7 @@ end;
 procedure TFrameAdicaoEndereco.PreencherDataSet(Obj: TObject);
 begin
   var Endereco := TEndereco(Obj);
-  if cdsDados.Locate('ID',Endereco.Id,[]) then
+  if cdsDados.Locate('GUID',Endereco.GUID,[]) then
     cdsDados.Edit
   else
     cdsDados.Append;

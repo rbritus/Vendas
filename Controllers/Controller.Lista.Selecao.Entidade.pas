@@ -14,7 +14,7 @@ type
     constructor Create(pClasseEntidade: TClass);
   public
     class function New(pClasseEntidade: TClass): iControllerListaSelecaoEntidade;
-    function ObterObjetoSelecionado(pId: Integer): TObject;
+    function ObterObjetoSelecionado(AGUID: string): TObject;
     function ObterDataSetPreenchido: TDataSet;
   end;
 
@@ -41,9 +41,9 @@ begin
   Result := FClientDataSet;
 end;
 
-function TControllerListaSelecaoEntidade.ObterObjetoSelecionado(pId: Integer): TObject;
+function TControllerListaSelecaoEntidade.ObterObjetoSelecionado(AGUID: string): TObject;
 begin
-  Result := TUtilsEntidade.ExecutarMetodoClasse(FClasseEntidade,'PesquisarPorId',[pId]).AsObject;
+  Result := TUtilsEntidade.ExecutarMetodoClasse(FClasseEntidade,'PesquisarPorGUID',[AGUID]).AsObject;
 end;
 
 end.

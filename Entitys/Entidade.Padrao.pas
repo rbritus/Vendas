@@ -5,12 +5,15 @@ Interface
 uses
   System.Classes, System.Generics.Collections, Services.Padrao, Rtti,
   Datasnap.DBClient, System.SysUtils, Interfaces.Services.Padrao, Utils.Entidade,
-  Componente.TObjectList, Winapi.Windows;
+  Componente.TObjectList, Winapi.Windows, Attributes.Entidades;
 
 Type
   TEntidade<T: class> = class(TInterfacedPersistent)
   private
     FRefCount: Integer;
+    FDATA_INSERCAO: TDateTime;
+    procedure SetDATA_INSERCAO(const Value: TDateTime);
+    function GetDATA_INSERCAO: TDateTime;
   public
     procedure Gravar;
     procedure Excluir;
@@ -18,11 +21,13 @@ Type
     function EstaVazia: Boolean; virtual; abstract;
     class function ListarTodos: TObjectListFuck<T>;
     class function ListarTodosCDS: TClientDataSet;
-    class function PesquisarPorId(Id: Integer): T;
+    class function PesquisarPorGUID(GUID: string): T;
     class function PesquisarPorCondicao(cSql: string): TObjectListFuck<T>;
     Destructor Destroy; override;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    [TCampoData('DATA_INSERCAO', [NOTNULL], 'DATA_INSERCAO', False)]
+    property DATA_INSERCAO: TDateTime read GetDATA_INSERCAO write SetDATA_INSERCAO;
   end;
 
 Implementation
@@ -39,6 +44,11 @@ procedure TEntidade<T>.Excluir;
 begin
   var iServico := TServico<T>.New;
   iServico.Excluir(Self);
+end;
+
+function TEntidade<T>.GetDATA_INSERCAO: TDateTime;
+begin
+  Result := FDATA_INSERCAO;
 end;
 
 procedure TEntidade<T>.Gravar;
@@ -70,10 +80,15 @@ begin
   Result := iServico.PesquisarPorCondicao(cSql);
 end;
 
-class function TEntidade<T>.PesquisarPorId(Id: Integer): T;
+class function TEntidade<T>.PesquisarPorGUID(GUID: string): T;
 begin
   var iServico := TServico<T>.New;
-  Result := iServico.PesquisarPorId(Id);
+  Result := iServico.PesquisarPorGUID(GUID);
+end;
+
+procedure TEntidade<T>.SetDATA_INSERCAO(const Value: TDateTime);
+begin
+  FDATA_INSERCAO := Value;
 end;
 
 function TEntidade<T>._AddRef: Integer;
