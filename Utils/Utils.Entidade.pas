@@ -590,7 +590,9 @@ begin
             begin
               var Obj := Prop.GetValue(Objeto).AsObject;
               if Assigned(Obj) then
-                Obj.Free;
+                Obj.DisposeOf;
+
+              Prop.SetValue(Objeto,nil);
             end;
           tkInteger, tkFloat:
             Prop.SetValue(Objeto, 0);
@@ -629,7 +631,9 @@ begin
           begin
             var Obj := Prop.GetValue(Objeto).AsObject;
             if Assigned(Obj) then
-              Obj.Free;
+              Obj.DisposeOf;
+
+            Prop.SetValue(Objeto,nil);
           end;
         end;
       end;

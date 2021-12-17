@@ -31,7 +31,7 @@ type
     procedure CarregarEntidadeParaEdicao(AGUID: string);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
-    procedure LimparEntidades;
+    procedure LimparEntidadesMapeadas;
     procedure DestruirEntidadesPosCadastro;
     procedure CarregarComboBoxComEnumerators;
     procedure CarregarMascarasNosCampos;
@@ -184,7 +184,7 @@ begin
   LimpaFramesAdicao;
 end;
 
-procedure TControllerCadastroPadrao.LimparEntidades;
+procedure TControllerCadastroPadrao.LimparEntidadesMapeadas;
 begin
   TUtilsForm.LimparEntidadesDoForm(FForm);
 end;

@@ -54,6 +54,7 @@ type
     procedure PreencherCidadePeloCodigoIBGE(IBGE: string);
     function ObterCEPSemMascara: string;
     function CEPValido: Boolean;
+    procedure LimparEntidades;
   public
     { Public declarations }
     function ValidacoesEspecificasAtendidas: Boolean; override;
@@ -127,7 +128,7 @@ end;
 
 procedure TFrmCadastroEndereco.btnCadastrarClick(Sender: TObject);
 begin
-  FCidade.DisposeOf;
+  LimparEntidades;
   FCidade := TCidade(FramePesquisaCidade.ObterEntidade);
   inherited;
 end;
@@ -164,6 +165,12 @@ begin
   finally
     Cidade.Free;
   end;
+end;
+
+procedure TFrmCadastroEndereco.LimparEntidades;
+begin
+  if Assigned(FCidade) then
+    FCidade.DisposeOf;
 end;
 
 function TFrmCadastroEndereco.ObterCEPSemMascara: string;

@@ -13,7 +13,7 @@ type
     procedure CarregarEntidadeParaEdicao(AGUID: string);
     procedure CarregarLayoutDeCamposEditaveis;
     procedure LimparCamposEditaveis;
-    procedure LimparEntidades;
+    procedure LimparEntidadesMapeadas;
     procedure DestruirEntidadesPosCadastro;
     procedure CarregarComboBoxComEnumerators;
     procedure CarregarMascarasNosCampos;

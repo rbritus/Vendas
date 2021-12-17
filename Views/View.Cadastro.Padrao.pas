@@ -27,6 +27,7 @@ type
     procedure btnCadastrarExit(Sender: TObject);
     procedure btnCancelarEnter(Sender: TObject);
     procedure btnCancelarExit(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure AjustarPosicaoBarraLateralAoBotao(Botao: TButton);
@@ -35,7 +36,7 @@ type
     procedure InicializarID;
     procedure CarregarLayoutDinamico;
     procedure LimparCampos;
-    procedure LimparEntidades;
+    procedure LimparEntidadesMapeadas;
     procedure PrepararComboBoxComEnumerators;
     function CamposObrigatoriosEstaoPreenchidos: Boolean;
     procedure CarregarMascaraNosCampos;
@@ -98,7 +99,7 @@ begin
   FGUID := AGUID;
   PrepararComboBoxComEnumerators;
   LimparCampos;
-  LimparEntidades;
+  LimparEntidadesMapeadas;
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CarregarEntidadeParaEdicao(AGUID);
 end;
@@ -108,7 +109,7 @@ begin
   InicializarID;
   PrepararComboBoxComEnumerators;
   LimparCampos;
-  LimparEntidades;
+  LimparEntidadesMapeadas;
 end;
 
 procedure TFrmCadastroPadrao.InicializarID;
@@ -123,10 +124,10 @@ begin
   ControllerView.LimparCamposEditaveis;
 end;
 
-procedure TFrmCadastroPadrao.LimparEntidades;
+procedure TFrmCadastroPadrao.LimparEntidadesMapeadas;
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
-  ControllerView.LimparEntidades;
+  ControllerView.LimparEntidadesMapeadas;
 end;
 
 procedure TFrmCadastroPadrao.CarregarLayoutDinamico;
@@ -146,6 +147,14 @@ procedure TFrmCadastroPadrao.CriarImagemDeValidacaoParaCampo(
 begin
   var ControllerView := TControllerCadastroPadrao.New(Self);
   ControllerView.CriarImagemDeValidacaoDeCampo(AComponente,Mensagem);
+end;
+
+procedure TFrmCadastroPadrao.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  var ControllerView := TControllerCadastroPadrao.New(Self);
+  ControllerView.LimparEntidadesMapeadas;
 end;
 
 procedure TFrmCadastroPadrao.FormShow(Sender: TObject);
@@ -227,7 +236,7 @@ begin
   Result := True;
   if not CamposObrigatoriosEstaoPreenchidos then
   begin
-    LimparEntidades;
+    LimparEntidadesMapeadas;
     Result := False;
   end;
 end;

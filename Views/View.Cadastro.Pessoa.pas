@@ -37,6 +37,7 @@ type
     FTelefones: TObjectListFuck<TTelefone>;
     function CPFValido: Boolean;
     const DUAS_LINHAS = 2;
+    procedure LimparEntidades;
     { Private declarations }
   public
     { Public declarations }
@@ -65,8 +66,7 @@ end;
 
 procedure TFrmCadastroPessoa.btnCadastrarClick(Sender: TObject);
 begin
-  FEnderecos.DisposeOf;
-  FTelefones.DisposeOf;
+  LimparEntidades;
   FEnderecos := FrameAdicaoEndereco.ObterLista;
   FTelefones := FrameAdicaoTelefone.ObterLista;
   inherited;
@@ -80,6 +80,15 @@ begin
   FrameAdicaoTelefone.QuantidadeMaximaDeLinhas := DUAS_LINHAS;
   FrameAdicaoTelefone.CarregarFrame(Self.FGUID);
   edtCPF.SetFocus;
+end;
+
+procedure TFrmCadastroPessoa.LimparEntidades;
+begin
+  if Assigned(FEnderecos) then
+    FEnderecos.DisposeOf;
+
+  if Assigned(FTelefones) then
+    FTelefones.DisposeOf;
 end;
 
 function TFrmCadastroPessoa.ValidacoesEspecificasAtendidas: Boolean;

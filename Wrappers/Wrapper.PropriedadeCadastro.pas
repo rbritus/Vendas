@@ -488,6 +488,8 @@ begin
         var Obj := AField.GetValue(AForm).AsObject;
         if Assigned(Obj) then
           Obj.DisposeOf;
+
+        AField.SetValue(AForm,nil);
       end;
   end;
 end;
@@ -517,9 +519,13 @@ begin
   case ATipo of
     ftINTEIRO : Result := TValue.FromVariant(AField.GetValue(AForm).AsInteger);
     ftDECIMAL, ftDATA : Result := TValue.FromVariant(AField.GetValue(AForm).AsCurrency);
-    ftLISTAGEM : Result := TValue.From(TObjectListFuck<TObject>(AField.GetValue(AForm).AsObject));
+    ftLISTAGEM :
+      begin
+        Result := TObjectListFuck<TObject>(AField.GetValue(AForm).AsObject);
+        Result := TValue.From(TUtilsEntidade.ObterCloneObjeto(Result.AsObject));
+      end;
     ftLOGICO : Result := TValue.FromVariant(AField.GetValue(AForm).AsBoolean);
-    ftESTRANGEIRO : Result := TValue.From(AField.GetValue(AForm).AsObject);
+    ftESTRANGEIRO : Result := TValue.From(TUtilsEntidade.ObterCloneObjeto(AField.GetValue(AForm).AsObject));
   else
     Result := TValue.FromVariant(AField.GetValue(AForm).AsString);
   end;
