@@ -36,6 +36,8 @@ type
          ClasseDestino: TPersistentClass): TObjectListFuck<T>;
     class function GetCaptionEnumerator(Prop: TRttiProperty; Obj: TObject): string; static;
 
+    class function ExistePropriedade(Objeto: TObject; NomePropriedade: string): Boolean;
+
     class procedure PreencheObjeto(var Obj: TObject; DSet: TDataSet);
     class procedure Limpar(Objeto: TObject);
     class procedure LimparEntidades(Objeto: TObject); static;
@@ -199,6 +201,20 @@ begin
     end;
   finally
     ctx.Free;
+  end;
+end;
+
+class function TUtilsEntidade.ExistePropriedade(Objeto: TObject;
+  NomePropriedade: string): Boolean;
+begin
+  Result := False;
+  var Ctx := TRttiContext.Create;
+  try
+    var Tipo := Ctx.GetType(Objeto.ClassType);
+    if Assigned(Tipo) then
+      Result := Assigned(Tipo.GetProperty(NomePropriedade));
+  finally
+    Ctx.Free;
   end;
 end;
 

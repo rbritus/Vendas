@@ -1,5 +1,5 @@
-inherited FrmCadastroPessoa: TFrmCadastroPessoa
-  Caption = 'Cadastrar Pessoa'
+inherited FrmCadastroTamanho: TFrmCadastroTamanho
+  Caption = 'Cadastrar Tamanho'
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
@@ -7,10 +7,10 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       object Label2: TLabel
         Left = 40
         Top = 86
-        Width = 35
+        Width = 74
         Height = 16
         BiDiMode = bdLeftToRight
-        Caption = 'Nome'
+        Caption = 'Abrevia'#231#227'o'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
@@ -20,8 +20,8 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentFont = False
       end
       object Label3: TLabel
-        Left = 713
-        Top = 86
+        Left = 40
+        Top = 159
         Width = 35
         Height = 16
         BiDiMode = bdLeftToRight
@@ -37,10 +37,10 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
       object Label1: TLabel
         Left = 40
         Top = 12
-        Width = 22
+        Width = 58
         Height = 16
         BiDiMode = bdLeftToRight
-        Caption = 'CPF'
+        Caption = 'Tamanho'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -13
@@ -49,16 +49,16 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ParentBiDiMode = False
         ParentFont = False
       end
-      object edtNome: TEdit
+      object edtAbreviacao: TEdit
         Left = 40
         Top = 108
-        Width = 625
+        Width = 74
         Height = 24
         TabOrder = 1
       end
       object tswAtivo: TToggleSwitch
-        Left = 713
-        Top = 108
+        Left = 40
+        Top = 181
         Height = 20
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -73,40 +73,12 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         TabOrder = 2
         ThumbColor = clHighlight
       end
-      inline FrameAdicaoEndereco: TFrameAdicaoEndereco
-        Left = 40
-        Top = 152
-        Width = 760
-        Height = 180
-        AutoSize = True
-        TabOrder = 3
-        ExplicitLeft = 40
-        ExplicitTop = 152
-        inherited pnlFundo: TPanel
-          inherited pnlConteudo: TPanel
-            inherited DBCtrlGrid1: TDBCtrlGrid
-              Top = 6
-              ExplicitTop = 6
-            end
-          end
-        end
-      end
-      object edtCPF: TMaskEdit
+      object edtTamanho: TEdit
         Left = 40
         Top = 34
-        Width = 169
+        Width = 300
         Height = 24
         TabOrder = 0
-        Text = ''
-      end
-      inline FrameAdicaoTelefone: TFrameAdicaoTelefone
-        Left = 40
-        Top = 345
-        Width = 760
-        Height = 180
-        TabOrder = 4
-        ExplicitLeft = 40
-        ExplicitTop = 345
       end
     end
   end

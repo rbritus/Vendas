@@ -10,10 +10,13 @@ type
   TControllerListaSelecaoEntidade = class(TInterfacedObject, iControllerListaSelecaoEntidade)
   strict private
     FClasseEntidade: TClass;
+  private
+    procedure SomenteRegistrosAtivos(DataSet: TDataSet);
+    function ExistePropriedadeRegistrosAtivos: Boolean;
   protected
-    constructor Create(pClasseEntidade: TClass);
+    constructor Create(AClasseEntidade: TClass);
   public
-    class function New(pClasseEntidade: TClass): iControllerListaSelecaoEntidade;
+    class function New(AClasseEntidade: TClass): iControllerListaSelecaoEntidade;
     function ObterObjetoSelecionado(AGUID: string): TObject;
     function ObterDataSetPreenchido: TDataSet;
   end;
@@ -21,29 +24,49 @@ type
 implementation
 
 uses
-  Utils.Entidade;
+  Utils.Entidade, Utils.Enumerators;
 
 { TControllerFrameAdicaoPadrao }
 
-constructor TControllerListaSelecaoEntidade.Create(pClasseEntidade: TClass);
+constructor TControllerListaSelecaoEntidade.Create(AClasseEntidade: TClass);
 begin
-  FClasseEntidade := pClasseEntidade;
+  FClasseEntidade := AClasseEntidade;
 end;
 
-class function TControllerListaSelecaoEntidade.New(pClasseEntidade: TClass): iControllerListaSelecaoEntidade;
+function TControllerListaSelecaoEntidade.ExistePropriedadeRegistrosAtivos: Boolean;
 begin
-  Result := TControllerListaSelecaoEntidade.Create(pClasseEntidade);
+  var Objeto := FClasseEntidade.Create;
+  try
+    Result := TUtilsEntidade.ExistePropriedade(Objeto,'ATIVO');
+  finally
+    Objeto.DisposeOf;
+  end;
+end;
+
+class function TControllerListaSelecaoEntidade.New(AClasseEntidade: TClass): iControllerListaSelecaoEntidade;
+begin
+  Result := TControllerListaSelecaoEntidade.Create(AClasseEntidade);
 end;
 
 function TControllerListaSelecaoEntidade.ObterDataSetPreenchido: TDataSet;
 begin
   var FClientDataSet := TDataSet(TUtilsEntidade.ExecutarMetodoClasse(FClasseEntidade,'ListarTodosCDS',[]).AsObject);
+  SomenteRegistrosAtivos(FClientDataSet);
   Result := FClientDataSet;
 end;
 
 function TControllerListaSelecaoEntidade.ObterObjetoSelecionado(AGUID: string): TObject;
 begin
   Result := TUtilsEntidade.ExecutarMetodoClasse(FClasseEntidade,'PesquisarPorGUID',[AGUID]).AsObject;
+end;
+
+procedure TControllerListaSelecaoEntidade.SomenteRegistrosAtivos(DataSet: TDataSet);
+begin
+  if not ExistePropriedadeRegistrosAtivos then
+    Exit;
+
+  DataSet.Filter := 'ATIVO = ' + TEnumerator<TRegistroAtivo>.GetValueToString(raAtivo).QuotedString;
+  DataSet.Filtered := True;
 end;
 
 end.

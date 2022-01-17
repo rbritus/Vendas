@@ -38,6 +38,8 @@ type
     btnConfiguracoes: TSpeedButton;
     pnlConfiguracoes: TPanel;
     SpeedButton7: TSpeedButton;
+    btnCadastroTamanhos: TSpeedButton;
+    Panel1: TPanel;
     procedure SplitViewMenuOpened(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnMenuClick(Sender: TObject);
@@ -54,6 +56,7 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton7Click(Sender: TObject);
+    procedure btnCadastroTamanhosClick(Sender: TObject);
   private
     { Private declarations }
     procedure ExpansaoDoMenu;
@@ -74,7 +77,8 @@ implementation
 uses
   Connection.Controller.SqLite, View.Cadastro.Lista.Pessoa,
   Connection.Scripter.SqLite, FireDAC.Comp.Client,
-  Utils.Entidade, Utils.Menssages, Utils.Constants, Controller.Scripter;
+  Utils.Entidade, Utils.Menssages, Utils.Constants, Controller.Scripter,
+  View.Cadastro.Lista.Tamanho;
 
 procedure TFrmMenu.actMouseEnterExecute(Sender: TObject);
 begin
@@ -112,7 +116,7 @@ end;
 
 procedure TFrmMenu.btnCadastroPessoasClick(Sender: TObject);
 begin
-  ControllerView.ShowForm(TFrmCadastroListaPessoa);
+  ControllerView.ShowFormOrigem(TFrmCadastroListaPessoa);
 end;
 
 procedure TFrmMenu.btnMenuClick(Sender: TObject);
@@ -132,7 +136,7 @@ begin
   {$ENDIF}
   ControllerView.MenuExpandido := True;
   ControllerView.MainForm := Self;
-  ControllerView.Parent := pnlMainForm;
+  ControllerView.ParentOrigem := pnlMainForm;
   ControllerView.Title := PanelTitulo;
 end;
 
@@ -170,6 +174,11 @@ end;
 procedure TFrmMenu.btnCadastrosClick(Sender: TObject);
 begin
   AtivarSubMenu(pnlCadastros);
+end;
+
+procedure TFrmMenu.btnCadastroTamanhosClick(Sender: TObject);
+begin
+  ControllerView.ShowFormOrigem(TFrmCadastroListaTamanho);
 end;
 
 procedure TFrmMenu.AtivarSubMenu(pPanel: TPanel);

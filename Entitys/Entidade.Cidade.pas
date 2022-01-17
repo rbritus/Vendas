@@ -32,9 +32,9 @@ type
     procedure SetCodigoSubdistrito(const Value: string);
     function GetCodigoSubdistrito: string;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
-    [TCampoTexto('NOME', 200, [NOTNULL], 'Cidade')]
+    [TCampoTexto('NOME', TConstantsEntidade.TAMANHO_NOME, [NOTNULL], 'Cidade')]
     property Nome: string read GetNome write SetNome;
     [TCampoInteiro('CODIGO_IBGE', [NOTNULL], 'Cód. IBGE')]
     property CodigoIBGE: Integer read GetCodigoIBGE write SetCodigoIBGE;

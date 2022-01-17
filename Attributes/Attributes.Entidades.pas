@@ -260,7 +260,7 @@ begin
   self.Visivel := pVisivel;
   Self.CustomSelect := nil;
   self.caption := pTabela;
-  Self.Tamanho := TConstantsInteger.TAMANHO_GUID;
+  Self.Tamanho := TConstantsEntidade.TAMANHO_GUID;
   if not ACaption.IsEmpty then
     self.caption := ACaption;
 end;

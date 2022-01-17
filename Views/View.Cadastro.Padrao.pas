@@ -11,6 +11,8 @@ uses
   Vcl.BaseImageCollection, Vcl.ImageCollection;
 
 type
+  THackWinControl = class(TWinControl);
+
   TFrmCadastroPadrao = class(TFrmPadrao)
     pnlMenu: TPanel;
     btnCancelar: TButton;
@@ -162,6 +164,7 @@ begin
   inherited;
   CarregarLayoutDinamico;
   CarregarMascaraNosCampos;
+  THackWinControl(pnlConteudo).SelectFirst;
 end;
 
 procedure TFrmCadastroPadrao.btnCancelarClick(Sender: TObject);

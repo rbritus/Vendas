@@ -24,13 +24,13 @@ type
     procedure SetObservacao(const Value: string);
     function GetObservacao: string;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
     [TCampoTexto('NUMERO', 20,[NOTNULL], 'Número', True)]
     property Numero: string read GetNumero write SetNumero;
     [TCampoInteiro('TIPO_TELEFONE', [NOTNULL], TCustomSelectTipoTelefone, 'Tipo')]
     property TipoTelefone: TTipoTelefone read GetTipoEndereco write SetTipoEndereco;
-    [TCampoTexto('OBSERVACAO', 200, [NOTNULL], 'Observação', True)]
+    [TCampoTexto('OBSERVACAO', TConstantsEntidade.TAMANHO_COMPLEMENTO, [NOTNULL], 'Observação', True)]
     property Observacao: string read GetObservacao write SetObservacao;
 
     class function New : iTelefone;

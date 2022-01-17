@@ -34,16 +34,16 @@ type
     procedure SetTelefones(const Value: TObjectListFuck<TTelefone>);
     function GetTelefones: TObjectListFuck<TTelefone>;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
-    [TCampoTexto('NOME', 200, [NOTNULL], 'Nome')]
+    [TCampoTexto('NOME', TConstantsEntidade.TAMANHO_NOME, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
     [TAtributoMascara(TConstantsMasks.CPF)]
-    [TCampoTexto('CPF', 11, [], 'CPF')]
+    [TCampoTexto('CPF', TConstantsEntidade.TAMANHO_CPF, [], 'CPF')]
     property CPF: string read GetCPF write SetCPF;
-    [TCampoTexto('EMAIL', 200, [], 'E-mail', False)]
+    [TCampoTexto('EMAIL', TConstantsEntidade.TAMANHO_EMAIL, [], 'E-mail', False)]
     property Email: string read GetEmail write SetEmail;
-    [TCampoTexto('ATIVO', 1, [NOTNULL], TCustomSelectAtivo,'Situação')]
+    [TCampoTexto('ATIVO', 1, [NOTNULL], TCustomSelectAtivo,'Ativo')]
     property Ativo: TRegistroAtivo read GetAtivo write SetAtivo default raAtivo;
     [TCampoListagem(taManyToMany, ctCascade, 'PESSOA_FK', 'ENDERECO_FK', 'ENDERECO_PESSOA')]
     Property Enderecos: TObjectListFuck<TEndereco> read GetEnderecos write SetEnderecos;

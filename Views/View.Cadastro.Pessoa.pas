@@ -20,7 +20,7 @@ type
     [TCadastroEdit('Nome',ftTEXTO,coObrigatorio)]
     edtNome: TEdit;
     [TCadastroToggleSwitch('Ativo',ftTEXTO,coObrigatorio)]
-    ToggleSwitch1: TToggleSwitch;
+    tswAtivo: TToggleSwitch;
     Label3: TLabel;
     FrameAdicaoEndereco: TFrameAdicaoEndereco;
     [TMascaraCampo(TConstantsMasks.CPF)]

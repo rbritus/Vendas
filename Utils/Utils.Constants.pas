@@ -15,7 +15,6 @@ type
 
   TConstantsInteger = class
   public
-   const TAMANHO_GUID = 100;
    const MENOS_UM = -1;
    const ZERO = 0;
    const LARGURA_MENU_MAXIMIZADO = 200;
@@ -36,6 +35,19 @@ type
   TConstantsDataHora = class
   public
    const DATAHORA_VAZIA = 0;
+  end;
+
+  TConstantsEntidade = class
+  public
+   const TAMANHO_GUID = 100;
+   const TAMANHO_CPF = 11;
+   const TAMANHO_EMAIL = 200;
+   const TAMANHO_NOME = 200;
+   const TAMANHO_CEP = 10;
+   const TAMANHO_COMPLEMENTO = 200;
+   const TAMANHO_CODIGO_PRODUTO = 100;
+   const TAMANHO_ABREVIACAO = 20;
+   const TAMANHO_EXTENSAO = 10;
   end;
 
 implementation

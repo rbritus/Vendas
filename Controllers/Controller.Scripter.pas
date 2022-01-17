@@ -21,7 +21,8 @@ uses
   Connection.Scripter.SqLite, Entidade.Endereco, Entidade.Pessoa, Entidade.Pais,
   Entidade.Estado, Entidade.Cidade, System.Threading, System.SysUtils,
   System.Classes, Scripts.Versao00, Objeto.ScriptDML, Utils.Menssages,
-  Entidade.Telefone;
+  Entidade.Telefone, Entidade.Tamanho, Entidade.Imagem, Entidade.Produto,
+  Entidade.SKU;
 
 
 { TScriptSQL }
@@ -53,6 +54,10 @@ begin
   TScriptSQL.RegistrarEntidadeNoBanco(TCidade);
   TScriptSQL.RegistrarEntidadeNoBanco(TEndereco);
   TScriptSQL.RegistrarEntidadeNoBanco(TPessoa);
+  TScriptSQL.RegistrarEntidadeNoBanco(TTamanho);
+//  TScriptSQL.RegistrarEntidadeNoBanco(TImagem);
+//  TScriptSQL.RegistrarEntidadeNoBanco(TProduto);
+//  TScriptSQL.RegistrarEntidadeNoBanco(TSKU);
 end;
 
 class procedure TControllerScript.ExecutarScripts;

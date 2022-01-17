@@ -36,7 +36,7 @@ type
     property OwnerCaption: string read FOwnerCaption write FOwnerCaption;
     procedure SetObservador(Value: TWinControl);
     procedure NotificarObservador(Value: TObject);
-    procedure Show;
+    procedure Show; virtual;
   end;
 
 var

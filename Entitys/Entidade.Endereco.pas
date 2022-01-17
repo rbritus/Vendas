@@ -36,18 +36,18 @@ type
     function GetTipoEndereco: TTipoEndereco;
     function GetComplemento: string;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
     [TAtributoMascara(TConstantsMasks.CEP)]
-    [TCampoTexto('CEP', 10, [NOTNULL], 'CEP')]
+    [TCampoTexto('CEP', TConstantsEntidade.TAMANHO_CEP, [NOTNULL], 'CEP')]
     property CEP: string read GetCEP write SetCEP;
-    [TCampoTexto('LOGRADOURO', 200, [NOTNULL], 'Endereço')]
+    [TCampoTexto('LOGRADOURO', TConstantsEntidade.TAMANHO_NOME, [NOTNULL], 'Endereço')]
     property Logradouro: string read GetLogradouro write SetLogradouro;
     [TCampoInteiro('NUMERO', [], 'Número')]
     property Numero: Integer read GetNumero write SetNumero;
-    [TCampoTexto('BAIRRO', 100, [], 'Bairro')]
+    [TCampoTexto('BAIRRO', TConstantsEntidade.TAMANHO_NOME, [], 'Bairro')]
     property Bairro: string read GetBairro write SetBairro;
-    [TCampoTexto('COMPLEMENTO', 200, [], 'Complemento',False)]
+    [TCampoTexto('COMPLEMENTO', TConstantsEntidade.TAMANHO_COMPLEMENTO, [], 'Complemento',False)]
     property Complemento: string read GetComplemento write SetComplemento;
     [TCampoEstrangeiro('CIDADE_FK', [NOTNULL], 'CIDADE', 'Nome', 'Cidade')]
     property Cidade: TCidade read GetCidade write SetCidade;

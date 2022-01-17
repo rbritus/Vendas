@@ -254,6 +254,24 @@
         <DCCReference Include="Controllers\Controller.Componente.TImagemValidacao.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas"/>
         <DCCReference Include="Utils\Utils.GUID.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.Produto.pas"/>
+        <DCCReference Include="Entitys\Entidade.Produto.pas"/>
+        <DCCReference Include="Entitys\Entidade.Tamanho.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.Tamanho.pas"/>
+        <DCCReference Include="Views\View.Cadastro.Tamanho.pas">
+            <Form>FrmCadastroTamanho</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Views\View.Cadastro.Lista.Tamanho.pas">
+            <Form>FrmCadastroListaTamanho</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Entitys\Entidade.Imagem.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.Imagem.pas"/>
+        <DCCReference Include="Objects\Objeto.Blob.pas"/>
+        <DCCReference Include="Attributes\Attributes.Blob.pas"/>
+        <DCCReference Include="Entitys\Entidade.SKU.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.SKU.pas"/>
         <RcItem Include="Resources\ImagemValidacao3.gif">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>gifValidation</ResourceId>

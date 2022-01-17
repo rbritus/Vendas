@@ -5,7 +5,7 @@ interface
 uses
   Vcl.ExtCtrls, vcl.controls, System.classes, Vcl.StdCtrls, vcl.forms,
   System.UITypes, System.Generics.Collections, System.SysUtils, System.Types,
-  Winapi.Windows, Winapi.Messages, Rtti, Utils.Constants, System.Math;
+  Winapi.Windows, Winapi.Messages, Rtti, Utils.Constants, System.Math, Vcl.Mask;
 
 type
   TControllerView = class(TObject)
@@ -21,6 +21,7 @@ type
     function GetCaptionOwner(AForm: TForm): string;
     function GetLarguraMenu: Integer;
   public
+    ParentOrigem: TPanel;
     constructor Create;
     destructor Destroy; override;
     procedure ListForms(var Lista: TListBox; var Title: TPanel);
@@ -40,6 +41,7 @@ type
 
     procedure AdicionarFormNalista(Value: TComponentClass; var AForm: TForm);
     procedure ShowForm(Value: TComponentClass);
+    procedure ShowFormOrigem(Value: TComponentClass);
     function ShowFormModal(Value: TComponentClass): TForm;
 
     property MainForm: TForm read FMainForm write FMainForm;
@@ -118,6 +120,55 @@ begin
   Result := FormModal;
 end;
 
+procedure TControllerView.ShowFormOrigem(Value: TComponentClass);
+var
+  AForm: TForm;
+
+    function CloneComponent(AAncestor: TComponent): TComponent;
+      var
+        XMemoryStream: TMemoryStream;
+        XTempName: string;
+      begin
+        Result:=nil;
+        if not Assigned(AAncestor) then
+          exit;
+        XMemoryStream:=TMemoryStream.Create;
+        try
+          XTempName:=AAncestor.Name;
+          AAncestor.Name:='clone_' + XTempName + Random(9999999).ToString;;
+          XMemoryStream.WriteComponent(AAncestor);
+          AAncestor.Name:=XTempName;
+          XMemoryStream.Position:=0;
+          Result:=TComponentClass(AAncestor.ClassType).Create(AAncestor.Owner);
+          if AAncestor is TControl then TControl(Result).Parent:=TControl(AAncestor).Parent;
+          XMemoryStream.ReadComponent(Result);
+        finally
+          XMemoryStream.Free;
+        end;
+      end;
+
+begin
+  AdicionarFormNalista(Value,AForm);
+  if Assigned(AForm.Parent) then
+  begin
+    Parent.Visible := False;
+    Parent := TPanel(AForm.Parent);
+    Parent.Visible := True;
+  end
+  else
+  begin
+    Parent := CloneComponent(ParentOrigem) as TPanel;
+    Parent.Visible := True;
+    Title.Visible := True;
+    AForm.Parent := Parent;
+    AForm.Align := alClient;
+    AForm.BorderStyle := bsNone;
+    AForm.FormStyle := fsNormal;
+    AForm.Show;
+  end;
+  TUtilsEntidade.ExecutarMetodoObjeto(AForm,'Show',[]);
+end;
+
 procedure TControllerView.ShowOwnerCaption(AForm: Tform);
 begin
   if Assigned(Title) then
@@ -147,6 +198,9 @@ end;
 
 procedure TControllerView.AjustarLarguraMinimaDaAplicao;
 begin
+  if not Assigned(FParent) then
+    Exit;
+
   const DIFERENCA_ENTRE_BORDAS = 260;
   FMainForm.Constraints.MinWidth :=  FParent.Width + DIFERENCA_ENTRE_BORDAS;
 end;
@@ -166,8 +220,13 @@ procedure TControllerView.AtribuirUpperCaseParaCamponentesEditaveis(
   AForm: TForm);
 begin
   for var Indice := 0 to Pred(AForm.ComponentCount) do
+  begin
     if AForm.Components[Indice].ClassType = TEdit then
-      TEdit(AForm.Components[Indice]).CharCase := TEditCharCase.ecUpperCase;
+      TEdit(AForm.Components[Indice]).CharCase := TEditCharCase.ecUpperCase
+    else
+    if AForm.Components[Indice].ClassType = TMaskEdit then
+      TMaskEdit(AForm.Components[Indice]).CharCase := TEditCharCase.ecUpperCase;
+  end;
 end;
 
 procedure TControllerView.ShowFormCaption(AForm: Tform);

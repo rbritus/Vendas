@@ -48,13 +48,19 @@ type
   [TEnumAttribute(3,'ENTREGA',3)]
   TTipoEndereco = (teResidencial, teComercial, teFinanceiro, teEntrega);
 
-  [TEnumAttribute(0,'ATIVO','S')]
-  [TEnumAttribute(1,'INATIVO','N')]
+  [TEnumAttribute(0,'SIM','S')]
+  [TEnumAttribute(1,'NÃO','N')]
   TRegistroAtivo = (raAtivo, raInativo);
 
   [TEnumAttribute(0,'CELULAR',0)]
   [TEnumAttribute(1,'TELEFONE',1)]
   TTipoTelefone = (ttCelular,ttTelefone);
+
+  [TEnumAttribute(0,'JPEG','*.jpeg')]
+  [TEnumAttribute(1,'PNG','*.png')]
+  [TEnumAttribute(2,'BMP','*.bmp')]
+  TTipoExtensao = (extJPEG,extPNG,extBMP);
+  TTipoExtensoes = set of TTipoExtensao;
 
 implementation
 

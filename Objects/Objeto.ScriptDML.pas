@@ -13,7 +13,7 @@ type
     FScript: string;
     FVersao: string;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID')]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID')]
     property GUIDControle: string read FGUIDControle write FGUIDControle;
     [TCampoTexto('VERSAO', 50, [NOTNULL], 'Versão')]
     property Versao: string read FVersao write FVersao;

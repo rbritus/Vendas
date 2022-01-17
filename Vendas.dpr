@@ -80,7 +80,19 @@ uses
   Componente.TImagemValidacao in 'Components\Componente.TImagemValidacao.pas',
   Controller.Componente.TImagemValidacao in 'Controllers\Controller.Componente.TImagemValidacao.pas',
   Interfaces.Controller.Componente.TImagemValidacao in 'Interfaces\Interfaces.Controller.Componente.TImagemValidacao.pas',
-  Utils.GUID in 'Utils\Utils.GUID.pas';
+  Utils.GUID in 'Utils\Utils.GUID.pas',
+  Interfaces.Entidade.Produto in 'Interfaces\Interfaces.Entidade.Produto.pas',
+  Entidade.Produto in 'Entitys\Entidade.Produto.pas',
+  Entidade.Tamanho in 'Entitys\Entidade.Tamanho.pas',
+  Interfaces.Entidade.Tamanho in 'Interfaces\Interfaces.Entidade.Tamanho.pas',
+  View.Cadastro.Tamanho in 'Views\View.Cadastro.Tamanho.pas' {FrmCadastroTamanho},
+  View.Cadastro.Lista.Tamanho in 'Views\View.Cadastro.Lista.Tamanho.pas' {FrmCadastroListaTamanho},
+  Entidade.Imagem in 'Entitys\Entidade.Imagem.pas',
+  Interfaces.Entidade.Imagem in 'Interfaces\Interfaces.Entidade.Imagem.pas',
+  Objeto.Blob in 'Objects\Objeto.Blob.pas',
+  Attributes.Blob in 'Attributes\Attributes.Blob.pas',
+  Entidade.SKU in 'Entitys\Entidade.SKU.pas',
+  Interfaces.Entidade.SKU in 'Interfaces\Interfaces.Entidade.SKU.pas';
 
 {$R *.res}
 

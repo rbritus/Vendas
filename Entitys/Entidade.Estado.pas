@@ -26,9 +26,9 @@ type
     function GetCodigoUF: Integer;
     function GetPais: TPais;
   public
-    [TCampoTexto('GUID', TConstantsInteger.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
+    [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
-    [TCampoTexto('NOME', 100, [NOTNULL], 'Estado')]
+    [TCampoTexto('NOME', TConstantsEntidade.TAMANHO_NOME, [NOTNULL], 'Estado')]
     property Nome: string read GetNome write SetNome;
     [TCampoTexto('ABREVIACAO', 2, [NOTNULL], 'UF')]
     property Abreviacao: string read GetAbreviacao write SetAbreviacao;
