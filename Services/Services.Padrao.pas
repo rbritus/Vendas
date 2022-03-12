@@ -304,19 +304,25 @@ end;
 
 function TServico<T>.CriarSqlParaAtualizacao(Objeto: TObject; Parametros: TArrayParametros): string;
 begin
-  var cSql := 'UPDATE ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' SET ';
+  var SqlString := TStringBuilder.Create;
+  try
+    SqlString.Append('UPDATE ' + TUtilsEntidade.ObterNomeDaTabela(Objeto) + ' SET ');
 
-  for var IndiceArray := Low(Parametros) to High(Parametros) do
-  begin
-    if Parametros[IndiceArray].FValorParametro = 'null' then
-      cSql := cSql + Parametros[IndiceArray].FNomeParametro + ' = Null'
-    else
-      cSql := cSql + Parametros[IndiceArray].FNomeParametro + ' = :' + Parametros[IndiceArray].FNomeParametro;
+    for var IndiceArray := Low(Parametros) to High(Parametros) do
+    begin
+      if Parametros[IndiceArray].FValorParametro = 'null' then
+        SqlString.Append(Parametros[IndiceArray].FNomeParametro + ' = Null')
+      else
+        SqlString.Append(Parametros[IndiceArray].FNomeParametro + ' = :' + Parametros[IndiceArray].FNomeParametro);
 
-    if IndiceArray <> High(Parametros) then
-      cSql := cSql + ',';
+      if IndiceArray <> High(Parametros) then
+        SqlString.Append(',');
+    end;
+    Result := SqlString.Append(' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' +
+      TUtilsEntidade.ObterValorPropriedade(Objeto, 'GUID').AsString.QuotedString).ToString;
+  finally
+    SqlString.DisposeOf;
   end;
-  Result := cSql + ' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' + TUtilsEntidade.ObterValorPropriedade(Objeto, 'GUID').AsString.QuotedString;
 end;
 
 procedure TServico<T>.PreencherQueryComArray(Qry: TQuery; Parametros: TArrayParametros);

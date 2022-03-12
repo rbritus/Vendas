@@ -22,7 +22,7 @@ uses
   Entidade.Estado, Entidade.Cidade, System.Threading, System.SysUtils,
   System.Classes, Scripts.Versao00, Objeto.ScriptDML, Utils.Menssages,
   Entidade.Telefone, Entidade.Tamanho, Entidade.Imagem, Entidade.Produto,
-  Entidade.SKU;
+  Entidade.SKU, Entidade.UnidadeMedida;
 
 
 { TScriptSQL }
@@ -55,6 +55,7 @@ begin
   TScriptSQL.RegistrarEntidadeNoBanco(TEndereco);
   TScriptSQL.RegistrarEntidadeNoBanco(TPessoa);
   TScriptSQL.RegistrarEntidadeNoBanco(TTamanho);
+  TScriptSQL.RegistrarEntidadeNoBanco(TUnidadeMedida);
 //  TScriptSQL.RegistrarEntidadeNoBanco(TImagem);
 //  TScriptSQL.RegistrarEntidadeNoBanco(TProduto);
 //  TScriptSQL.RegistrarEntidadeNoBanco(TSKU);

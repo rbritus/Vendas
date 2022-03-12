@@ -43,7 +43,7 @@ implementation
 
 function TSKU.EstaVazia: Boolean;
 begin
-  Result := False;
+  Result := (FNome = EmptyStr);
 end;
 
 function TSKU.GetGUID: string;

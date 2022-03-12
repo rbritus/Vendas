@@ -92,7 +92,10 @@ uses
   Objeto.Blob in 'Objects\Objeto.Blob.pas',
   Attributes.Blob in 'Attributes\Attributes.Blob.pas',
   Entidade.SKU in 'Entitys\Entidade.SKU.pas',
-  Interfaces.Entidade.SKU in 'Interfaces\Interfaces.Entidade.SKU.pas';
+  Interfaces.Entidade.SKU in 'Interfaces\Interfaces.Entidade.SKU.pas',
+  Entidade.UnidadeMedida in 'Entitys\Entidade.UnidadeMedida.pas',
+  Interfaces.Entidade.UnidadeMedida in 'Interfaces\Interfaces.Entidade.UnidadeMedida.pas',
+  Utils.FuncoesTexto in 'Utils\Utils.FuncoesTexto.pas';
 
 {$R *.res}
 

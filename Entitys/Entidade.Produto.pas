@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, Entidade.Padrao, Interfaces.Entidade.Produto,
   Attributes.Entidades, System.SysUtils, Utils.Constants, Utils.GUID,
-  Entidade.Imagem, Utils.Entidade, Componente.TObjectList;
+  Entidade.Imagem, Utils.Entidade, Componente.TObjectList, Entidade.UnidadeMedida;
 
 type
   [TNomeTabela('PRODUTO')]
@@ -15,6 +15,7 @@ type
     FCodigo: string;
     FNome: string;
     FImagens: TObjectListFuck<TImagem>;
+    FUnidadeMedida: TUnidadeMedida;
     procedure SetGUID(const Value: string);
     function GetGUID: string;
     procedure SetCodigo(const Value: string);
@@ -23,6 +24,8 @@ type
     function GetNome: string;
     procedure SetImagens(const Value: TObjectListFuck<TImagem>);
     function GetImagens: TObjectListFuck<TImagem>;
+    procedure SetUnidadeMedida(const Value: TUnidadeMedida);
+    function GetUnidadeMedida: TUnidadeMedida;
   public
     [TCampoTexto('GUID', TConstantsEntidade.TAMANHO_GUID, [CHAVE_PRIMARIA, NOTNULL], 'GUID', False)]
     property GUID: string read GetGUID write SetGUID;
@@ -30,6 +33,8 @@ type
     property Codigo: string read GetCodigo write SetCodigo;
     [TCampoTexto('NOME', TConstantsEntidade.TAMANHO_NOME, [NOTNULL], 'Nome')]
     property Nome: string read GetNome write SetNome;
+    [TCampoEstrangeiro('UNIDADE_MEDIDA_FK', [NOTNULL], 'UNIDADE_MEDIDA', 'ABREVIACAO', 'Unidade')]
+    property UnidadeMedida: TUnidadeMedida read GetUnidadeMedida write SetUnidadeMedida;
     [TCampoListagem(taManyToMany, ctCascade, 'PRODUTO_FK', 'IMAGEM_FK', 'IMAGEM_PESSOA')]
     Property Imagens: TObjectListFuck<TImagem> read GetImagens write SetImagens;
 
@@ -49,6 +54,14 @@ end;
 function TProduto.GetNome: string;
 begin
   Result := FNome;
+end;
+
+function TProduto.GetUnidadeMedida: TUnidadeMedida;
+begin
+  if not Assigned(FUnidadeMedida) then
+    FUnidadeMedida := TUtilsEntidade.ObterObjetoChaveEstrangeira(Self as TObject, TUnidadeMedida) as TUnidadeMedida;
+
+  Result := FUnidadeMedida;
 end;
 
 function TProduto.GetGUID: string;
@@ -81,6 +94,11 @@ end;
 procedure TProduto.SetNome(const Value: string);
 begin
   FNome := Value;
+end;
+
+procedure TProduto.SetUnidadeMedida(const Value: TUnidadeMedida);
+begin
+  FUnidadeMedida := Value;
 end;
 
 procedure TProduto.SetGUID(const Value: string);

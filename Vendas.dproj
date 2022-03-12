@@ -272,6 +272,9 @@
         <DCCReference Include="Attributes\Attributes.Blob.pas"/>
         <DCCReference Include="Entitys\Entidade.SKU.pas"/>
         <DCCReference Include="Interfaces\Interfaces.Entidade.SKU.pas"/>
+        <DCCReference Include="Entitys\Entidade.UnidadeMedida.pas"/>
+        <DCCReference Include="Interfaces\Interfaces.Entidade.UnidadeMedida.pas"/>
+        <DCCReference Include="Utils\Utils.FuncoesTexto.pas"/>
         <RcItem Include="Resources\ImagemValidacao3.gif">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>gifValidation</ResourceId>

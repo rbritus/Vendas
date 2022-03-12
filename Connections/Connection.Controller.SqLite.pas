@@ -125,7 +125,10 @@ Begin
       MyDataSet.ExecSQL;
     except
       on E: Exception do
+      begin
         Self.RollbackRetaining;
+        raise Exception.Create(E.Message);
+      end;
     end;
   finally
     MyDataSet.Free;
