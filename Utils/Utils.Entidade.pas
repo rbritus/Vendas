@@ -139,18 +139,23 @@ var
   AMethCreate: TRttiMethod;
   instanceType: TRttiInstanceType;
 begin
+  Result := T(nil);
   ctx := TRttiContext.Create;
-  rType := ctx.GetType(TypeInfo(T));
-  for AMethCreate in rType.GetMethods do
-  begin
-    if (AMethCreate.IsConstructor) and (Length(AMethCreate.GetParameters) = 0) then
+  try
+    rType := ctx.GetType(TypeInfo(T));
+    for AMethCreate in rType.GetMethods do
     begin
-      instanceType := rType.AsInstance;
-      AValue := AMethCreate.Invoke(instanceType.MetaclassType, []);
-      Result := AValue.AsType<T>;
+      if (AMethCreate.IsConstructor) and (Length(AMethCreate.GetParameters) = 0) then
+      begin
+        instanceType := rType.AsInstance;
+        AValue := AMethCreate.Invoke(instanceType.MetaclassType, []);
+        Result := AValue.AsType<T>;
 
-      Exit;
+        Exit;
+      end;
     end;
+  finally
+    ctx.Free;
   end;
 end;
 
@@ -171,8 +176,6 @@ begin
 
       if Assigned(lMethod) then
         Result := lMethod.Invoke(Classe, ParametrosDoMetodo);
-
-      lMethod.Free;
     end;
   finally
     ctx.Free;
@@ -196,8 +199,6 @@ begin
 
       if Assigned(lMethod) then
         Result := lMethod.Invoke(Objeto, ParametrosDoMetodo);
-
-      lMethod.Free;
     end;
   finally
     ctx.Free;
@@ -606,7 +607,7 @@ begin
             begin
               var Obj := Prop.GetValue(Objeto).AsObject;
               if Assigned(Obj) then
-                Obj.DisposeOf;
+                Obj.Free;
 
               Prop.SetValue(Objeto,nil);
             end;
@@ -647,7 +648,7 @@ begin
           begin
             var Obj := Prop.GetValue(Objeto).AsObject;
             if Assigned(Obj) then
-              Obj.DisposeOf;
+              Obj.Free;
 
             Prop.SetValue(Objeto,nil);
           end;

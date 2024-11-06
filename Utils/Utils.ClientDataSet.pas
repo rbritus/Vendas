@@ -4,7 +4,7 @@ interface
 
 uses
   Datasnap.DBClient, Data.DB, System.Classes, Attributes.Entidades, System.Rtti,
-  Objeto.CustomSelect, Utils.Enumerators, System.SysUtils, Utils.Entidade;
+  Objeto.CustomSelect, Utils.Enumerators, System.SysUtils, Utils.Entidade, System.TypInfo;
 
 type
   TUtilsClientDataSet = class

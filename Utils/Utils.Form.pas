@@ -28,7 +28,8 @@ implementation
 
 uses
   Interfaces.Wrapper.PropriedadeCadastro, Wrapper.PropriedadeCadastro,
-  Utils.Entidade, Utils.Enumerators, Vcl.Mask, Controller.Componente.TImagemValidacao;
+  Utils.Entidade, Utils.Enumerators, Vcl.Mask, Controller.Componente.TImagemValidacao,
+  System.TypInfo;
 
 { TUtilsForm }
 

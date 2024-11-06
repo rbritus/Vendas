@@ -1,8 +1,9 @@
 inherited FrmCadastroPessoa: TFrmCadastroPessoa
   Caption = 'Cadastrar Pessoa'
-  PixelsPerInch = 96
+  StyleElements = [seFont, seClient, seBorder]
   TextHeight = 13
   inherited pnlFundo: TPanel
+    StyleElements = [seFont, seClient, seBorder]
     inherited pnlConteudo: TScrollBox
       object Label2: TLabel
         Left = 40
@@ -83,10 +84,63 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         ExplicitLeft = 40
         ExplicitTop = 152
         inherited pnlFundo: TPanel
+          StyleElements = [seFont, seClient, seBorder]
           inherited pnlConteudo: TPanel
+            StyleElements = [seFont, seClient, seBorder]
             inherited DBCtrlGrid1: TDBCtrlGrid
               Top = 6
               ExplicitTop = 6
+              inherited edtTipoEndereco: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtCEP: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtEndereco: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtNumero: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited lblNumero: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtCidade: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtEstado: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited lblTraco: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited lblCEP: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited pnlBotoes: TPanel
+                StyleElements = [seFont, seClient]
+                inherited Panel4: TPanel
+                  StyleElements = [seFont, seClient, seBorder]
+                end
+              end
+            end
+          end
+          inherited pnlMenu: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+            inherited pnlBarraLateralBotao: TPanel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+          end
+          inherited pnlTitulo: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+            inherited lblTitulo: TLabel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+            inherited Label4: TLabel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+            inherited lblQuantidadeRegistros: TLabel
+              StyleElements = [seFont, seClient, seBorder]
             end
           end
         end
@@ -107,6 +161,56 @@ inherited FrmCadastroPessoa: TFrmCadastroPessoa
         TabOrder = 4
         ExplicitLeft = 40
         ExplicitTop = 345
+        inherited pnlFundo: TPanel
+          StyleElements = [seFont, seClient, seBorder]
+          inherited pnlConteudo: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+            inherited DBCtrlGrid1: TDBCtrlGrid
+              inherited edtTipoEndereco: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtNumero: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited edtObservacao: TDBText
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited lblCEP: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
+              inherited pnlBotoes: TPanel
+                StyleElements = [seFont, seClient]
+                inherited Panel4: TPanel
+                  StyleElements = [seFont, seClient, seBorder]
+                end
+              end
+            end
+          end
+          inherited pnlMenu: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+            inherited pnlBarraLateralBotao: TPanel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+          end
+          inherited pnlTitulo: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+            inherited lblTitulo: TLabel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+            inherited Label4: TLabel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+            inherited lblQuantidadeRegistros: TLabel
+              StyleElements = [seFont, seClient, seBorder]
+            end
+          end
+        end
+      end
+    end
+    inherited pnlMenu: TPanel
+      StyleElements = [seFont, seClient, seBorder]
+      inherited pnlBarraLateralBotao: TPanel
+        StyleElements = [seFont, seClient, seBorder]
       end
     end
   end

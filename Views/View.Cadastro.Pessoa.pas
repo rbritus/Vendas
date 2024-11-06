@@ -85,10 +85,10 @@ end;
 procedure TFrmCadastroPessoa.LimparEntidades;
 begin
   if Assigned(FEnderecos) then
-    FEnderecos.DisposeOf;
+    FEnderecos.Free;
 
   if Assigned(FTelefones) then
-    FTelefones.DisposeOf;
+    FTelefones.Free;
 end;
 
 function TFrmCadastroPessoa.ValidacoesEspecificasAtendidas: Boolean;

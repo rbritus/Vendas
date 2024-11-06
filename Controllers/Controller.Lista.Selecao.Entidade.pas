@@ -39,7 +39,7 @@ begin
   try
     Result := TUtilsEntidade.ExistePropriedade(Objeto,'ATIVO');
   finally
-    Objeto.DisposeOf;
+    Objeto.Free;
   end;
 end;
 

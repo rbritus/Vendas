@@ -170,7 +170,7 @@ end;
 procedure TFrmCadastroEndereco.LimparEntidades;
 begin
   if Assigned(FCidade) then
-    FCidade.DisposeOf;
+    FCidade.Free;
 end;
 
 function TFrmCadastroEndereco.ObterCEPSemMascara: string;

@@ -144,7 +144,7 @@ begin
   SqlBuild.Append('INSERT INTO PAIS (GUID, NOME,ABREVIACAO,CODIGO_BACEN,CODIGO_SISCOMEX, DATA_INSERCAO) ').Append(SLineBreak)
     .Append('VALUES ('+ GetGUID + ',''BRASIL'',''BR'',''1058'',''105'',DATE(''now''))');
   Result := TScriptDML.Create(IDControle, VERSAO, SqlBuild.ToString);
-  SqlBuild.DisposeOf;
+  SqlBuild.Free;
 end;
 
 function TScriptVersao00.ObterScript02_InsercaoEstadosBrasil: TScriptDML;
@@ -206,7 +206,7 @@ begin
 	.Append('INSERT INTO ESTADO (GUID, NOME,ABREVIACAO,CODIGO_UF,PAIS_FK, DATA_INSERCAO) ').Append(SLINEBREAK)
 	.Append('VALUES (''{9F4B0079-343F-4AF8-AB04-B6721903D54F}'',''DISTRITO FEDERAL'',''DF'',''53'',(SELECT GUID FROM PAIS WHERE CODIGO_BACEN = ''1058''),DATE(''now''));');
   Result := TScriptDML.Create(IDControle, VERSAO, SqlBuild.ToString);
-  SqlBuild.DisposeOf;
+  SqlBuild.Free;
 end;
 
 //function TScriptVersao00.ObterScript03_InsercaoLogradouros: TScriptDML;
@@ -596,7 +596,7 @@ begin
     .Append('INSERT INTO CIDADE (GUID, NOME, CODIGO_IBGE, CODIGO_MUNICIPIO, CODIGO_DISTRITO, ESTADO_FK, DATA_INSERCAO) VALUES ('+ GetGUID + ',''SÃO LUIZ'', 1400605, ''00605'', ''05'', (SELECT GUID FROM ESTADO WHERE CODIGO_UF = 14),DATE(''now''));').Append(SLINEBREAK)
     .Append('INSERT INTO CIDADE (GUID, NOME, CODIGO_IBGE, CODIGO_MUNICIPIO, CODIGO_DISTRITO, ESTADO_FK, DATA_INSERCAO) VALUES ('+ GetGUID + ',''UIRAMUTÃ'', 1400704, ''00704'', ''05'', (SELECT GUID FROM ESTADO WHERE CODIGO_UF = 14),DATE(''now''));');
   Result := TScriptDML.Create(IDControle, VERSAO, SqlBuild.ToString);
-  SqlBuild.DisposeOf;
+  SqlBuild.Free;
 end;
 
 function TScriptVersao00.ObterScript04_InsercaoMunicipiosDistrito02: TScriptDML;

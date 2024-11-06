@@ -2,11 +2,12 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
   Caption = 'FrmCadastroListaPadrao'
   Constraints.MaxWidth = 840
   Constraints.MinWidth = 840
+  StyleElements = [seFont, seClient, seBorder]
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 13
   inherited pnlFundo: TPanel
+    StyleElements = [seFont, seClient, seBorder]
     inherited pnlConteudo: TScrollBox
       Top = 139
       Height = 501
@@ -122,8 +123,17 @@ inherited FrmCadastroListaPadrao: TFrmCadastroListaPadrao
       TabOrder = 2
       ExplicitTop = 50
       inherited pnlFundo: TPanel
+        StyleElements = [seFont, seClient, seBorder]
+        inherited pnlConteudo: TPanel
+          StyleElements = [seFont, seClient, seBorder]
+          inherited pnlFiltros: TPanel
+            StyleElements = [seFont, seClient, seBorder]
+          end
+        end
         inherited pnlPesquisa: TPanel
+          StyleElements = [seFont, seClient, seBorder]
           inherited edtPesquisa: TEdit
+            StyleElements = [seFont, seClient, seBorder]
             OnEnter = FrameFiltroPesquisa1edtPesquisaEnter
             OnExit = FrameFiltroPesquisa1edtPesquisaExit
           end

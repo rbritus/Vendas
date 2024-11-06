@@ -487,7 +487,7 @@ begin
       begin
         var Obj := AField.GetValue(AForm).AsObject;
         if Assigned(Obj) then
-          Obj.DisposeOf;
+          Obj.Free;
 
         AField.SetValue(AForm,nil);
       end;

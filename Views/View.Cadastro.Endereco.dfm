@@ -1,8 +1,9 @@
 inherited FrmCadastroEndereco: TFrmCadastroEndereco
   Caption = 'Cadastrar Endere'#231'o'
-  PixelsPerInch = 96
+  StyleElements = [seFont, seClient, seBorder]
   TextHeight = 13
   inherited pnlFundo: TPanel
+    StyleElements = [seFont, seClient, seBorder]
     inherited pnlConteudo: TScrollBox
       object Label1: TLabel
         Left = 40
@@ -171,9 +172,11 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         ExplicitWidth = 361
         inherited pnlFundo: TPanel
           Width = 361
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 361
           inherited pnlConteudo: TPanel
             Width = 361
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 361
             DesignSize = (
               361
@@ -181,10 +184,12 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
             inherited Label1: TLabel
               Width = 43
               Caption = 'Cidade'
+              StyleElements = [seFont, seClient, seBorder]
               ExplicitWidth = 43
             end
             inherited Edit1: TEdit
               Width = 315
+              StyleElements = [seFont, seClient, seBorder]
               OnChange = FramePesquisaCidadeEdit1Change
               ExplicitWidth = 315
             end
@@ -221,6 +226,12 @@ inherited FrmCadastroEndereco: TFrmCadastroEndereco
         Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 2
+      end
+    end
+    inherited pnlMenu: TPanel
+      StyleElements = [seFont, seClient, seBorder]
+      inherited pnlBarraLateralBotao: TPanel
+        StyleElements = [seFont, seClient, seBorder]
       end
     end
   end

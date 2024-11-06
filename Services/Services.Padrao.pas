@@ -6,7 +6,7 @@ uses
   Generics.Collections, Rtti, Classes, Attributes.Entidades,
   Interfaces.Services.Padrao, Connection.Controller.SqLite, Datasnap.DBClient,
   Data.DB, System.SysUtils, Utils.Entidade, Controls, FireDAC.Comp.Client,
-  FireDAC.Stan.Param, Utils.Enumerators, Componente.TObjectList;
+  FireDAC.Stan.Param, Utils.Enumerators, Componente.TObjectList, FireDAC.Stan.Intf;
 
 type
   TParametro = record
@@ -68,7 +68,7 @@ var
   cTabela, cId, cValor: string;
   Ctx: TRttiContext;
   Prop: TRttiProperty;
-  Tipo, TipoEstr: TRTTIType;
+  Tipo: TRTTIType;
   Atrib: TCustomAttribute;
   Lista: TObjectListFuck<TObject>;
   ObjEstrangeiro: TObject;
@@ -128,7 +128,7 @@ begin
                       end;
                     ctSetNull:
                       begin
-                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
+//                        Lista := Prop.GetValue(Objeto).AsType<TObjectListFuck<TObject>>;
                         TConexao.GetInstance.EnviarComando('DELETE FROM ' + TCampoListagem(Atrib).TabelaRelacional + ' WHERE ' + TCampoListagem(Atrib).CampoPai + ' = ' + cValor);
                       end;
                     ctRestrict:
@@ -243,7 +243,6 @@ begin
   var Parametros: TArrayParametros;
   SetLength(Parametros, 1);
 
-  var IndiceArray := 0;
   var Ctx := TRttiContext.Create;
   try
     var Tipo := Ctx.GetType(FindClass(Objeto.ClassName));
@@ -321,7 +320,7 @@ begin
     Result := SqlString.Append(' WHERE ' + TUtilsEntidade.ObterChavePrimaria(Objeto) + ' = ' +
       TUtilsEntidade.ObterValorPropriedade(Objeto, 'GUID').AsString.QuotedString).ToString;
   finally
-    SqlString.DisposeOf;
+    SqlString.Free;
   end;
 end;
 
@@ -427,12 +426,10 @@ procedure TServico<T>.GravarPropertyLista(Propriedade: TRttiProperty; Lista: TOb
 var
   entFilho: TObject;
   GUIDPai: string;
-  GUIDFilho: string;
   cTabela: string;
   cCampoPai: string;
   cCampoFilho: string;
   Ctx: TRttiContext;
-  Tipo: TRTTIType;
   Atrib: TCustomAttribute;
   nRelacao: TTipoAssociacaoEntreTabelas;
   TipoCascata: TTipoCascata;
@@ -440,6 +437,8 @@ var
   lAchou: Boolean;
   cIdRemovidos: string;
 begin
+  nRelacao := taOneToOne;
+  TipoCascata := ctNoAction;
   GUIDPai := TUtilsEntidade.ObterValorPropriedade(EntidadePai, 'GUID').AsString.QuotedString;
 
   Ctx := TRttiContext.Create;
