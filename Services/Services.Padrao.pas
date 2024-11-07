@@ -231,7 +231,6 @@ begin
         end;
       end;
     end;
-    Tipo.Free;
   finally
     Ctx.Free;
     Result := Parametros;
@@ -266,7 +265,6 @@ begin
         end;
       end;
     end;
-    Tipo.Free;
   finally
     Ctx.Free;
   end;
